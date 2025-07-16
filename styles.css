@@ -1,0 +1,92 @@
+/* styles.css */
+body {
+  background-color: #f4f6f8;
+  display: flex;
+  justify-content: center;
+  
+}
+
+.site-wrapper {
+  width: 1000px;
+  background-color: white;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+header {
+  background: linear-gradient(to right, #004aad, #007bff);
+  color: white;
+  padding: 16px 24px;
+  font-size: 24px;
+  font-weight: bold;
+  font-family: 'Baloo Tamma 2', sans-serif;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.scroll-nav {
+  overflow-x: auto;
+  white-space: nowrap;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+}
+
+.scroll-nav .nav-buttons {
+  display: inline-flex;
+  padding: 10px 16px;
+  gap: 10px;
+}
+
+.scroll-nav .btn {
+  font-family: 'Baloo Tamma 2', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  white-space: nowrap;
+}
+
+.scroll-nav .btn:hover {
+  background-color: #dceeff;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.job-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  background-color: #fff;
+}
+
+.job-card h5 {
+  margin-bottom: 8px;
+}
+
+.footer a {
+  color: #198754;
+}
+.footer a:hover {
+  text-decoration: underline;
+}
+
+
+
+#quillEditor {
+  height: 150px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-top: 5px;
+}
