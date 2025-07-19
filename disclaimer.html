@@ -11,41 +11,57 @@
 <body>
   <div class="site-wrapper">
 
-    <!-- Header -->
-    <header class="d-flex align-items-center justify-content-between p-3 border-bottom shadow-sm bg-light">
-      <div class="d-flex align-items-center gap-2">
-        <img src="assets/RDMjobslogo.png" alt="RDM Logo" width="32" height="32" class="rounded" />
-        <h5 class="mb-0">RDM Jobs</h5>
-      </div>
-      <div id="currentDate" class="text-muted small"></div>
-    </header>
+   <header class="d-flex align-items-center justify-content-between p-3 border-bottom shadow-sm bg-light">
+  <div class="d-flex align-items-center gap-2">
+    <img src="assets/RDMjobslogo.png" alt="RDM Logo" width="32" height="32" class="rounded" />
+    <h5 class="mb-0">RDM Jobs</h5>
+  </div>
+</header>
 
-    <!-- Scrollable Nav -->
-    <div class="scroll-nav">
-      <div class="nav-buttons">
-        <button class="btn btn-light btn-sm" onclick="location.href='index.html'">
-          <i class="bi bi-house-door-fill"></i> Home
-        </button>
-        <button class="btn btn-outline-success btn-sm" onclick="navigateToType('Government')">
-          <i class="bi bi-bank"></i> Government Jobs
-        </button>
-        <button class="btn btn-outline-success btn-sm" onclick="navigateToType('Private')">
-          <i class="bi bi-building"></i> Private Jobs
-        </button>
-        <button class="btn btn-outline-success btn-sm" onclick="navigateToType('Software')">
-          <i class="bi bi-laptop"></i> Software Jobs
-        </button>
-        <button class="btn btn-outline-success btn-sm" onclick="navigateToType('Admit Card')">
-          <i class="bi bi-card-checklist"></i> Admit Cards
-        </button>
-        <button class="btn btn-outline-success btn-sm" onclick="navigateToType('Result')">
-          <i class="bi bi-award"></i> Results
-        </button>
-        <button class="btn btn-outline-success btn-sm" onclick="navigateToType('Upcoming Notification')">
-          <i class="bi bi-bell"></i> Upcoming Notifications
-        </button>
-      </div>
-    </div>
+
+<div class="scroll-nav overflow-auto bg-light border-bottom">
+  <div class="nav-buttons d-flex flex-nowrap gap-2 p-2 small text-nowrap">
+
+    <!-- Home Button -->
+    <button class="btn btn-sm btn-outline-secondary px-2 py-1" onclick="location.href='index.html'">
+      <i class="bi bi-house-door-fill me-1"></i> All Jobs
+    </button>
+
+    <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Government')">
+      <i class="bi bi-bank me-1"></i> Govt jobs
+    </button>
+
+    <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Private')">
+      <i class="bi bi-building me-1"></i> Private jobs
+    </button>
+
+    <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Software')">
+      <i class="bi bi-laptop me-1"></i> Software jobs
+    </button>
+
+    <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Admit Card')">
+      <i class="bi bi-card-checklist me-1"></i> Admit Cards 
+    </button>
+
+    <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Result')">
+      <i class="bi bi-award me-1"></i> JOB Results
+    </button>
+
+    <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Upcoming Notification')">
+      <i class="bi bi-bell me-1"></i> Upcoming Jobs
+    </button>
+
+    <!-- Optional: Admin buttons -->
+    <button class="btn btn-sm btn-success ms-auto px-2 py-1 d-none" id="createJobBtn" data-bs-toggle="modal" data-bs-target="#createJobModal">
+      <i class="bi bi-plus-circle me-1"></i> Create Jobs
+    </button>
+
+    <button class="btn btn-sm btn-outline-secondary px-2 py-1" data-bs-toggle="modal" data-bs-target="#adminLoginModal">
+      <i class="bi bi-person-lock me-1"></i> Admin
+    </button>
+
+  </div>
+</div>
 
     <!-- Main Content -->
     <div class="main-content">
