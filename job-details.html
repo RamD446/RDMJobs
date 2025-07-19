@@ -105,16 +105,16 @@
         }
 
         const job = docSnap.data();
-        jobDetailsEl.innerHTML = `
-          <h4 class="mb-2">${job.title}</h4>
-          <div class="mb-3">${job.content}</div>
-          <hr>
-          <div class="text-muted small">
-            Posted by <strong>${job.createdBy}</strong> (${job.email})<br>
-            Created: ${job.createdDate}<br>
-            Last Date: ${job.lastDate}
-          </div>
-        `;
+       jobDetailsEl.innerHTML = `
+  <h4 class="mb-2">${job.title}</h4>
+  <div class="text-muted small">
+    <strong>Posted by: ${job.createdBy}</strong>||
+    <strong>Created: ${job.createdDate}</strong>
+  </div>
+  <br>
+  <div class="mb-3">${job.content}</div>
+`;
+
 
         const relatedQuery = query(collection(db, "jobs"), where("type", "==", job.type));
         const querySnapshot = await getDocs(relatedQuery);
