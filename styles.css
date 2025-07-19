@@ -90,3 +90,49 @@ header {
   border-radius: 6px;
   margin-top: 5px;
 }
+.trending-carousel-img {
+  width: 100%;
+  max-width: 220px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.trending-carousel-title {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #333;
+  max-width: 90%;
+  margin: 0.5rem auto 0 auto;
+  text-align: center;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: rgba(0, 0, 0, 0.5);
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+}
+
+.carousel-control-prev-icon::before {
+  content: "<";
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+.carousel-control-next-icon::before {
+  content: ">";
+  font-size: 1.2rem;
+  color: #fff;
+}
+
