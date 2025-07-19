@@ -5,89 +5,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Job Details - RDM Jobs</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
-
 </head>
 <body>
   <div class="site-wrapper">
-    <!-- Header -->
-<header class="d-flex align-items-center justify-content-between p-3 border-bottom shadow-sm bg-light">
+    <header class="d-flex align-items-center justify-content-between p-3 border-bottom shadow-sm bg-light">
   <div class="d-flex align-items-center gap-2">
     <img src="assets/RDMjobslogo.png" alt="RDM Logo" width="32" height="32" class="rounded" />
     <h5 class="mb-0">RDM Jobs</h5>
   </div>
 </header>
-
-    <!-- Scrollable Nav -->
-    <div class="scroll-nav">
-      <div class="nav-buttons">
-         <button class="btn btn-light btn-sm" onclick="location.href='index.html'">
-          <i class="bi bi-bank"></i> Home
-        </button>
-        <button class="btn btn-outline-success" onclick="navigateToType('Government')">
-      <i class="bi bi-bank"></i> Government Jobs
-    </button>
-
-    <button class="btn btn-outline-success" onclick="navigateToType('Private')">
-      <i class="bi bi-building"></i> Private Jobs
-    </button>
-
-    <button class="btn btn-outline-success" onclick="navigateToType('Software')">
-      <i class="bi bi-laptop"></i> Software Jobs
-    </button>
-
-    <button class="btn btn-outline-success" onclick="navigateToType('Admit Card')">
-      <i class="bi bi-card-checklist"></i> Admit Cards
-    </button>
-
-    <button class="btn btn-outline-success" onclick="navigateToType('Result')">
-      <i class="bi bi-award"></i> Results
-    </button>
-
-    <button class="btn btn-outline-success" onclick="navigateToType('Upcoming Notification')">
-      <i class="bi bi-bell"></i> Upcoming Notifications
-    </button>
+    <div class="scroll-nav overflow-auto bg-light border-bottom">
+      <div class="nav-buttons d-flex flex-nowrap gap-2 p-2 small text-nowrap">
+        <button class="btn btn-sm btn-outline-primary" onclick="location.href='index.html'">All Jobs</button>
+        <button class="btn btn-sm btn-outline-success" onclick="navigateToType('Government')">Govt jobs</button>
+        <button class="btn btn-sm btn-outline-success" onclick="navigateToType('Private')">Private jobs</button>
+        <button class="btn btn-sm btn-outline-success" onclick="navigateToType('Software')">Software jobs</button>
+        <button class="btn btn-sm btn-outline-success" onclick="navigateToType('Admit Card')">Admit Cards</button>
+        <button class="btn btn-sm btn-outline-success" onclick="navigateToType('Result')">Job Results</button>
+        <button class="btn btn-sm btn-outline-success" onclick="navigateToType('Upcoming Notification')">Upcoming Jobs</button>
       </div>
     </div>
 
-    <!-- Main Content -->
     <div class="main-content">
       <div id="jobDetails" class="p-4 bg-light border rounded shadow-sm mb-4"></div>
-
       <h5 class="text-secondary mb-3">Related Jobs</h5>
-      <div id="relatedJobs" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5"></div>
+      <div id="relatedJobs" class="row g-3 mb-5"></div>
     </div>
- <!-- Footer -->
-<footer class="footer text-center small text-muted py-4 bg-light border-top">
-  <div class="container">
-    <p class="mb-1">© 2025 <strong>RDM Jobs</strong>. All rights reserved.</p>
-    
-    <p class="mb-2">
-      <a href="privacy.html" class="text-decoration-none me-2">Privacy Policy</a> |
-      <a href="disclaimer.html" class="text-decoration-none mx-2">Disclaimer</a> |
-      <a href="about.html" class="text-decoration-none ms-2">About Us</a>
-    </p>
 
-    <p class="mb-1"><strong>Support:</strong> <a href="mailto:rdm409446@gmail.com">rdm409446@gmail.com</a></p>
-    <p class="mb-0"><strong>Note:</strong> Job information is shared only for public benefit. Please verify before applying.</p>
-     <code>Job ID: <span id="currentJobId"></span></code>
-  </div>
-</footer>
+    <footer class="footer text-center small text-muted py-4 bg-light border-top">
+      <div class="container">
+        <p class="mb-1">© 2025 <strong>RDM Jobs</strong>. All rights reserved.</p>
+        <p class="mb-2">
+          <a href="privacy.html" class="text-decoration-none me-2">Privacy Policy</a> |
+          <a href="disclaimer.html" class="text-decoration-none mx-2">Disclaimer</a> |
+          <a href="about.html" class="text-decoration-none ms-2">About Us</a>
+        </p>
+        <p class="mb-1"><strong>Support:</strong> <a href="mailto:rdm409446@gmail.com">rdm409446@gmail.com</a></p>
+        <p class="mb-0"><strong>Note:</strong> Job info is public benefit only. Verify before applying.</p>
+        <code>Job ID: <span id="currentJobId"></span></code>
+      </div>
+    </footer>
   </div>
 
-  <!-- Firebase Script -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-    import {
-      getFirestore,
-      doc,
-      getDoc,
-      collection,
-      query,
-      where,
-      getDocs
-    } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAzXgI8kvqz9CEo9393W48yEZjUx6l_YNM",
@@ -101,21 +64,14 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const jobId = urlParams.get("jobId");
+    const jobId = new URLSearchParams(window.location.search).get("jobId");
     document.getElementById("currentJobId").textContent = jobId ?? "N/A";
 
     const jobDetailsEl = document.getElementById("jobDetails");
     const relatedJobsEl = document.getElementById("relatedJobs");
 
     async function loadJobDetails() {
-     jobDetailsEl.innerHTML = `
-  <div class="text-center text-muted py-5">
-    <div class="spinner-border text-success mb-3" role="status"></div><br>
-    Loading job details...
-  </div>
-`;
-
+      jobDetailsEl.innerHTML = `<div class="text-center text-muted py-5"><div class="spinner-border text-success mb-3" role="status"></div><br>Loading job details...</div>`;
 
       if (!jobId) {
         jobDetailsEl.innerHTML = "<p class='text-danger'>No job ID provided.</p>";
@@ -126,56 +82,63 @@
         const docRef = doc(db, "jobs", jobId);
         const docSnap = await getDoc(docRef);
 
-        if (docSnap.exists()) {
-          const job = docSnap.data();
+        if (!docSnap.exists()) {
+          jobDetailsEl.innerHTML = "<p class='text-danger'>Job not found.</p>";
+          return;
+        }
 
-          jobDetailsEl.innerHTML = `
-            <h4 class="mb-2">${job.title}</h4>
-            <span class="badge bg-success mb-3">${job.type}</span>
-            <div class="mb-3">${job.content}</div>
-            <hr>
-            <div class="text-muted small">
-              Posted by <strong>${job.createdBy}</strong> (${job.email})<br>
-              Created: ${job.createdDate}<br>
-              Last Date: ${job.lastDate}
-            </div>
+        const job = docSnap.data();
+
+        jobDetailsEl.innerHTML = `
+          <h4 class="mb-2">${job.title}</h4>
+          <div class="mb-3">${job.content}</div>
+          <hr>
+          <div class="text-muted small">
+            Posted by <strong>${job.createdBy}</strong> (${job.email})<br>
+            Created: ${job.createdDate}<br>
+            Last Date: ${job.lastDate}
+          </div>
+        `;
+
+        const relatedQuery = query(collection(db, "jobs"), where("type", "==", job.type));
+        const querySnapshot = await getDocs(relatedQuery);
+
+        relatedJobsEl.innerHTML = "";
+        let cardCount = 0;
+
+        querySnapshot.forEach((docItem) => {
+          if (docItem.id === jobId || cardCount >= 6) return;
+          const related = docItem.data();
+          const tempDiv = document.createElement("div");
+          tempDiv.innerHTML = related.content || "";
+          const imgEl = tempDiv.querySelector("img");
+          const imageUrl = imgEl ? imgEl.src : "assets/RDMjobslogo.png";
+          const titleShort = related.title.length > 80 ? related.title.substring(0, 80).trim() + "..." : related.title;
+
+          const card = document.createElement("div");
+          card.className = "col-6";
+          card.innerHTML = `
+            <a href="job-details.html?jobId=${docItem.id}" class="text-decoration-none text-dark">
+              <div class="border rounded shadow-sm p-2 h-100 d-flex gap-2 align-items-start">
+                <img src="${imageUrl}" alt="${related.title}" class="rounded" style="width: 60px; height: 60px; object-fit: cover;" />
+                <div>
+                  <span class="badge bg-primary mb-1">${related.type}</span>
+                  <div style="font-size: 0.9rem;">${titleShort}</div>
+                </div>
+              </div>
+            </a>
           `;
 
-          // Fetch related jobs by type (exclude current job)
-          const relatedQuery = query(collection(db, "jobs"), where("type", "==", job.type));
-          const querySnapshot = await getDocs(relatedQuery);
+          relatedJobsEl.appendChild(card);
+          cardCount++;
+        });
 
-          relatedJobsEl.innerHTML = "";
-          let cardCount = 0;
-
-          querySnapshot.forEach((docItem) => {
-            const related = docItem.data();
-
-            if (docItem.id !== jobId && cardCount < 6) {
-              const card = document.createElement("div");
-              card.className = "col";
-              card.innerHTML = `
-                <div class="card h-100 shadow-sm">
-                  <div class="card-body">
-                    <span class="badge bg-primary mb-2">${related.type}</span>
-                    <h6 class="card-title">${related.title}</h6>
-                  </div>
-                  <div class="card-footer text-end bg-light">
-                    <a href="job-details.html?jobId=${docItem.id}" class="btn btn-sm btn-outline-success">View</a>
-                  </div>
-                </div>
-              `;
-              relatedJobsEl.appendChild(card);
-              cardCount++;
-            }
-          });
-
-          if (relatedJobsEl.children.length === 0) {
-            relatedJobsEl.innerHTML = `<p class="text-muted">No related jobs found.</p>`;
-          }
-        } else {
-          jobDetailsEl.innerHTML = "<p class='text-danger'>Job not found.</p>";
+        if (cardCount === 0) {
+          relatedJobsEl.innerHTML = `<p class="text-muted">No related jobs found.</p>`;
         }
+
+        await loadMoreJobs(job.type);
+
       } catch (error) {
         console.error("Error fetching job:", error);
         jobDetailsEl.innerHTML = "<p class='text-danger'>Error loading job details.</p>";
@@ -184,20 +147,59 @@
 
     loadJobDetails();
 
- 
+    async function loadMoreJobs(currentType) {
+      const allJobsQuery = query(collection(db, "jobs"));
+      const snapshot = await getDocs(allJobsQuery);
+
+      const moreJobsEl = document.createElement('div');
+      moreJobsEl.innerHTML = `
+        <h5 class="text-secondary mb-3">More Jobs</h5>
+        <div id="moreJobs" class="row g-3 mb-5"></div>
+      `;
+      document.querySelector('.main-content').appendChild(moreJobsEl);
+
+      const container = document.getElementById("moreJobs");
+      let count = 0;
+
+      snapshot.forEach((docItem) => {
+        const job = docItem.data();
+        if (job.type === currentType || count >= 100) return;
+
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = job.content || "";
+        const imgEl = tempDiv.querySelector("img");
+        const imageUrl = imgEl ? imgEl.src : "assets/RDMjobslogo.png";
+        const titleShort = job.title.length > 80 ? job.title.substring(0, 80).trim() + "..." : job.title;
+
+        const card = document.createElement("div");
+        card.className = "col-6";
+        card.innerHTML = `
+          <a href="job-details.html?jobId=${docItem.id}" class="text-decoration-none text-dark">
+            <div class="border rounded shadow-sm p-2 h-100 d-flex gap-2 align-items-start">
+              <img src="${imageUrl}" alt="${job.title}" class="rounded" style="width: 60px; height: 60px; object-fit: cover;" />
+              <div>
+                <span class="badge bg-secondary mb-1">${job.type}</span>
+                <div style="font-size: 0.9rem;">${titleShort}</div>
+              </div>
+            </div>
+          </a>
+        `;
+        container.appendChild(card);
+        count++;
+      });
+
+      if (count === 0) {
+        container.innerHTML = `<p class="text-muted">No additional jobs available.</p>`;
+      }
+    }
+
   </script>
+
   <script>
-  const currentDateEl = document.getElementById("currentDate");
-  const now = new Date();
-  const options = { year: 'numeric', month: 'short', day: 'numeric' };
-  currentDateEl.textContent = now.toLocaleDateString(undefined, options);
-  
-</script>
-  <script>
-  function navigateToType(type) {
-    const encodedType = encodeURIComponent(type);
-    window.location.href = `jobinformation.html?type=${encodedType}`;
-  }
-</script>
+    function navigateToType(type) {
+      const encoded = encodeURIComponent(type);
+      location.href = `jobinformation.html?type=${encoded}`;
+    }
+  </script>
 </body>
 </html>
