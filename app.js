@@ -50,22 +50,8 @@ createModalEl.addEventListener("show.bs.modal", () => {
   createdDateInput.value = today;
 });
 
-// Admin Login Handler
-document.getElementById("adminLoginForm").addEventListener("submit", function (e) {
-  e.preventDefault();
-  const email = document.getElementById("adminEmail").value.trim();
-  const password = document.getElementById("adminPassword").value.trim();
-  const adminError = document.getElementById("adminError");
 
-  if (email === "446" && password === "446") {
-    createJobBtn.classList.remove("d-none");
-    adminError.classList.add("d-none");
-    bootstrap.Modal.getInstance(document.getElementById("adminLoginModal")).hide();
-    alert("Admin access granted");
-  } else {
-    adminError.classList.remove("d-none");
-  }
-});
+
 
 // Submit Job Form
 jobForm.addEventListener("submit", async (e) => {
@@ -121,7 +107,8 @@ async function loadTrendingJobs() {
         id: doc.id,
         title: job.title.length > 80 ? job.title.slice(0, 80) + "..." : job.title,
         imageUrl,
-        lastDate: job.lastDate || "N/A"
+        lastDate: job.lastDate || "N/A",
+        content: job.content.replace(/<[^>]+>/g, '').slice(0, 100) + "..."
       });
     }
   });
@@ -131,52 +118,49 @@ async function loadTrendingJobs() {
     return;
   }
 
-wrapper.innerHTML = `
-  <h5 class="mb-3 text-primary fw-bold">Latest Trending</h5>
-  <div class="trending-jobs-container position-relative border rounded p-3 bg-white">
-    <div id="trendingScroll" class="trending-scroll hide-scrollbar">
-      ${jobs.map(job => `
-        <a href="job-details.html?jobId=${job.id}" class="trending-job-card">
-          <img src="${job.imageUrl}" alt="${job.title}">
-          <div class="card-body">
-            <div class="title">${job.title}</div>
-            <div class="date">Last Date: ${job.lastDate}</div>
-          </div>
-        </a>
-      `).join("")}
-    </div>
-  </div>
-`;
+  wrapper.innerHTML = `
+    <div id="singleTrendingJob" class="single-job-display mb-4"></div>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 g-3" id="relatedJobsFooter"></div>
+  `;
 
+  const displayBox = document.getElementById("singleTrendingJob");
+  const relatedFooter = document.getElementById("relatedJobsFooter");
 
-  const scrollBox = document.getElementById("trendingScroll");
-  const card = scrollBox.querySelector(".trending-job-card");
-  const cardWidth = card.offsetWidth + 16; // 16px gap/margin if applied
-  const maxScroll = scrollBox.scrollWidth - scrollBox.clientWidth;
+  let index = 0;
 
-  let scrollPosition = 0;
+  function renderJob(i) {
+    const job = jobs[i];
+    displayBox.innerHTML = `
+      <a href="job-details.html?jobId=${job.id}" class="d-flex align-items-start gap-3 text-decoration-none p-3 trending-single-card">
+        <div class="flex-shrink-0">
+          <img src="${job.imageUrl}" alt="${job.title}" class="rounded" style="width: 100px; height: 110px; object-fit: cover;">
+        </div>
+        <div class="text-body">
+          <h6 class="fw-bold text-dark mb-1">${job.title}</h6>
+          <p class="mb-1 text-muted small">${job.content}</p>
+          <small class="text-muted">📅 Last Date: ${job.lastDate}</small>
+        </div>
+      </a>
+    `;
 
-  function startAutoScroll() {
-    scrollInterval = setInterval(() => {
-      scrollPosition += cardWidth;
-
-      if (scrollPosition >= maxScroll - 5) {
-        // Reset to beginning
-        scrollPosition = 0;
-        scrollBox.scrollTo({ left: 0, behavior: "smooth" });
-      } else {
-        scrollBox.scrollTo({ left: scrollPosition, behavior: "smooth" });
-      }
-    }, 3000);
+   
   }
 
-  scrollBox.addEventListener("mouseenter", () => clearInterval(scrollInterval));
-  scrollBox.addEventListener("mouseleave", () => startAutoScroll());
+  function startSingleJobScroll() {
+    renderJob(index);
+    scrollInterval = setInterval(() => {
+      index = (index + 1) % jobs.length;
+      renderJob(index);
+    }, 4000);
+  }
 
-  startAutoScroll();
+  displayBox.addEventListener("mouseenter", () => clearInterval(scrollInterval));
+  displayBox.addEventListener("mouseleave", () => startSingleJobScroll());
+
+  startSingleJobScroll();
 }
-
 loadTrendingJobs();
+
 
 
 

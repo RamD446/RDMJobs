@@ -124,142 +124,41 @@ header {
   border: 1px solid #ccc;
   border-radius: 6px;
   margin-top: 5px;
+}/* ✅ Single Trending Job Card */
+.single-job-display {
+  min-height: 130px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: all 0.2s;
 }
 
-/* ✅ Trending Carousel Wrapper */
-.trending-jobs-container {
-  position: relative;
-  overflow: hidden;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  background: white;
-  padding: 1rem 0;
-  margin-bottom: 1rem;
-}
-
-/* ✅ Trending Scroll Row */
-.trending-scroll {
-  scroll-behavior: smooth;
-  display: flex;
-  overflow-x: auto;
-  gap: 1rem;
-  padding: 0 2rem;
-}
-
-/* ✅ Individual Trending Job Card */
-.trending-job-card {
-  flex: 0 0 auto;
-  width: 220px;
-  height: 230px;
-  background: #f9f9f9;
-  border-radius: 10px;
-  text-align: center;
-  overflow: hidden;
-  text-decoration: none;
+.trending-single-card {
   transition: transform 0.2s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
 }
 
-.trending-job-card:hover {
-  transform: translateY(-4px);
+.trending-single-card:hover {
+  transform: translateY(-3px);
 }
 
-.trending-job-card img {
-  width: 100%;
-  height: 120px;
-  object-fit: cover;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+.trending-single-card img {
+  border-radius: 8px;
 }
 
-.trending-job-card .card-body {
-  padding: 8px;
-}
-
-.trending-job-card .title {
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: #222;
-  line-height: 1.3;
-  height: 40px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.trending-job-card .date {
-  font-size: 0.72rem;
-  color: #888;
-  margin-top: 4px;
-}
-
-/* ✅ Scroll Buttons */
-.scroll-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 9;
-  background-color: rgba(0, 0, 0, 0.4);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  font-size: 20px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.scroll-btn.left {
-  left: 0.5rem;
-}
-
-.scroll-btn.right {
-  right: 0.5rem;
-}
-
-/* ✅ Hide Scrollbar */
-.hide-scrollbar {
-  scrollbar-width: none; /* Firefox */
-}
-
-.hide-scrollbar::-webkit-scrollbar {
-  display: none; /* Chrome, Safari */
-}
-
-/* ✅ Responsive Design */
 @media (max-width: 768px) {
-  .site-wrapper {
-    width: 100%;
-    border-radius: 0;
-    box-shadow: none;
+  .trending-single-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
-  .job-card {
-    flex-direction: row;
-    padding: 10px;
-  }
-
-  .job-card img {
+  .trending-single-card img {
     width: 80px;
-    height: 100px;
+    height: 90px;
   }
 
-  .job-card .job-info .title {
-    font-size: 0.82rem;
-  }
-
-  .trending-job-card {
-    width: 160px;
-    height: 220px;
-  }
-
-  .scroll-btn {
-    display: none; /* Hide arrows on mobile */
-  }
-
-  .trending-scroll {
-    padding: 0 1rem;
+  .trending-single-card .text-body {
+    margin-top: 10px;
   }
 }
