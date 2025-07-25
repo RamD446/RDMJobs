@@ -3,7 +3,9 @@ body {
   background-color: #f4f6f8;
   display: flex;
   justify-content: center;
-  
+  margin: 0;
+  padding: 0;
+  font-family: 'Baloo Tamma 2', sans-serif;
 }
 
 .site-wrapper {
@@ -22,7 +24,6 @@ header {
   padding: 16px 24px;
   font-size: 24px;
   font-weight: bold;
-  font-family: 'Baloo Tamma 2', sans-serif;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -42,7 +43,6 @@ header {
 }
 
 .scroll-nav .btn {
-  font-family: 'Baloo Tamma 2', sans-serif;
   font-size: 15px;
   font-weight: 700;
   border-radius: 8px;
@@ -50,6 +50,7 @@ header {
   padding: 8px 16px;
   border: 1px solid #ddd;
   white-space: nowrap;
+  transition: background 0.2s;
 }
 
 .scroll-nav .btn:hover {
@@ -62,27 +63,58 @@ header {
   overflow-y: auto;
 }
 
+/* ✅ Job Card Styling */
 .job-card {
+  transition: all 0.2s ease;
   border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 16px;
+  border-radius: 10px;
+  padding: 12px;
   margin-bottom: 16px;
   background-color: #fff;
+  display: flex;
+  align-items: start;
+  gap: 12px;
+  min-height: 110px;
 }
 
-.job-card h5 {
-  margin-bottom: 8px;
+.job-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 128, 0, 0.15);
+  transform: translateY(-2px);
 }
 
+.job-card img {
+  width: 90px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.job-card .job-info {
+  flex-grow: 1;
+}
+
+.job-card .job-info .badge {
+  font-size: 0.7rem;
+  margin-bottom: 4px;
+}
+
+.job-card .job-info .title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* ✅ Footer Link Styling */
 .footer a {
   color: #198754;
 }
+
 .footer a:hover {
   text-decoration: underline;
 }
 
-
-
+/* ✅ Quill Editor */
 #quillEditor {
   height: 150px;
   background: white;
@@ -90,6 +122,8 @@ header {
   border-radius: 6px;
   margin-top: 5px;
 }
+
+/* ✅ Trending Carousel */
 .trending-carousel-img {
   width: 100%;
   max-width: 220px;
@@ -111,28 +145,53 @@ header {
   text-align: center;
 }
 
+/* ✅ Carousel Icons */
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
   background-color: rgba(0, 0, 0, 0.5);
-  mask-image: none !important;
   -webkit-mask-image: none !important;
+  mask-image: none !important;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
+  width: 2.5rem;
+  height: 2.5rem;
   border-radius: 50%;
+  font-size: 1.2rem;
+  color: #fff;
 }
 
 .carousel-control-prev-icon::before {
-  content: "<";
-  font-size: 1.2rem;
-  color: #fff;
+  font-family: "Font Awesome 6 Free";
+  content: "\f104"; /* fa-angle-left */
+  font-weight: 900;
 }
 
 .carousel-control-next-icon::before {
-  content: ">";
-  font-size: 1.2rem;
-  color: #fff;
+  font-family: "Font Awesome 6 Free";
+  content: "\f105"; /* fa-angle-right */
+  font-weight: 900;
 }
 
+/* ✅ Responsive */
+@media (max-width: 768px) {
+  .site-wrapper {
+    width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .job-card {
+    flex-direction: row;
+    padding: 10px;
+  }
+
+  .job-card img {
+    width: 80px;
+    height: 100px;
+  }
+
+  .job-card .job-info .title {
+    font-size: 0.82rem;
+  }
+}
