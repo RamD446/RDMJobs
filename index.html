@@ -73,34 +73,57 @@
   </div>
 </div>
 
- <div class="row ">
+<!-- ✅ Trending + Updates Section -->
+<div class="container my-3">
+  <div class="row g-3">
     
     <!-- 🔥 Left Column: Trending Jobs -->
-    <div class="col-md-6">
+    <div class="col-12 col-md-6">
       <div class="bg-white border rounded p-3 shadow-sm h-100 d-flex flex-column">
-        <h5 class="mb-3 text-primary fw-bold"> Latest Trending</h5>
-        <div id="trendingJobsWrapper" class="flex-grow-1 overflow-hidden"></div>
+        <h5 class="mb-3 text-primary fw-bold">
+           Latest Trending
+        </h5>
+        <!-- Trending Job Content -->
+        <div id="trendingJobsWrapper" class="flex-grow-1 overflow-hidden">
+          <!-- JS will inject single card with fade-in -->
+        </div>
       </div>
     </div>
 
-    <!-- 📢 Right Column: Get Latest Updates -->
-   <div class="col-md-6">
+   <!-- 📢 Right Column: Get Latest Updates -->
+<div class="col-12 col-md-6">
   <div class="bg-white border rounded p-3 shadow-sm h-100 d-flex flex-column">
+    
+    <!-- Header -->
     <h5 class="mb-3 text-success fw-bold">📢 Get Latest Updates</h5>
-    <ul class="list-unstyled small text-muted flex-grow-1">
-      <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i> 🏛️ Government Jobs posted daily</li>
-      <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i> 🏢 Private Jobs regularly updated</li>
-      <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i> 💻 Software Jobs across top companies</li>
-      <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i> 🪪 Latest Admit Cards released</li>
-      <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i> 📊 Job Results announced frequently</li>
-      <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i> 📅 Upcoming Notification alerts daily</li>
+    
+    <!-- Update List (Only 3 Items) -->
+    <ul class="list-unstyled small text-muted flex-grow-1 mb-2">
+      <li class="mb-2">
+        <i class="bi bi-check-circle text-success me-2"></i>
+        🏛️ All Jobs posted daily
+      </li>
+      <li class="mb-2">
+        <i class="bi bi-check-circle text-success me-2"></i>
+        📅 Latest Admit Cards posted daily
+      </li>
+      <li class="mb-2">
+        <i class="bi bi-check-circle text-success me-2"></i>
+        🏢 All Results regularly updated
+      </li>
     </ul>
-    <a class="mt-auto text-end text-primary fw-semibold small">Below see all updates →</a>
+    
+    <!-- Footer Link -->
+    <a href="#all-updates" class="mt-auto text-end text-primary fw-semibold small">
+      See all updates →
+    </a>
   </div>
 </div>
 
 
   </div>
+</div>
+
 
 
 <!-- ✅ Trending Jobs Section -->

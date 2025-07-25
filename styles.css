@@ -66,9 +66,9 @@ header {
   overflow-y: auto;
 }
 
-/* ✅ Job Card */
+/* ✅ Job Card (Used for Trending & General Jobs) */
 .job-card {
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   border: 1px solid #ddd;
   border-radius: 10px;
   padding: 12px;
@@ -93,19 +93,23 @@ header {
   flex-shrink: 0;
 }
 
-.job-card .job-info {
+.job-card .text-body {
   flex-grow: 1;
 }
 
-.job-card .job-info .badge {
-  font-size: 0.7rem;
-  margin-bottom: 4px;
-}
-
-.job-card .job-info .title {
-  font-size: 0.85rem;
+.job-card .text-body h6 {
+  font-size: 0.95rem;
   font-weight: 600;
   color: #333;
+}
+
+.job-card .text-body p {
+  font-size: 0.82rem;
+  margin: 4px 0;
+}
+
+.job-card .text-body small {
+  font-size: 0.75rem;
 }
 
 /* ✅ Footer */
@@ -124,41 +128,36 @@ header {
   border: 1px solid #ccc;
   border-radius: 6px;
   margin-top: 5px;
-}/* ✅ Single Trending Job Card */
+}
+
+/* ✅ Single Trending Job Display with Fade */
 .single-job-display {
   min-height: 130px;
   border-radius: 8px;
   background-color: #fff;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  transition: all 0.2s;
+  transition: opacity 0.8s ease-in-out;
+  opacity: 0;
 }
 
-.trending-single-card {
-  transition: transform 0.2s ease;
-  border-radius: 10px;
+.single-job-display.show {
+  opacity: 1;
 }
 
-.trending-single-card:hover {
-  transform: translateY(-3px);
-}
-
-.trending-single-card img {
-  border-radius: 8px;
-}
-
+/* ✅ Mobile Responsive for Job Card */
 @media (max-width: 768px) {
-  .trending-single-card {
+  .job-card {
     flex-direction: column;
     align-items: center;
     text-align: center;
   }
 
-  .trending-single-card img {
+  .job-card img {
     width: 80px;
-    height: 90px;
+    height: 100px;
   }
 
-  .trending-single-card .text-body {
+  .job-card .text-body {
     margin-top: 10px;
   }
 }

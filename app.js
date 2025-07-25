@@ -118,32 +118,29 @@ async function loadTrendingJobs() {
     return;
   }
 
-  wrapper.innerHTML = `
-    <div id="singleTrendingJob" class="single-job-display mb-4"></div>
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 g-3" id="relatedJobsFooter"></div>
-  `;
-
+  wrapper.innerHTML = `<div id="singleTrendingJob" class="single-job-display mb-3"></div>`;
   const displayBox = document.getElementById("singleTrendingJob");
-  const relatedFooter = document.getElementById("relatedJobsFooter");
 
   let index = 0;
 
   function renderJob(i) {
     const job = jobs[i];
-    displayBox.innerHTML = `
-      <a href="job-details.html?jobId=${job.id}" class="d-flex align-items-start gap-3 text-decoration-none p-3 trending-single-card">
-        <div class="flex-shrink-0">
-          <img src="${job.imageUrl}" alt="${job.title}" class="rounded" style="width: 100px; height: 110px; object-fit: cover;">
-        </div>
-        <div class="text-body">
-          <h6 class="fw-bold text-dark mb-1">${job.title}</h6>
-          <p class="mb-1 text-muted small">${job.content}</p>
-          <small class="text-muted">📅 Last Date: ${job.lastDate}</small>
-        </div>
-      </a>
-    `;
+    displayBox.classList.remove("show");
 
-   
+    setTimeout(() => {
+      displayBox.innerHTML = `
+        <a href="job-details.html?jobId=${job.id}" class="job-card text-decoration-none">
+          <img src="${job.imageUrl}" alt="${job.title}" style="width: 115px; height: 70px; object-fit: cover; border-radius: 4px;" />
+          <div class="text-body">
+            <h6 class="fw-bold text-dark mb-1">${job.title}</h6>
+            <p class="mb-1 text-muted small">${job.content}</p>
+            <small class="text-muted">📅 Last Date: ${job.lastDate}</small><br>
+            <small class="text-muted"> ${job.type}</small>
+          </div>
+        </a>
+      `;
+      displayBox.classList.add("show");
+    }, 100); // Delay to trigger fade
   }
 
   function startSingleJobScroll() {
@@ -151,7 +148,7 @@ async function loadTrendingJobs() {
     scrollInterval = setInterval(() => {
       index = (index + 1) % jobs.length;
       renderJob(index);
-    }, 4000);
+    }, 6000); // 6 sec per card
   }
 
   displayBox.addEventListener("mouseenter", () => clearInterval(scrollInterval));
@@ -160,6 +157,8 @@ async function loadTrendingJobs() {
   startSingleJobScroll();
 }
 loadTrendingJobs();
+
+
 
 
 
