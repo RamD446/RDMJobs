@@ -66,20 +66,13 @@
   </div>
 </div>
 
-<div class="container my-4">
-  <!-- Bold, Larger Breadcrumb Header -->
-  <div class="text-success fw-bold fs-5 mb-3">Home / Trending</div>
 
-  <!-- Trending Jobs Wrapper -->
-  <div class="row justify-content-center">
-    <div class="col-12 col-md-6">
-      <div id="trendingJobsWrapper" class="shadow-sm p-3 bg-white rounded border"></div>
-    </div>
-  </div>
+<!-- ✅ Trending Jobs Section -->
+<div class="container my-4">
+   <div class="main-content" id="trendingJobsWrapper"></div>
+  <div class="main-content" id="jobList"></div>
 </div>
 
-
-<div class="main-content" id="jobList"></div>
 
  <!-- Footer -->
 <footer class="footer text-center small text-muted py-4 bg-light border-top">
@@ -182,7 +175,15 @@
     const encodedType = encodeURIComponent(type);
     window.location.href = `jobinformation.html?type=${encodedType}`;
   }
+  const carousel = new bootstrap.Carousel(document.querySelector('#trendingCarousel'), {
+  interval: 5000,
+  ride: 'carousel',
+  touch: true,
+  pause: false,
+});
+
 </script>
+
 
 
 <!-- Scripts -->

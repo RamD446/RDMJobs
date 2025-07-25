@@ -94,6 +94,8 @@ jobForm.addEventListener("submit", async (e) => {
   }
 });
 
+let scrollInterval;
+
 async function loadTrendingJobs() {
   const wrapper = document.getElementById("trendingJobsWrapper");
   wrapper.innerHTML = `
@@ -109,55 +111,78 @@ async function loadTrendingJobs() {
   const jobs = [];
   snapshot.forEach((doc) => {
     const job = doc.data();
-    if (job.title && job.content && jobs.length < 10) {
+    if (job.title && job.content && jobs.length < 45) {
       const tempDiv = document.createElement("div");
       tempDiv.innerHTML = job.content;
       const firstImg = tempDiv.querySelector("img");
-      const imageUrl = firstImg ? firstImg.src : "assets/RDMjobslogo.png";
+      const imageUrl = firstImg?.src || "assets/RDMjobslogo.png";
 
       jobs.push({
         id: doc.id,
-        title: job.title.length > 70 ? job.title.slice(0, 70) + "..." : job.title,
+        title: job.title.length > 80 ? job.title.slice(0, 80) + "..." : job.title,
         imageUrl,
+        lastDate: job.lastDate || "N/A"
       });
     }
   });
 
   if (jobs.length === 0) {
-    wrapper.innerHTML = `<p class="text-muted">No trending jobs found.</p>`;
+    wrapper.innerHTML = `<p class="text-muted text-center">No trending jobs found.</p>`;
     return;
   }
 
-  const carouselId = "trendingCarousel";
-  const slides = jobs.map((job, index) => `
-    <div class="carousel-item ${index === 0 ? "active" : ""}">
-      <a href="job-details.html?jobId=${job.id}" class="d-block text-decoration-none text-center">
-        <img src="${job.imageUrl}" class="trending-carousel-img mx-auto" alt="${job.title}">
-        <div class="trending-carousel-title mt-2">${job.title}</div>
-      </a>
+wrapper.innerHTML = `
+  <h5 class="mb-3 text-primary fw-bold">Latest Trending</h5>
+  <div class="trending-jobs-container position-relative border rounded p-3 bg-white">
+    <div id="trendingScroll" class="trending-scroll hide-scrollbar">
+      ${jobs.map(job => `
+        <a href="job-details.html?jobId=${job.id}" class="trending-job-card">
+          <img src="${job.imageUrl}" alt="${job.title}">
+          <div class="card-body">
+            <div class="title">${job.title}</div>
+            <div class="date">Last Date: ${job.lastDate}</div>
+          </div>
+        </a>
+      `).join("")}
     </div>
-  `).join("");
+  </div>
+`;
 
-  wrapper.innerHTML = `
-    <div id="${carouselId}" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000" data-bs-pause="hover">
-      <div class="carousel-inner">
-        ${slides}
-      </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#${carouselId}" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#${carouselId}" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
-    </div>
-  `;
+
+  const scrollBox = document.getElementById("trendingScroll");
+  const card = scrollBox.querySelector(".trending-job-card");
+  const cardWidth = card.offsetWidth + 16; // 16px gap/margin if applied
+  const maxScroll = scrollBox.scrollWidth - scrollBox.clientWidth;
+
+  let scrollPosition = 0;
+
+  function startAutoScroll() {
+    scrollInterval = setInterval(() => {
+      scrollPosition += cardWidth;
+
+      if (scrollPosition >= maxScroll - 5) {
+        // Reset to beginning
+        scrollPosition = 0;
+        scrollBox.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        scrollBox.scrollTo({ left: scrollPosition, behavior: "smooth" });
+      }
+    }, 3000);
+  }
+
+  scrollBox.addEventListener("mouseenter", () => clearInterval(scrollInterval));
+  scrollBox.addEventListener("mouseleave", () => startAutoScroll());
+
+  startAutoScroll();
 }
 
-
-
 loadTrendingJobs();
+
+
+
+
+
+
 
 async function loadJobs() {
   jobList.innerHTML = `
