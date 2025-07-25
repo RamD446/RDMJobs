@@ -5,15 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>RDM Jobs</title>
 
-<!-- ✅ CSS Dependencies -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
-<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css" />
-
-<!-- ✅ JS Dependencies -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
+  <!-- CSS Dependencies -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 <div class="site-wrapper">
@@ -57,14 +53,10 @@
       <i class="bi bi-bell me-1"></i> Upcoming Jobs
     </button>
 
-    <!-- Admin-only Create Job Button -->
-<button class="btn btn-sm btn-success ms-auto px-2 py-1 d-none" 
-        id="createJobBtn" 
-        data-bs-toggle="modal" 
-        data-bs-target="#createJobModal">
-  <i class="bi bi-plus-circle me-1"></i> Create Jobs
-</button>
-
+    <!-- Optional: Admin buttons -->
+    <button class="btn btn-sm btn-success ms-auto px-2 py-1 d-none" id="createJobBtn" data-bs-toggle="modal" data-bs-target="#createJobModal">
+      <i class="bi bi-plus-circle me-1"></i> Create Jobs
+    </button>
 
     <button class="btn btn-sm btn-outline-secondary px-2 py-1" data-bs-toggle="modal" data-bs-target="#adminLoginModal">
       <i class="bi bi-person-lock me-1"></i> Admin
@@ -74,61 +66,22 @@
 </div>
 
 
-<!-- ✅ Trending + Updates Section -->
-<div class="container my-3">
-  <div class="row g-3">
-    
-    <!-- 🔥 Left Column: Trending Jobs -->
-    <div class="col-12 col-md-6">
-      <div class="bg-white border rounded p-3 shadow-sm h-100 d-flex flex-column">
-        <h5 class="mb-3 text-primary fw-bold">
-          🔥 Latest Trending
-        </h5>
-        <!-- Trending Job Content -->
-        <div id="trendingJobsWrapper" class="flex-grow-1 overflow-hidden">
-          <!-- JS will inject single card with fade-in -->
-        </div>
-      </div>
-    </div>
 
-    <!-- 📢 Right Column: Get Latest Updates -->
-    <div class="col-12 col-md-6">
-      <div class="bg-white border rounded p-3 shadow-sm h-100 d-flex flex-column">
-        <h5 class="mb-3 text-success fw-bold">
-          📢 Get Latest Updates
-        </h5>
-        <ul class="list-unstyled small text-muted flex-grow-1 mb-2">
-          <li class="mb-2">
-            <i class="bi bi-check-circle text-success me-2"></i> 🏛️ Government Jobs posted daily
-          </li>
-          <li class="mb-2">
-            <i class="bi bi-check-circle text-success me-2"></i> 🏢 Private Jobs regularly updated
-          </li>
-          <li class="mb-2">
-            <i class="bi bi-check-circle text-success me-2"></i> 💻 Software Jobs across top companies
-          </li>
-          <li class="mb-2">
-            <i class="bi bi-check-circle text-success me-2"></i> 🪪 Latest Admit Cards released
-          </li>
-          <li class="mb-2">
-            <i class="bi bi-check-circle text-success me-2"></i> 📊 Job Results announced frequently
-          </li>
-          <li class="mb-2">
-            <i class="bi bi-check-circle text-success me-2"></i> 📅 Upcoming Notification alerts daily
-          </li>
-        </ul>
-        <a href="#all-updates" class="mt-auto text-end text-primary fw-semibold small">Below see all updates →</a>
-      </div>
-    </div>
+<div class="container my-4">
+  <!-- Bold, Larger Breadcrumb Header -->
+  <div class="text-success fw-bold fs-5 mb-3">Home / Trending</div>
 
+  <!-- Trending Jobs Wrapper -->
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-6">
+      <div id="trendingJobsWrapper" class="shadow-sm p-3 bg-white rounded border"></div>
+    </div>
   </div>
 </div>
 
-<!-- ✅ Trending Jobs Section -->
-<div class="container my-2">
-  <div class="main-content" id="jobList"></div>
-</div>
 
+
+<div class="main-content" id="jobList"></div>
 
  <!-- Footer -->
 <footer class="footer text-center small text-muted py-4 bg-light border-top">
@@ -193,7 +146,6 @@
 </div>
 
 <!-- Admin Login Modal -->
-<!-- Admin Login Modal -->
 <div class="modal fade" id="adminLoginModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
@@ -220,8 +172,6 @@
     </div>
   </div>
 </div>
-
-
 <script>
   const currentDateEl = document.getElementById("currentDate");
   const now = new Date();
@@ -234,40 +184,7 @@
     const encodedType = encodeURIComponent(type);
     window.location.href = `jobinformation.html?type=${encodedType}`;
   }
-
 </script>
-<script>
-  document.getElementById("adminLoginForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const email = document.getElementById("adminEmail").value.trim();
-    const password = document.getElementById("adminPassword").value.trim();
-    const adminError = document.getElementById("adminError");
-    const createJobBtn = document.getElementById("createJobBtn");
-
-    if (email === "446" && password === "446") {
-      // ✅ Show create job button
-      createJobBtn.classList.remove("d-none");
-
-      // ✅ Hide error message
-      adminError.classList.add("d-none");
-
-      // ✅ Close the modal automatically
-      const modalEl = document.getElementById("adminLoginModal");
-      const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
-      modal.hide();
-
-      alert("✅ Admin access granted!");
-    } else {
-      // ❌ Show error message
-      adminError.classList.remove("d-none");
-    }
-  });
-</script>
-
-
-
-
 
 
 <!-- Scripts -->
