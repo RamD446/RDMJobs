@@ -28,19 +28,81 @@
     z-index: 1020;
   }
 </style>
+<style>
+.navbar-brand-text {
+  font-family: 'Courgette', cursive;
+  font-size: 1.5rem;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+
+  .developer-label {
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.75rem;
+    color: #fff;
+    margin-bottom: 0;
+    line-height: 1;
+  }
+
+  .developer-name {
+    font-family: 'Pacifico', cursive;
+    font-size: 1rem;
+    color: #ffe082;
+    margin-bottom: 0;
+    line-height: 1.2;
+  }
+  .brand-highlight {
+  font-family: 'Pacifico', cursive;
+  font-size: 0.7rem;
+  color: #ffc107; /* Gold/Yellow */
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+
+.brand-text {
+  font-size: 0.5rem;
+  font-weight: bold;
+  color: white;
+}
+
+</style>
 </head>
 <body>
 <div class="site-wrapper">
 
 
-<!-- Header -->
-<header class="d-flex align-items-center justify-content-between p-3 border-bottom shadow-sm bg-primary fixed-top" style="z-index: 1030;">
-  <div class="d-flex align-items-center gap-2">
-    <h5 class="mb-0" style="font-family: 'Pacifico', cursive; font-size: 1.25rem; color: white; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">
-      Rdmjobs.com
-    </h5>
+<!-- Sticky Responsive Header -->
+<nav class="navbar navbar-expand-lg bg-primary fixed-top shadow-sm">
+  <div class="container-fluid px-3">
+    
+  <a class="navbar-brand d-flex align-items-center gap-2 text-white" href="index.html">
+  <img src="assets/RDMjobslogo.png" alt="RDM Logo" width="32" height="32" class="rounded">
+  <span class="d-flex flex-column">
+    <span class="brand-highlight">RDM</span>
+    <span class="brand-text">JOBS</span>
+  </span>
+</a>
+
+
+
+    <!-- Toggle (Mobile) -->
+    <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#rdmNavbar" aria-controls="rdmNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="bi bi-list"></i>
+    </button>
+
+    <!-- Right Side -->
+    <div class="collapse navbar-collapse justify-content-end" id="rdmNavbar">
+      <ul class="navbar-nav align-items-center gap-3 text-end">
+        <li class="nav-item">
+          <p class="developer-label">Developed by</p>
+          <p class="developer-name">Yalla Ramana</p>
+        </li>
+     
+      </ul>
+    </div>
   </div>
-</header>
+</nav>
+
 
 <!-- Sticky Scroll Nav -->
 <div class="scroll-nav bg-light border-bottom shadow-sm">
@@ -90,7 +152,7 @@
       <a href="disclaimer.html" class="text-decoration-none mx-2">Disclaimer</a> |
       <a href="about.html" class="text-decoration-none ms-2">About Us</a>
     </p>
-    <p class="mb-1"><strong>Support:</strong> Rdm409446@gmail.com</p>
+    <p class="mb-1"><strong>Support:</strong> Rdm409446@gmail.com || Made In India</p>
     <p class="mb-0"><strong>Note:</strong> Job information is shared only for public benefit. Please verify before applying.</p>
   </div>
 </footer>
