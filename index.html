@@ -19,16 +19,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 <style>
   body {
-    padding-top: 110px; /* Adjust based on header + nav height */
-  }
-  .scroll-nav {
-    position: fixed;
-    top: 56px; /* height of header */
-    width: 100%;
-    z-index: 1020;
-  }
-</style>
-<style>
+  padding-top: 110px; /* Adjust based on header + nav height */
+}
+
+.scroll-nav {
+  position: fixed;
+  top: 56px; /* height of header */
+  width: 100%;
+  z-index: 1020;
+}
+
 .navbar-brand-text {
   font-family: 'Courgette', cursive;
   font-size: 1.5rem;
@@ -36,33 +36,35 @@
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
+.developer-label {
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.75rem;
+  color: #fff;
+  margin-bottom: 0;
+  line-height: 1;
+}
 
-  .developer-label {
-    font-family: 'Roboto', sans-serif;
-    font-size: 0.75rem;
-    color: #fff;
-    margin-bottom: 0;
-    line-height: 1;
-  }
+.developer-name {
+  font-family: 'Pacifico', cursive;
+  font-size: 1rem;
+  color: #ffe082;
+  margin-bottom: 0;
+  line-height: 1.2;
+}
 
-  .developer-name {
-    font-family: 'Pacifico', cursive;
-    font-size: 1rem;
-    color: #ffe082;
-    margin-bottom: 0;
-    line-height: 1.2;
-  }
-  .brand-highlight {
+.brand-highlight {
   font-family: 'Pacifico', cursive;
   font-size: 0.7rem;
   color: #ffc107; /* Gold/Yellow */
-  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  line-height: 1;
 }
 
 .brand-text {
   font-size: 0.5rem;
   font-weight: bold;
   color: white;
+  line-height: 1;
 }
 
 </style>
@@ -74,34 +76,29 @@
 <!-- Sticky Responsive Header -->
 <nav class="navbar navbar-expand-lg bg-primary fixed-top shadow-sm">
   <div class="container-fluid px-3">
-    
-  <a class="navbar-brand d-flex align-items-center gap-2 text-white" href="index.html">
-  <img src="assets/RDMjobslogo.png" alt="RDM Logo" width="32" height="32" class="rounded">
-  <span class="d-flex flex-column">
-    <span class="brand-highlight">RDM</span>
-    <span class="brand-text">JOBS</span>
-  </span>
-</a>
 
+    <!-- Brand Logo + Name -->
+    <a class="navbar-brand d-flex align-items-center gap-2 text-white" href="index.html">
+      <img src="assets/RDMjobslogo.png" alt="RDM Logo" width="32" height="32" class="rounded">
+      <span class="d-flex flex-column">
+        <span class="brand-highlight">RDM</span>
+        <span class="brand-text">JOBS</span>
+      </span>
+    </a>
 
-
-    <!-- Toggle (Mobile) -->
-    <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#rdmNavbar" aria-controls="rdmNavbar" aria-expanded="false" aria-label="Toggle navigation">
-      <i class="bi bi-list"></i>
-    </button>
-
-    <!-- Right Side -->
+    <!-- Right Side: Developer Info -->
     <div class="collapse navbar-collapse justify-content-end" id="rdmNavbar">
       <ul class="navbar-nav align-items-center gap-3 text-end">
         <li class="nav-item">
-          <p class="developer-label">Developed by</p>
-          <p class="developer-name">Yalla Ramana</p>
+          <p class="developer-label mb-0 text-white small">Developed by</p>
+          <p class="developer-name mb-0 text-white fw-semibold">Yalla Ramana</p>
         </li>
-     
       </ul>
     </div>
+
   </div>
 </nav>
+
 
 
 <!-- Sticky Scroll Nav -->
