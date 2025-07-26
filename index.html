@@ -20,102 +20,62 @@
   </div>
 </header>
 
-
+<!-- Navigation -->
 <div class="scroll-nav overflow-auto bg-light border-bottom">
   <div class="nav-buttons d-flex flex-nowrap gap-2 p-2 small text-nowrap">
-
-    <!-- Home Button -->
     <button class="btn btn-sm btn-outline-primary px-2 py-1" onclick="location.href='index.html'">
       <i class="bi bi-house-door-fill me-1"></i> All Jobs
     </button>
+    <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Government')"><i class="bi bi-bank me-1"></i> Govt jobs</button>
+    <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Private')"><i class="bi bi-building me-1"></i> Private jobs</button>
+    <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Software')"><i class="bi bi-laptop me-1"></i> Software jobs</button>
+    <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Admit Card')"><i class="bi bi-card-checklist me-1"></i> Admit Cards</button>
+    <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Result')"><i class="bi bi-award me-1"></i> JOB Results</button>
+    <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Upcoming Notification')"><i class="bi bi-bell me-1"></i> Upcoming Jobs</button>
 
-    <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Government')">
-      <i class="bi bi-bank me-1"></i> Govt jobs
-    </button>
-
-    <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Private')">
-      <i class="bi bi-building me-1"></i> Private jobs
-    </button>
-
-    <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Software')">
-      <i class="bi bi-laptop me-1"></i> Software jobs
-    </button>
-
-    <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Admit Card')">
-      <i class="bi bi-card-checklist me-1"></i> Admit Cards 
-    </button>
-
-    <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Result')">
-      <i class="bi bi-award me-1"></i> JOB Results
-    </button>
-
-    <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Upcoming Notification')">
-      <i class="bi bi-bell me-1"></i> Upcoming Jobs
-    </button>
-
-    <!-- Optional: Admin buttons -->
+    <!-- Admin -->
     <button class="btn btn-sm btn-success ms-auto px-2 py-1 d-none" id="createJobBtn" data-bs-toggle="modal" data-bs-target="#createJobModal">
       <i class="bi bi-plus-circle me-1"></i> Create Jobs
     </button>
-
     <button class="btn btn-sm btn-outline-secondary px-2 py-1" data-bs-toggle="modal" data-bs-target="#adminLoginModal">
       <i class="bi bi-person-lock me-1"></i> Admin
     </button>
-
   </div>
 </div>
 
-
-
-<div class="container my-4">
-  <!-- Bold, Larger Breadcrumb Header -->
-  <div class="text-success fw-bold fs-5 mb-3">Home / Trending</div>
-
-  <!-- Trending Jobs Wrapper -->
-  <div class="row justify-content-center">
-    <div class="col-12 col-md-6">
-      <div id="trendingJobsWrapper" class="shadow-sm p-3 bg-white rounded border"></div>
-    </div>
-  </div>
-</div>
-
-
-
+<!-- Job Listing -->
 <div class="main-content" id="jobList"></div>
 
- <!-- Footer -->
+<!-- Footer -->
 <footer class="footer text-center small text-muted py-4 bg-light border-top">
   <div class="container">
     <p class="mb-1">© 2025 <strong>RDM Jobs</strong>. All rights reserved.</p>
-    
     <p class="mb-2">
       <a href="privacy.html" class="text-decoration-none me-2">Privacy Policy</a> |
       <a href="disclaimer.html" class="text-decoration-none mx-2">Disclaimer</a> |
       <a href="about.html" class="text-decoration-none ms-2">About Us</a>
     </p>
-
     <p class="mb-1"><strong>Support:</strong> Rdm409446@gmail.com</p>
     <p class="mb-0"><strong>Note:</strong> Job information is shared only for public benefit. Please verify before applying.</p>
   </div>
 </footer>
-
 </div>
 
-<!-- Job Creation Modal -->
-<div class="modal fade" id="createJobModal" tabindex="-1" aria-hidden="true">
+<!-- Modals -->
+<!-- Create Job Modal -->
+<div class="modal fade" id="createJobModal" tabindex="-1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <form id="jobForm">
         <div class="modal-header">
           <h5 class="modal-title">Post a New Job</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" title="Close" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="mb-3">
             <label for="jobTitle" class="form-label">Job Title</label>
             <input type="text" id="jobTitle" class="form-control" required />
           </div>
-
           <div class="mb-3">
             <label for="jobType" class="form-label">Job Type</label>
             <select id="jobType" class="form-select" required>
@@ -128,12 +88,10 @@
               <option value="Upcoming Notification">Upcoming Notification</option>
             </select>
           </div>
-
           <div class="mb-3">
             <label class="form-label">Job Details</label>
             <div id="quillEditor" style="height: 200px;"></div>
           </div>
-
           <input type="hidden" id="createdDate" />
           <input type="hidden" id="lastDate" value="N/A" />
         </div>
@@ -146,7 +104,7 @@
 </div>
 
 <!-- Admin Login Modal -->
-<div class="modal fade" id="adminLoginModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="adminLoginModal" tabindex="-1">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
       <form id="adminLoginForm">
@@ -157,11 +115,11 @@
         <div class="modal-body">
           <div class="mb-2">
             <label class="form-label">Email</label>
-            <input type="text" class="form-control" id="adminEmail" />
+            <input type="text" class="form-control" id="adminEmail" placeholder="Enter your email" title="Admin Email" />
           </div>
           <div class="mb-2">
             <label class="form-label">Password</label>
-            <input type="password" class="form-control" id="adminPassword" />
+            <input type="password" class="form-control" id="adminPassword" placeholder="Enter your password" title="Admin Password" />
           </div>
           <div class="text-danger small d-none" id="adminError">Invalid credentials</div>
         </div>
@@ -172,27 +130,257 @@
     </div>
   </div>
 </div>
-<script>
-  const currentDateEl = document.getElementById("currentDate");
-  const now = new Date();
-  const options = { year: 'numeric', month: 'short', day: 'numeric' };
-  currentDateEl.textContent = now.toLocaleDateString(undefined, options);
-  
-</script>
-<script>
-  function navigateToType(type) {
-    const encodedType = encodeURIComponent(type);
-    window.location.href = `jobinformation.html?type=${encodedType}`;
-  }
-</script>
-
 
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<script type="module" src="app.js"></script>
+<!-- Firebase & Logic Script -->
+<script type="module">
+// Firebase Setup
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAzXgI8kvqz9CEo9393W48yEZjUx6l_YNM",
+  authDomain: "rdmjobs-78da3.firebaseapp.com",
+  projectId: "rdmjobs-78da3",
+  storageBucket: "rdmjobs-78da3.appspot.com",
+  messagingSenderId: "850369074130",
+  appId: "1:850369074130:web:c96133288fb6cabdd82e0b"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Quill Editor Init
+const quill = new Quill("#quillEditor", {
+  theme: "snow",
+  modules: {
+    toolbar: [
+      [{ header: [1, 2, false] }],
+      ["bold", "italic", "underline"],
+      ["image", "link"],
+      [{ list: "ordered" }, { list: "bullet" }]
+    ]
+  }
+});
+
+// DOM
+const jobForm = document.getElementById("jobForm");
+const jobList = document.getElementById("jobList");
+const createJobBtn = document.getElementById("createJobBtn");
+const createModalEl = document.getElementById("createJobModal");
+
+// Set created date
+createModalEl.addEventListener("show.bs.modal", () => {
+  document.getElementById("createdDate").value = new Date().toISOString().split("T")[0];
+});
+
+// Submit Job
+jobForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const job = {
+    title: document.getElementById("jobTitle").value,
+    type: document.getElementById("jobType").value,
+    content: quill.root.innerHTML,
+    createdBy: "Yalla Ramana",
+    createdDate: document.getElementById("createdDate").value,
+    lastDate: document.getElementById("lastDate").value,
+    postedAt: new Date().toISOString()
+  };
+
+  try {
+    await addDoc(collection(db, "jobs"), job);
+    jobForm.reset();
+    quill.setText("");
+    bootstrap.Modal.getInstance(createModalEl).hide();
+    loadJobs();
+  } catch (error) {
+    alert("Error posting job.");
+    console.error(error);
+  }
+});
+
+// Admin Login
+document.getElementById("adminLoginForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const email = document.getElementById("adminEmail").value.trim();
+  const password = document.getElementById("adminPassword").value.trim();
+  const errorDiv = document.getElementById("adminError");
+
+  if (email === "446" && password === "446") {
+    errorDiv.classList.add("d-none");
+    createJobBtn.classList.remove("d-none");
+    bootstrap.Modal.getInstance(document.getElementById("adminLoginModal")).hide();
+  } else {
+    errorDiv.classList.remove("d-none");
+  }
+});
+
+// Load Jobs
+async function loadJobs() {
+  jobList.innerHTML = `
+    <div class="text-center text-muted py-5">
+      <div class="spinner-border text-success mb-3" role="status"></div><br>
+      Loading jobs...
+    </div>
+  `;
+
+  try {
+    const q = query(collection(db, "jobs"), orderBy("postedAt", "desc"));
+    const snapshot = await getDocs(q);
+    jobList.innerHTML = "";
+
+    if (snapshot.empty) {
+      jobList.innerHTML = "<p class='text-center'>No jobs posted yet.</p>";
+      return;
+    }
+
+    const jobGroups = {
+      Government: [],
+      Private: [],
+      Software: [],
+      AdmitCard: [],
+      Result: [],
+      UpcomingNotification: [],
+    };
+
+    const allJobs = [];
+
+    snapshot.forEach((doc) => {
+      const job = doc.data();
+      const jobId = doc.id;
+
+      allJobs.push({ ...job, id: jobId });
+
+      if (job.type && typeof job.type === "string") {
+        const key = job.type.replace(/\s+/g, "");
+        if (jobGroups[key] && jobGroups[key].length < 5) {
+          jobGroups[key].push({ ...job, id: jobId });
+        }
+      }
+    });
+
+    const truncateText = (text, maxLength) =>
+      text.length > maxLength ? text.substring(0, maxLength).trim() + "..." : text;
+
+    const renderJobCard = (job) => {
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = job.content || "";
+      const firstImg = tempDiv.querySelector("img");
+      const imageUrl = firstImg ? firstImg.src : "assets/RDMjobslogo.png";
+
+      return `
+        <a href="job-details.html?jobId=${job.id}" class="text-decoration-none text-dark">
+          <div class="card mb-3 shadow-sm">
+            <div class="row g-0 align-items-center">
+              <div class="col-4">
+                <img src="${imageUrl}" class="img-fluid rounded-start" alt="${job.title}" style="height: 100%; object-fit: cover;" />
+              </div>
+              <div class="col-8">
+                <div class="card-body p-2">
+                  <h6 class="card-title mb-1 fw-semibold" style="font-size: 0.95rem; color: #007BFF;">${truncateText(job.title, 60)}</h6>
+
+                  <span class="badge bg-success" style="font-size: 0.65rem;">${job.type}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+      `;
+    };
+
+    // ✅ Top 20 Latest Jobs Section
+    const top20Jobs = allJobs.slice(0, 20);
+    if (top20Jobs.length > 0) {
+      const section = document.createElement("div");
+      section.className = "mb-4";
+      section.innerHTML = `
+        <h5 class="mb-3 text-success">All Latest Information</h5>
+        <div class="row g-3"></div>
+      `;
+      const row = section.querySelector(".row");
+
+      top20Jobs.forEach((job) => {
+        const col = document.createElement("div");
+        col.className = "col-12 col-md-6";
+        col.innerHTML = renderJobCard(job);
+        row.appendChild(col);
+      });
+
+      jobList.appendChild(section);
+    }
+
+    // ✅ Categorized Sections
+    const types = ["Government", "Private", "Software", "AdmitCard", "Result", "UpcomingNotification"];
+    const categoryTitles = {
+      Government: "Government Jobs",
+      Private: "Private Jobs",
+      Software: "Software Jobs",
+      AdmitCard: "Admit Cards",
+      Result: "All Job Results",
+      UpcomingNotification: "Upcoming Notifications",
+    };
+
+    let contentAdded = false;
+
+    for (let i = 0; i < types.length; i += 2) {
+      const row = document.createElement("div");
+      row.className = "row";
+
+      [types[i], types[i + 1]].forEach((type) => {
+        const jobs = jobGroups[type] || [];
+        const col = document.createElement("div");
+        col.className = "col-12 col-md-6 mb-4";
+
+        if (jobs.length === 0) {
+          col.innerHTML = `
+            <div class="bg-light rounded p-3 shadow-sm">
+              <h6 class="text-success mb-2">${categoryTitles[type]}</h6>
+              <p class="text-muted small">No ${categoryTitles[type]} found.</p>
+            </div>
+          `;
+          row.appendChild(col);
+          return;
+        }
+
+        contentAdded = true;
+
+        const heading = `<h6 class="text-success mb-2">${categoryTitles[type]}</h6>`;
+        const cardsHTML = jobs.map(renderJobCard).join("");
+        const moreBtn = `
+          <div class="text-end mt-2">
+            <a href="jobinformation.html?type=${encodeURIComponent(type)}" class="btn btn-sm btn-outline-success px-2 py-1" title="See All">
+              <i class="bi bi-box-arrow-up-right"></i>
+            </a>
+          </div>
+        `;
+
+        col.innerHTML = heading + cardsHTML + moreBtn;
+        row.appendChild(col);
+      });
+
+      jobList.appendChild(row);
+    }
+
+    if (!contentAdded) {
+      jobList.innerHTML += "<p class='text-center text-muted'>No categorized jobs found to display.</p>";
+    }
+  } catch (error) {
+    console.error("Error loading jobs:", error);
+    jobList.innerHTML = "<p class='text-center text-danger'>Failed to load jobs. Please try again later.</p>";
+  }
+}
+
+loadJobs();
+
+
+window.navigateToType = function(type) {
+  window.location.href = `jobinformation.html?type=${encodeURIComponent(type)}`;
+};
+</script>
+
 </body>
 </html>
