@@ -86,7 +86,7 @@ async function loadTrendingJobs() {
   const wrapper = document.getElementById("trendingJobsWrapper");
   wrapper.innerHTML = `
     <div class="text-center py-3">
-      <div class="spinner-border text-success" role="status"></div><br>
+      <div class=" text-success" role="status"></div><br>
       Loading trending jobs...
     </div>
   `;
@@ -135,7 +135,8 @@ async function loadTrendingJobs() {
             <h6 class="fw-bold text-dark mb-1">${job.title}</h6>
             <p class="mb-1 text-muted small">${job.content}</p>
             <small class="text-muted">📅 Last Date: ${job.lastDate}</small><br>
-            <small class="text-muted"> ${job.type}</small>
+            <small class="text-muted"> ${job.type}</small><br>
+            <small class="text-muted">Posted By: ${job.createdBy}</small>
           </div>
         </a>
       `;
