@@ -39,7 +39,7 @@
 .developer-label {
   font-family: 'Roboto', sans-serif;
   font-size: 0.75rem;
-  color: #fff;
+  color: #ffffff;
   margin-bottom: 0;
   line-height: 1;
 }
@@ -54,14 +54,14 @@
 
 .brand-highlight {
   font-family: 'Pacifico', cursive;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   color: #ffc107; /* Gold/Yellow */
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
   line-height: 1;
 }
 
 .brand-text {
-  font-size: 0.5rem;
+  font-size: 0.8rem;
   font-weight: bold;
   color: white;
   line-height: 1;
@@ -74,11 +74,11 @@
 
 
 <!-- Sticky Responsive Header -->
-<nav class="navbar navbar-expand-lg bg-primary fixed-top shadow-sm">
-  <div class="container-fluid px-3">
+<nav class="navbar bg-primary fixed-top shadow-sm">
+  <div class="container-fluid px-3 d-flex justify-content-between align-items-center">
 
-    <!-- Brand Logo + Name -->
-    <a class="navbar-brand d-flex align-items-center gap-2 text-white" href="index.html">
+    <!-- Left: Brand -->
+    <a class="navbar-brand d-flex align-items-center gap-2 text-white mb-0" href="index.html">
       <img src="assets/RDMjobslogo.png" alt="RDM Logo" width="32" height="32" class="rounded">
       <span class="d-flex flex-column">
         <span class="brand-highlight">RDM</span>
@@ -86,18 +86,16 @@
       </span>
     </a>
 
-    <!-- Right Side: Developer Info -->
-    <div class="collapse navbar-collapse justify-content-end" id="rdmNavbar">
-      <ul class="navbar-nav align-items-center gap-3 text-end">
-        <li class="nav-item">
-          <p class="developer-label mb-0 text-white small">Developed by</p>
-          <p class="developer-name mb-0 text-white fw-semibold">Yalla Ramana</p>
-        </li>
-      </ul>
+    <!-- Right: Developer Info -->
+    <div class="d-flex flex-column align-items-end text-end">
+      <p class="developer-label mb-0 text-white small">Developed by</p>
+      <p class="developer-name mb-0 text-white fw-semibold">Yalla Ramana</p>
     </div>
 
   </div>
 </nav>
+
+
 
 
 
@@ -139,20 +137,8 @@
 
 <!-- Job Listing -->
 <div class="main-content" id="jobList"></div>
+<div class="footer-container"></div>
 
-<!-- Footer -->
-<footer class="footer text-center small text-muted py-4 bg-light border-top">
-  <div class="container">
-    <p class="mb-1">© 2025 <strong>RDM Jobs</strong>. All rights reserved.</p>
-    <p class="mb-2">
-      <a href="privacy.html" class="text-decoration-none me-2">Privacy Policy</a> |
-      <a href="disclaimer.html" class="text-decoration-none mx-2">Disclaimer</a> |
-      <a href="about.html" class="text-decoration-none ms-2">About Us</a>
-    </p>
-    <p class="mb-1"><strong>Support:</strong> Rdm409446@gmail.com || Made In India</p>
-    <p class="mb-0"><strong>Note:</strong> Job information is shared only for public benefit. Please verify before applying.</p>
-  </div>
-</footer>
 </div>
 
 <!-- Modals -->
@@ -229,6 +215,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="footer.js"></script>
+
 
 <!-- Firebase & Logic Script -->
 <script type="module">
