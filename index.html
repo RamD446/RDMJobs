@@ -80,30 +80,43 @@
           <h5 class="modal-title">Post a New Job</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" title="Close" aria-label="Close"></button>
         </div>
+
         <div class="modal-body">
-          <div class="mb-3">
-            <label for="jobTitle" class="form-label">Job Title</label>
-            <input type="text" id="jobTitle" class="form-control" required />
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="jobTitle" class="form-label">Job Title</label>
+              <input type="text" id="jobTitle" class="form-control" required />
+            </div>
+
+            <div class="col-md-6">
+              <label for="jobCompany" class="form-label">Company Name</label>
+              <input type="text" id="jobCompany" class="form-control" required />
+            </div>
+
+            <div class="col-md-6">
+              <label for="jobType" class="form-label">Job Type</label>
+              <select id="jobType" class="form-select" required>
+                <option value="">Select Job Type</option>
+                <option value="Government">Government</option>
+                <option value="Private">Private</option>
+                <option value="Software">Software</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label for="jobLastDate" class="form-label">Last Date to Apply</label>
+              <input type="date" id="jobLastDate" class="form-control" required />
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="jobType" class="form-label">Job Type</label>
-            <select id="jobType" class="form-select" required>
-              <option value="">Select Job Type</option>
-              <option value="Government">Government</option>
-              <option value="Private">Private</option>
-              <option value="Software">Software</option>
-              <option value="Admit Card">Admit Card</option>
-              <option value="Result">Result</option>
-              <option value="Upcoming Notification">Upcoming Notification</option>
-            </select>
-          </div>
-          <div class="mb-3">
+
+          <div class="mt-3">
             <label class="form-label">Job Details</label>
             <div id="quillEditor" style="height: 200px;"></div>
           </div>
+
           <input type="hidden" id="createdDate" />
-          <input type="hidden" id="lastDate" value="N/A" />
         </div>
+
         <div class="modal-footer">
           <button type="submit" class="btn btn-success">Save Job</button>
         </div>
@@ -111,6 +124,7 @@
     </div>
   </div>
 </div>
+
 
 <!-- Admin Login Modal -->
 <div class="modal fade" id="adminLoginModal" tabindex="-1">
@@ -147,11 +161,17 @@
 <script src="footer.js"></script>
 
 
-<!-- Firebase & Logic Script -->
 <script type="module">
 // Firebase Setup
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAzXgI8kvqz9CEo9393W48yEZjUx6l_YNM",
@@ -178,27 +198,25 @@ const quill = new Quill("#quillEditor", {
   }
 });
 
-// DOM
-const jobForm = document.getElementById("jobForm");
-const jobList = document.getElementById("jobList");
-const createJobBtn = document.getElementById("createJobBtn");
-const createModalEl = document.getElementById("createJobModal");
-
 // Set created date
+const createModalEl = document.getElementById("createJobModal");
 createModalEl.addEventListener("show.bs.modal", () => {
   document.getElementById("createdDate").value = new Date().toISOString().split("T")[0];
 });
 
 // Submit Job
+const jobForm = document.getElementById("jobForm");
 jobForm.addEventListener("submit", async (e) => {
   e.preventDefault();
+
   const job = {
     title: document.getElementById("jobTitle").value,
+    company: document.getElementById("jobCompany").value,
     type: document.getElementById("jobType").value,
+    lastDate: document.getElementById("jobLastDate").value,
     content: quill.root.innerHTML,
     createdBy: "Yalla Ramana",
     createdDate: document.getElementById("createdDate").value,
-    lastDate: document.getElementById("lastDate").value,
     postedAt: new Date().toISOString()
   };
 
@@ -251,7 +269,7 @@ async function loadJobs() {
 
     const jobGroups = {
       Government: [],
-      Private: [],
+      Private: []
     };
 
     const allJobs = [];
@@ -280,15 +298,16 @@ async function loadJobs() {
       const imageUrl = firstImg ? firstImg.src : "assets/RDMjobslogo.png";
 
       return `
-        <a href="job-details.html?jobId=${job.id}" class="text-decoration-none text-dark">
-          <div class="job-card shadow-sm">
-            <img src="${imageUrl}" alt="${job.title}" class="job-card-img" />
-            <div class="job-info">
-              <h6 class="title">${truncateText(job.title, 60)}</h6>
-              <span class="badge bg-success">${job.type}</span>
-            </div>
-          </div>
-        </a>
+       <a href="job-details.html?jobId=${job.id}" class="text-decoration-none text-dark">
+  <div class="job-card shadow-sm">
+    <img src="${imageUrl}" alt="${job.title}" class="job-card-img" />
+    <div class="job-info">
+      <h6 class="title">${truncateText(job.title, 60)}</h6>
+      <p class="mb-1"><strong style="color:#0d6efd;">${job.company || "N/A"}</strong></p>
+      <p class="mb-1"><strong style="color:#dc3545;">Last Date apply:</strong> <span style="color:#dc3545;">${job.lastDate || "N/A"}</span></p>
+    </div>
+  </div>
+</a>
       `;
     };
 
@@ -317,7 +336,7 @@ async function loadJobs() {
     const types = ["Government", "Private"];
     const categoryTitles = {
       Government: "🏛 Government Jobs",
-      Private: "🏢 Private Jobs",
+      Private: "🏢 Private Jobs"
     };
 
     let contentAdded = false;
@@ -373,9 +392,6 @@ async function loadJobs() {
 }
 
 loadJobs();
-
-
-
 
 window.navigateToType = function(type) {
   window.location.href = `jobinformation.html?type=${encodeURIComponent(type)}`;
