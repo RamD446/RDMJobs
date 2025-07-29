@@ -302,7 +302,7 @@ async function loadJobs() {
   <div class="job-card shadow-sm">
     <img src="${imageUrl}" alt="${job.title}" class="job-card-img" />
     <div class="job-info">
-      <h6 class="title">${truncateText(job.title, 60)}</h6>
+      <h6 class="title"> <strong>${truncateText(job.title, 60)}</strong></h6>
       <p class="mb-1"><strong style="color:#0d6efd;">${job.company || "N/A"}</strong></p>
       <p class="mb-1"><strong style="color:#dc3545;">Last Date apply:</strong> <span style="color:#dc3545;">${job.lastDate || "N/A"}</span></p>
     </div>
