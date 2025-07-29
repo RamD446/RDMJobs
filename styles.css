@@ -1,61 +1,212 @@
-/* styles.css */
-body {
-  background-color: #f4f6f8;
-  display: flex;
-  justify-content: center;
+/* === Global Layout === */
+* {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+body {
+  background-color: #eef2f5;
+  display: flex;
+  justify-content: center;
   font-family: 'Baloo Tamma 2', sans-serif;
 }
 
 .site-wrapper {
-  width: 1000px;
-  background-color: white;
+  width: 960px;
+  background: white;
   border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-height: 100vh;
 }
 
-header {
-  background: linear-gradient(to right, #004aad, #007bff);
+/* === Sticky Header === */
+.top-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: linear-gradient(90deg, #004aad, #007bff);
   color: white;
-  padding: 16px 24px;
-  font-size: 24px;
-  font-weight: bold;
+  padding: 12px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.scroll-nav {
+/* === Brand Text === */
+.navbar-brand-text {
+  font-family: 'Courgette', cursive;
+  font-size: 1.5rem;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.brand-highlight {
+  font-family: 'Pacifico', cursive;
+  font-size: 0.8rem;
+  color: #ffc107;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  line-height: 1;
+}
+
+.brand-text {
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: white;
+  line-height: 1;
+}
+
+.developer-label {
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.75rem;
+  color: #ffffff;
+  margin-bottom: 0;
+  line-height: 1;
+}
+
+.developer-name {
+  font-family: 'Pacifico', cursive;
+  font-size: 1rem;
+  color: #ffe082;
+  margin-bottom: 0;
+  line-height: 1.2;
+}
+
+/* === Scrollable Category Header === */
+.category-scroll {
+  position: sticky;
+  top: 56px;
+  z-index: 999;
   overflow-x: auto;
   white-space: nowrap;
   background-color: #f8f9fa;
   border-bottom: 1px solid #ddd;
 }
 
-.scroll-nav .nav-buttons {
+.category-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.category-scroll::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 3px;
+}
+
+.category-container {
   display: inline-flex;
-  padding: 10px 16px;
-  gap: 10px;
+  padding: 10px;
+  gap: 8px;
+  min-width: max-content;
 }
 
-.scroll-nav .btn {
-  font-size: 15px;
-  font-weight: 700;
-  border-radius: 8px;
-  background: #ffffff;
+.category-button {
+  background-color: #ffffff;
   padding: 8px 16px;
-  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-family: 'Baloo Tamma 2', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
   white-space: nowrap;
-  transition: background 0.2s;
+  border: 1px solid #ddd;
 }
 
-.scroll-nav .btn:hover {
+.category-button:hover {
   background-color: #dceeff;
 }
+
+.category-button i {
+  margin-right: 6px;
+  color: #007bff;
+}
+
+/* === Header Title Text === */
+.header-line {
+  width: 100%;
+  color: #2c349b;
+  font-size: 30px;
+  font-family: 'Baloo Tamma 2', sans-serif;
+}
+
+/* === Main Content (Scrolls Entire Page) === */
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
+/* === Job Cards === */
+.job-card {
+  transition: all 0.2s ease;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 16px;
+  background-color: #fff;
+  display: flex;
+  align-items: start;
+  gap: 12px;
+  min-height: 110px;
+}
+
+.job-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 128, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.job-card img {
+  width: 90px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.job-card .job-info {
+  flex-grow: 1;
+}
+
+.job-card .job-info .badge {
+  font-size: 0.7rem;
+  margin-bottom: 4px;
+}
+
+.job-card .job-info .title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* === Footer === */
+footer {
+  background-color: #f1f1f1;
+  text-align: center;
+  font-size: 13px;
+  padding: 10px;
+}
+
+.footer a {
+  color: #198754;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+/* === Quill Editor === */
+#quillEditor {
+  height: 150px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-top: 5px;
+}
+
 
 .main-content {
   flex: 1;
@@ -123,3 +274,17 @@ header {
   margin-top: 5px;
 }
 
+.navbar-brand-text {
+  font-family: 'Courgette', cursive;
+  font-size: 1.5rem;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.developer-label {
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.75rem;
+  color: #ffffff;
+  margin-bottom: 0;
+  line-height: 1;
+}

@@ -18,121 +18,50 @@
 <!-- Add this to <head> -->
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 <style>
-  body {
-  padding-top: 110px; /* Adjust based on header + nav height */
-}
 
-.scroll-nav {
-  position: fixed;
-  top: 56px; /* height of header */
-  width: 100%;
-  z-index: 1020;
-}
 
-.navbar-brand-text {
-  font-family: 'Courgette', cursive;
-  font-size: 1.5rem;
-  color: white;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-}
-
-.developer-label {
-  font-family: 'Roboto', sans-serif;
-  font-size: 0.75rem;
-  color: #ffffff;
-  margin-bottom: 0;
-  line-height: 1;
-}
-
-.developer-name {
-  font-family: 'Pacifico', cursive;
-  font-size: 1rem;
-  color: #ffe082;
-  margin-bottom: 0;
-  line-height: 1.2;
-}
-
-.brand-highlight {
-  font-family: 'Pacifico', cursive;
-  font-size: 0.8rem;
-  color: #ffc107; /* Gold/Yellow */
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-  line-height: 1;
-}
-
-.brand-text {
-  font-size: 0.8rem;
-  font-weight: bold;
-  color: white;
-  line-height: 1;
-}
 
 </style>
 </head>
 <body>
 <div class="site-wrapper">
 
+<!-- Sticky Header -->
+<div class="top-header">
+  <a class="navbar-brand d-flex align-items-center gap-2 text-white mb-0" href="index.html">
+    <img src="assets/RDMjobslogo.png" alt="RDM Logo" width="32" height="32" class="rounded" />
+    <span class="d-flex flex-column">
+      <span class="brand-highlight">RDM</span>
+      <span class="brand-text">JOBS</span>
+    </span>
+  </a>
 
-<!-- Sticky Responsive Header -->
-<nav class="navbar bg-primary fixed-top shadow-sm">
-  <div class="container-fluid px-3 d-flex justify-content-between align-items-center">
-
-    <!-- Left: Brand -->
-    <a class="navbar-brand d-flex align-items-center gap-2 text-white mb-0" href="index.html">
-      <img src="assets/RDMjobslogo.png" alt="RDM Logo" width="32" height="32" class="rounded">
-      <span class="d-flex flex-column">
-        <span class="brand-highlight">RDM</span>
-        <span class="brand-text">JOBS</span>
-      </span>
-    </a>
-
-    <!-- Right: Developer Info -->
-    <div class="d-flex flex-column align-items-end text-end">
-      <p class="developer-label mb-0 text-white small">Developed by</p>
-      <p class="developer-name mb-0 text-white fw-semibold">Yalla Ramana</p>
-    </div>
-
+  <div class="d-flex flex-column align-items-end text-end">
+    <p class="developer-label mb-0">Developed by</p>
+    <p class="developer-name mb-0 fw-semibold">Yalla Ramana</p>
   </div>
-</nav>
+</div>
 
+<!-- Scrollable Category Header -->
+<div class="category-scroll">
+  <div class="category-container">
+    <div class="category-button" onclick="location.href='index.html'">
+      <i class="bi bi-house-door-fill"></i> All Job Notifications
+    </div>
+    <div class="category-button">Govt Notifications</div>
+    <div class="category-button">Private Notifications</div>
+    <div class="category-button">Admit Notifications</div>
 
-
-
-
-<!-- Sticky Scroll Nav -->
-<div class="scroll-nav bg-light border-bottom shadow-sm">
-  <div class="nav-buttons d-flex flex-nowrap gap-2 p-2 small text-nowrap">
-    <button class="btn btn-sm btn-outline-primary px-2 py-1" onclick="location.href='index.html'">
-      <i class="bi bi-house-door-fill me-1"></i> All Jobs
+    <button class="category-button btn btn-sm btn-success px-2 py-1 d-none" id="createJobBtn" data-bs-toggle="modal" data-bs-target="#createJobModal">
+      <i class="bi bi-plus-circle me-1"></i> Create Job
     </button>
-    <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Government')">
-      <i class="bi bi-bank me-1"></i> Govt jobs
-    </button>
-    <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Private')">
-      <i class="bi bi-building me-1"></i> Private jobs
-    </button>
-    <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Software')">
-      <i class="bi bi-laptop me-1"></i> Software jobs
-    </button>
-    <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Admit Card')">
-      <i class="bi bi-card-checklist me-1"></i> Admit Cards
-    </button>
-    <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Result')">
-      <i class="bi bi-award me-1"></i> JOB Results
-    </button>
-    <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Upcoming Notification')">
-      <i class="bi bi-bell me-1"></i> Upcoming Jobs
-    </button>
-
-    <!-- Admin Buttons -->
-    <button class="btn btn-sm btn-success ms-auto px-2 py-1 d-none" id="createJobBtn" data-bs-toggle="modal" data-bs-target="#createJobModal">
-      <i class="bi bi-plus-circle me-1"></i> Create Jobs
-    </button>
-    <button class="btn btn-sm btn-outline-secondary px-2 py-1" data-bs-toggle="modal" data-bs-target="#adminLoginModal">
-      <i class="bi bi-person-lock me-1"></i> Admin
+    <button class="category-button btn btn-sm btn-outline-secondary px-2 py-1" data-bs-toggle="modal" data-bs-target="#adminLoginModal">
+      <i class="bi bi-person-lock me-1"></i> Admin Login
     </button>
   </div>
 </div>
+
+
 
 
 <!-- Job Listing -->
@@ -323,10 +252,7 @@ async function loadJobs() {
     const jobGroups = {
       Government: [],
       Private: [],
-      Software: [],
       AdmitCard: [],
-      Result: [],
-      UpcomingNotification: [],
     };
 
     const allJobs = [];
@@ -396,14 +322,11 @@ async function loadJobs() {
     }
 
     // ✅ Categorized Sections
-    const types = ["Government", "Private", "Software", "AdmitCard", "Result", "UpcomingNotification"];
+    const types = ["Government", "Private", "AdmitCard"];
     const categoryTitles = {
       Government: "Government Jobs",
       Private: "Private Jobs",
-      Software: "Software Jobs",
       AdmitCard: "Admit Cards",
-      Result: "All Job Results",
-      UpcomingNotification: "Upcoming Notifications",
     };
 
     let contentAdded = false;
@@ -457,7 +380,6 @@ async function loadJobs() {
 }
 
 loadJobs();
-
 
 window.navigateToType = function(type) {
   window.location.href = `jobinformation.html?type=${encodeURIComponent(type)}`;
