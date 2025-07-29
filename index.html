@@ -22,47 +22,8 @@
 <div class="site-wrapper">
 
 <!-- Sticky Header -->
-<header class="top-header">
-  <div class="header-row">
-    <!-- Left: Logo -->
-    <a href="index.html" class="navbar-brand">
-      <img src="assets/RDMjobslogo.png" alt="RDM Logo" class="logo-img" />
-      <div class="brand-text-wrap">
-        <div class="brand-highlight">RDM</div>
-        <div class="brand-text">JOBS</div>
-      </div>
-    </a>
-
-    <!-- Right: Icons/Buttons -->
-    <div class="header-buttons">
-      <button title="All Jobs" onclick="location.href='index.html'">
-        <i class="bi bi-house-door-fill"></i>
-        <span class="btn-label">All</span>
-      </button>
-      <button title="Govt" onclick="navigateToType('Government')">
-        <i class="bi bi-building"></i>
-        <span class="btn-label">Govt</span>
-      </button>
-      <button title="Private" onclick="navigateToType('Private')">
-        <i class="bi bi-briefcase-fill"></i>
-        <span class="btn-label">Private</span>
-      </button>
-      <button class="d-none">
-        <i class="bi bi-card-text"></i>
-        <span class="btn-label">Admit</span>
-      </button>
-      <button class="d-none" id="createJobBtn" data-bs-toggle="modal" data-bs-target="#createJobModal">
-        <i class="bi bi-plus-circle"></i>
-        <span class="btn-label">Create</span>
-      </button>
-      <button title="Admin" onclick="document.getElementById('adminLoginModal').showModal()">
-        <i class="bi bi-person-lock"></i>
-        <span class="btn-label">Admin</span>
-      </button>
-    </div>
-  </div>
-</header>
-
+<!-- HEADER CONTAINER -->
+<div class="header-container"></div>
 <main class="main-content" id="jobList"></main>
 <div class="footer-container"></div> <!-- ✅ Footer inserted here -->
 </div>
@@ -134,12 +95,12 @@
         </div>
         <div class="modal-body">
           <div class="mb-2">
-            <label class="form-label">Email</label>
-            <input type="text" class="form-control" id="adminEmail" placeholder="Enter your email" title="Admin Email" />
+            <label>Email</label>
+            <input type="text" class="form-control" id="adminEmail" placeholder="Enter your email" />
           </div>
           <div class="mb-2">
-            <label class="form-label">Password</label>
-            <input type="password" class="form-control" id="adminPassword" placeholder="Enter your password" title="Admin Password" />
+            <label>Password</label>
+            <input type="password" class="form-control" id="adminPassword" placeholder="Enter your password" />
           </div>
           <div class="text-danger small d-none" id="adminError">Invalid credentials</div>
         </div>
@@ -151,11 +112,13 @@
   </div>
 </div>
 
+
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="footer.js"></script>
+<script src="header.js"></script>
 
 
 <script type="module">
@@ -229,21 +192,6 @@ jobForm.addEventListener("submit", async (e) => {
   }
 });
 
-// Admin Login
-document.getElementById("adminLoginForm").addEventListener("submit", function (e) {
-  e.preventDefault();
-  const email = document.getElementById("adminEmail").value.trim();
-  const password = document.getElementById("adminPassword").value.trim();
-  const errorDiv = document.getElementById("adminError");
-
-  if (email === "446" && password === "446") {
-    errorDiv.classList.add("d-none");
-    createJobBtn.classList.remove("d-none");
-    bootstrap.Modal.getInstance(document.getElementById("adminLoginModal")).hide();
-  } else {
-    errorDiv.classList.remove("d-none");
-  }
-});
 
 // Load Jobs
 async function loadJobs() {
@@ -389,10 +337,38 @@ async function loadJobs() {
 }
 
 loadJobs();
-
 window.navigateToType = function(type) {
   window.location.href = `jobinformation.html?type=${encodeURIComponent(type)}`;
 };
+</script>
+<script>
+  
+    document.addEventListener("DOMContentLoaded", function () {
+  const adminLoginForm = document.getElementById("adminLoginForm");
+  if (!adminLoginForm) return;
+
+  adminLoginForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const email = document.getElementById("adminEmail").value.trim();
+    const password = document.getElementById("adminPassword").value.trim();
+    const errorDiv = document.getElementById("adminError");
+    const createJobBtn = document.getElementById("createJobBtn");
+
+    if (email === "446" && password === "446") {
+      errorDiv.classList.add("d-none");
+      if (createJobBtn) createJobBtn.classList.remove("d-none");
+
+      // Hide modal
+      const modalEl = document.getElementById("adminLoginModal");
+      const modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+      modalInstance.hide();
+    } else {
+      errorDiv.classList.remove("d-none");
+    }
+  });
+});
+
 </script>
 
 </body>

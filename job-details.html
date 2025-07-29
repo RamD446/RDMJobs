@@ -10,61 +10,23 @@
 </head>
 <body>
   <div class="site-wrapper">
-    <header class="d-flex align-items-center justify-content-between p-3 border-bottom shadow-sm bg-light">
-      <div class="d-flex align-items-center gap-2">
-        <img src="assets/RDMjobslogo.png" alt="RDM Logo" width="32" height="32" class="rounded" />
-        <h5 class="mb-0">RDM Jobs</h5>
-      </div>
-    </header>
 
-    <!-- Scroll Nav -->
-    <div class="scroll-nav overflow-auto bg-light border-bottom">
-      <div class="nav-buttons d-flex flex-nowrap gap-2 p-2 small text-nowrap">
-        <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="location.href='index.html'">
-          <i class="bi bi-house-door-fill me-1"></i> All Jobs
-        </button>
-        <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Government')">
-          <i class="bi bi-bank me-1"></i> Govt Jobs
-        </button>
-        <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Private')">
-          <i class="bi bi-building me-1"></i> Private Jobs
-        </button>
-        <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Software')">
-          <i class="bi bi-laptop me-1"></i> Software Jobs
-        </button>
-        <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Admit Card')">
-          <i class="bi bi-card-checklist me-1"></i> Admit Cards
-        </button>
-        <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Result')">
-          <i class="bi bi-award me-1"></i> Job Results
-        </button>
-        <button class="btn btn-sm btn-outline-success px-2 py-1" onclick="navigateToType('Upcoming Notification')">
-          <i class="bi bi-bell me-1"></i> Upcoming Jobs
-        </button>
-      </div>
-    </div>
+    <!-- Footer injected by footer.js -->
+    <div class="header-container"></div>
 
-    <div class="main-content">
+    <!-- Main Content -->
+    <div class="main-content p-3">
       <div id="jobDetails" class="p-4 bg-light border rounded shadow-sm mb-4"></div>
       <h5 class="text-secondary mb-3">Related Jobs</h5>
       <div id="relatedJobs" class="row g-3 mb-5"></div>
     </div>
 
-    <footer class="footer text-center small text-muted py-4 bg-light border-top">
-      <div class="container">
-        <p class="mb-1">© 2025 <strong>RDM Jobs</strong>. All rights reserved.</p>
-        <p class="mb-2">
-          <a href="privacy.html" class="text-decoration-none me-2">Privacy Policy</a> |
-          <a href="disclaimer.html" class="text-decoration-none mx-2">Disclaimer</a> |
-          <a href="about.html" class="text-decoration-none ms-2">About Us</a>
-        </p>
-        <p class="mb-1"><strong>Support:</strong> <a href="mailto:rdm409446@gmail.com">rdm409446@gmail.com</a></p>
-        <p class="mb-0"><strong>Note:</strong> Job info is public benefit only. Verify before applying.</p>
-        <code>Job ID: <span id="currentJobId"></span></code>
-      </div>
-    </footer>
+   <!-- Footer injected by footer.js -->
+    <div class="footer-container"></div>
+
   </div>
 
+  <!-- Firebase and Logic Script -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
     import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
@@ -82,13 +44,15 @@
     const db = getFirestore(app);
 
     const jobId = new URLSearchParams(window.location.search).get("jobId");
-    document.getElementById("currentJobId").textContent = jobId ?? "N/A";
-
     const jobDetailsEl = document.getElementById("jobDetails");
     const relatedJobsEl = document.getElementById("relatedJobs");
 
     async function loadJobDetails() {
-      jobDetailsEl.innerHTML = `<div class="text-center text-muted py-5"><div class="spinner-border text-success mb-3" role="status"></div><br>Loading job details...</div>`;
+      jobDetailsEl.innerHTML = `
+        <div class="text-center text-muted py-5">
+          <div class="spinner-border text-success mb-3" role="status"></div><br />
+          Loading job details...
+        </div>`;
 
       if (!jobId) {
         jobDetailsEl.innerHTML = "<p class='text-danger'>No job ID provided.</p>";
@@ -105,16 +69,14 @@
         }
 
         const job = docSnap.data();
-       jobDetailsEl.innerHTML = `
-  <h4 class="mb-2">${job.title}</h4>
-  <div class="text-muted small">
-    <strong>Posted by: ${job.createdBy}</strong>||
-    <strong>Created: ${job.createdDate}</strong>
-  </div>
-  <br>
-  <div class="mb-3">${job.content}</div>
-`;
-
+        jobDetailsEl.innerHTML = `
+          <h4>${job.title}</h4>
+          <div class="text-muted small mb-3">
+            <strong>Posted by:</strong> ${job.createdBy} |
+            <strong>Created:</strong> ${job.createdDate}
+          </div>
+          <div>${job.content}</div>
+        `;
 
         const relatedQuery = query(collection(db, "jobs"), where("type", "==", job.type));
         const querySnapshot = await getDocs(relatedQuery);
@@ -137,15 +99,14 @@
           card.innerHTML = `
             <a href="job-details.html?jobId=${docItem.id}" class="text-decoration-none text-dark">
               <div class="border rounded shadow-sm p-2 h-100 d-flex gap-2 align-items-start">
-                <img src="${imageUrl}" alt="${related.title}" class="rounded" style="width: 60px; height: 60px; object-fit: cover;" />
+                <img src="${imageUrl}" class="rounded" style="width: 60px; height: 60px; object-fit: cover;" />
                 <div>
-                  <span class="badge bg-primary mb-1">${related.type}</span>
+                 
                   <div style="font-size: 0.9rem;">${titleShort}</div>
                 </div>
               </div>
             </a>
           `;
-
           relatedJobsEl.appendChild(card);
           cardCount++;
         });
@@ -156,28 +117,22 @@
 
         await loadMoreJobs(job.type);
 
-      } catch (error) {
-        console.error("Error fetching job:", error);
-        jobDetailsEl.innerHTML = "<p class='text-danger'>Error loading job details.</p>";
+      } catch (err) {
+        console.error("Error loading job:", err);
+        jobDetailsEl.innerHTML = "<p class='text-danger'>Failed to load job details.</p>";
       }
     }
-
-    loadJobDetails();
 
     async function loadMoreJobs(currentType) {
       const allJobsQuery = query(collection(db, "jobs"));
       const snapshot = await getDocs(allJobsQuery);
 
-      const moreJobsEl = document.createElement('div');
-      moreJobsEl.innerHTML = `
-        <h5 class="text-secondary mb-3">More Jobs</h5>
-        <div id="moreJobs" class="row g-3 mb-5"></div>
-      `;
-      document.querySelector('.main-content').appendChild(moreJobsEl);
-
+      const moreJobsEl = document.createElement("div");
+      moreJobsEl.innerHTML = `<h5 class="text-secondary mb-3">More Jobs</h5><div id="moreJobs" class="row g-3 mb-5"></div>`;
+      document.querySelector(".main-content").appendChild(moreJobsEl);
       const container = document.getElementById("moreJobs");
-      let count = 0;
 
+      let count = 0;
       snapshot.forEach((docItem) => {
         const job = docItem.data();
         if (job.type === currentType || count >= 100) return;
@@ -193,9 +148,8 @@
         card.innerHTML = `
           <a href="job-details.html?jobId=${docItem.id}" class="text-decoration-none text-dark">
             <div class="border rounded shadow-sm p-2 h-100 d-flex gap-2 align-items-start">
-              <img src="${imageUrl}" class="rounded" style="width: 70px; height: 70px; object-fit: cover;" alt="${job.title}" />
+              <img src="${imageUrl}" class="rounded" style="width: 70px; height: 70px; object-fit: cover;" />
               <div>
-                <span class="badge bg-secondary mb-1">${job.type}</span>
                 <div style="font-size: 0.9rem;">${titleShort}</div>
               </div>
             </div>
@@ -209,12 +163,19 @@
         container.innerHTML = `<p class="text-muted">No additional jobs available.</p>`;
       }
     }
+
+    loadJobDetails();
   </script>
 
+  <!-- Navigation logic -->
   <script>
     function navigateToType(type) {
-      location.href = `jobinformation.html?type=${encodeURIComponent(type)}`;
+      window.location.href = `jobinformation.html?type=${encodeURIComponent(type)}`;
     }
   </script>
+
+  <!-- Load shared header and footer -->
+  <script src="header.js"></script>
+  <script src="footer.js"></script>
 </body>
 </html>
