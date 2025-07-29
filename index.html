@@ -252,7 +252,6 @@ async function loadJobs() {
     const jobGroups = {
       Government: [],
       Private: [],
-      AdmitCard: [],
     };
 
     const allJobs = [];
@@ -282,31 +281,24 @@ async function loadJobs() {
 
       return `
         <a href="job-details.html?jobId=${job.id}" class="text-decoration-none text-dark">
-          <div class="card mb-3 shadow-sm">
-            <div class="row g-0 align-items-center">
-              <div class="col-4">
-                <img src="${imageUrl}" class="img-fluid rounded-start" alt="${job.title}" style="height: 100%; object-fit: cover;" />
-              </div>
-              <div class="col-8">
-                <div class="card-body p-2">
-                  <h6 class="card-title mb-1 fw-semibold" style="font-size: 0.95rem; color: #007BFF;">${truncateText(job.title, 60)}</h6>
-
-                  <span class="badge bg-success" style="font-size: 0.65rem;">${job.type}</span>
-                </div>
-              </div>
+          <div class="job-card shadow-sm">
+            <img src="${imageUrl}" alt="${job.title}" class="job-card-img" />
+            <div class="job-info">
+              <h6 class="title">${truncateText(job.title, 60)}</h6>
+              <span class="badge bg-success">${job.type}</span>
             </div>
           </div>
         </a>
       `;
     };
 
-    // ✅ Top 20 Latest Jobs Section
+    // ✅ Latest Jobs Section
     const top20Jobs = allJobs.slice(0, 20);
     if (top20Jobs.length > 0) {
       const section = document.createElement("div");
       section.className = "mb-4";
       section.innerHTML = `
-        <h5 class="mb-3 text-success">All Latest Information</h5>
+        <h5 class="modern-section-title">🆕 Latest Job Information</h5>
         <div class="row g-3"></div>
       `;
       const row = section.querySelector(".row");
@@ -321,12 +313,11 @@ async function loadJobs() {
       jobList.appendChild(section);
     }
 
-    // ✅ Categorized Sections
-    const types = ["Government", "Private", "AdmitCard"];
+    // ✅ Categorized Sections (Only Government and Private)
+    const types = ["Government", "Private"];
     const categoryTitles = {
-      Government: "Government Jobs",
-      Private: "Private Jobs",
-      AdmitCard: "Admit Cards",
+      Government: "🏛 Government Jobs",
+      Private: "🏢 Private Jobs",
     };
 
     let contentAdded = false;
@@ -336,34 +327,36 @@ async function loadJobs() {
       row.className = "row";
 
       [types[i], types[i + 1]].forEach((type) => {
+        if (!type) return;
+
         const jobs = jobGroups[type] || [];
         const col = document.createElement("div");
-        col.className = "col-12 col-md-6 mb-4";
+        col.className = "col-12 col-md-6";
 
-        if (jobs.length === 0) {
-          col.innerHTML = `
-            <div class="bg-light rounded p-3 shadow-sm">
-              <h6 class="text-success mb-2">${categoryTitles[type]}</h6>
-              <p class="text-muted small">No ${categoryTitles[type]} found.</p>
-            </div>
-          `;
-          row.appendChild(col);
-          return;
-        }
+        const wrapper = document.createElement("div");
+        wrapper.className = "job-category-wrapper";
 
-        contentAdded = true;
-
-        const heading = `<h6 class="text-success mb-2">${categoryTitles[type]}</h6>`;
-        const cardsHTML = jobs.map(renderJobCard).join("");
-        const moreBtn = `
-          <div class="text-end mt-2">
-            <a href="jobinformation.html?type=${encodeURIComponent(type)}" class="btn btn-sm btn-outline-success px-2 py-1" title="See All">
+        const header = `
+          <div class="job-category-header">
+            <span>${categoryTitles[type]}</span>
+            <a href="jobinformation.html?type=${encodeURIComponent(type)}" title="See All">
               <i class="bi bi-box-arrow-up-right"></i>
             </a>
           </div>
         `;
 
-        col.innerHTML = heading + cardsHTML + moreBtn;
+        let content = "";
+
+        if (jobs.length === 0) {
+          content = `<p class="job-category-empty">No ${categoryTitles[type]} found.</p>`;
+        } else {
+          const cards = jobs.map(renderJobCard).join("");
+          content = `<div class="job-category-cards">${cards}</div>`;
+          contentAdded = true;
+        }
+
+        wrapper.innerHTML = header + content;
+        col.appendChild(wrapper);
         row.appendChild(col);
       });
 
@@ -380,6 +373,9 @@ async function loadJobs() {
 }
 
 loadJobs();
+
+
+
 
 window.navigateToType = function(type) {
   window.location.href = `jobinformation.html?type=${encodeURIComponent(type)}`;

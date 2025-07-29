@@ -1,4 +1,4 @@
-/* === Global Layout === */
+/* === Global Reset & Layout === */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -126,7 +126,7 @@ body {
   color: #007bff;
 }
 
-/* === Header Title Text === */
+/* === Section Header === */
 .header-line {
   width: 100%;
   color: #2c349b;
@@ -134,23 +134,65 @@ body {
   font-family: 'Baloo Tamma 2', sans-serif;
 }
 
-/* === Main Content (Scrolls Entire Page) === */
-.content {
-  flex: 1;
-  padding: 20px;
+.modern-section-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #198754;
+  margin-bottom: 1.5rem;
 }
 
-/* === Job Cards === */
-.job-card {
-  transition: all 0.2s ease;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 12px;
+/* === Main Content === */
+.content, .main-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* === Categorized Job Section Wrapper === */
+.job-category-wrapper {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.job-category-header {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #28a745;
   margin-bottom: 16px;
-  background-color: #fff;
   display: flex;
-  align-items: start;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.job-category-header a {
+  font-size: 0.85rem;
+  color: #28a745;
+  text-decoration: none;
+}
+
+.job-category-cards {
+  display: flex;
+  flex-direction: column;
   gap: 12px;
+}
+
+.job-category-empty {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.job-card {
+  display: flex;
+  gap: 12px;
+  background-color: #fff;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  transition: 0.2s ease;
+  align-items: center;
   min-height: 110px;
 }
 
@@ -159,27 +201,39 @@ body {
   transform: translateY(-2px);
 }
 
-.job-card img {
+.job-card-img {
   width: 90px;
-  height: 120px;
+  height: 100px;
   object-fit: cover;
   border-radius: 6px;
   flex-shrink: 0;
 }
 
-.job-card .job-info {
-  flex-grow: 1;
+.job-info .title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #007bff;
 }
 
-.job-card .job-info .badge {
+.job-info .badge {
   font-size: 0.7rem;
-  margin-bottom: 4px;
 }
+
 
 .job-card .job-info .title {
   font-size: 0.85rem;
   font-weight: 600;
   color: #333;
+}
+
+/* === Quill Editor === */
+#quillEditor {
+  height: 150px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-top: 5px;
 }
 
 /* === Footer === */
@@ -196,95 +250,4 @@ footer {
 
 .footer a:hover {
   text-decoration: underline;
-}
-
-/* === Quill Editor === */
-#quillEditor {
-  height: 150px;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  margin-top: 5px;
-}
-
-
-.main-content {
-  flex: 1;
-  padding: 20px;
-  overflow-y: auto;
-}
-
-/* ✅ Job Card Styling */
-.job-card {
-  transition: all 0.2s ease;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 12px;
-  margin-bottom: 16px;
-  background-color: #fff;
-  display: flex;
-  align-items: start;
-  gap: 12px;
-  min-height: 110px;
-}
-
-.job-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 128, 0, 0.15);
-  transform: translateY(-2px);
-}
-
-.job-card img {
-  width: 90px;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 6px;
-  flex-shrink: 0;
-}
-
-.job-card .job-info {
-  flex-grow: 1;
-}
-
-.job-card .job-info .badge {
-  font-size: 0.7rem;
-  margin-bottom: 4px;
-}
-
-.job-card .job-info .title {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #333;
-}
-
-/* ✅ Footer Link Styling */
-.footer a {
-  color: #198754;
-}
-
-.footer a:hover {
-  text-decoration: underline;
-}
-
-/* ✅ Quill Editor */
-#quillEditor {
-  height: 150px;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  margin-top: 5px;
-}
-
-.navbar-brand-text {
-  font-family: 'Courgette', cursive;
-  font-size: 1.5rem;
-  color: white;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-}
-
-.developer-label {
-  font-family: 'Roboto', sans-serif;
-  font-size: 0.75rem;
-  color: #ffffff;
-  margin-bottom: 0;
-  line-height: 1;
 }
