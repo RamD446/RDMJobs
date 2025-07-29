@@ -17,57 +17,54 @@
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 <!-- Add this to <head> -->
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-<style>
-
-
-
-</style>
 </head>
 <body>
 <div class="site-wrapper">
 
 <!-- Sticky Header -->
-<div class="top-header">
-  <a class="navbar-brand d-flex align-items-center gap-2 text-white mb-0" href="index.html">
-    <img src="assets/RDMjobslogo.png" alt="RDM Logo" width="32" height="32" class="rounded" />
-    <span class="d-flex flex-column">
-      <span class="brand-highlight">RDM</span>
-      <span class="brand-text">JOBS</span>
-    </span>
-  </a>
+<header class="top-header">
+  <div class="header-row">
+    <!-- Left: Logo -->
+    <a href="index.html" class="navbar-brand">
+      <img src="assets/RDMjobslogo.png" alt="RDM Logo" class="logo-img" />
+      <div class="brand-text-wrap">
+        <div class="brand-highlight">RDM</div>
+        <div class="brand-text">JOBS</div>
+      </div>
+    </a>
 
-  <div class="d-flex flex-column align-items-end text-end">
-    <p class="developer-label mb-0">Developed by</p>
-    <p class="developer-name mb-0 fw-semibold">Yalla Ramana</p>
-  </div>
-</div>
-
-<!-- Scrollable Category Header -->
-<div class="category-scroll">
-  <div class="category-container">
-    <div class="category-button" onclick="location.href='index.html'">
-      <i class="bi bi-house-door-fill"></i> All Job Notifications
+    <!-- Right: Icons/Buttons -->
+    <div class="header-buttons">
+      <button title="All Jobs" onclick="location.href='index.html'">
+        <i class="bi bi-house-door-fill"></i>
+        <span class="btn-label">All</span>
+      </button>
+      <button title="Govt" onclick="navigateToType('Government')">
+        <i class="bi bi-building"></i>
+        <span class="btn-label">Govt</span>
+      </button>
+      <button title="Private" onclick="navigateToType('Private')">
+        <i class="bi bi-briefcase-fill"></i>
+        <span class="btn-label">Private</span>
+      </button>
+      <button class="d-none">
+        <i class="bi bi-card-text"></i>
+        <span class="btn-label">Admit</span>
+      </button>
+      <button class="d-none" id="createJobBtn" data-bs-toggle="modal" data-bs-target="#createJobModal">
+        <i class="bi bi-plus-circle"></i>
+        <span class="btn-label">Create</span>
+      </button>
+      <button title="Admin" onclick="document.getElementById('adminLoginModal').showModal()">
+        <i class="bi bi-person-lock"></i>
+        <span class="btn-label">Admin</span>
+      </button>
     </div>
-    <div class="category-button">Govt Notifications</div>
-    <div class="category-button">Private Notifications</div>
-    <div class="category-button">Admit Notifications</div>
-
-    <button class="category-button btn btn-sm btn-success px-2 py-1 d-none" id="createJobBtn" data-bs-toggle="modal" data-bs-target="#createJobModal">
-      <i class="bi bi-plus-circle me-1"></i> Create Job
-    </button>
-    <button class="category-button btn btn-sm btn-outline-secondary px-2 py-1" data-bs-toggle="modal" data-bs-target="#adminLoginModal">
-      <i class="bi bi-person-lock me-1"></i> Admin Login
-    </button>
   </div>
-</div>
+</header>
 
-
-
-
-<!-- Job Listing -->
-<div class="main-content" id="jobList"></div>
-<div class="footer-container"></div>
-
+<main class="main-content" id="jobList"></main>
+<div class="footer-container"></div> <!-- ✅ Footer inserted here -->
 </div>
 
 <!-- Modals -->

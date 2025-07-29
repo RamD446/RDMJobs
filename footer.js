@@ -35,6 +35,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const footerContainer = document.querySelector('.footer-container');
   if (footerContainer) {
-    footerContainer.innerHTML = footerHTML;
+    footerContainer.innerHTML = footerHTML.trim(); // Clean HTML
+  } else {
+    console.warn("⚠️ .footer-container not found in DOM.");
   }
 });
