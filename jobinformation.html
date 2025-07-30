@@ -15,10 +15,13 @@
     <div class="header-container"></div>
     <!-- Main Content -->
     <div class="main-content p-3">
-      <div id="breadcrumbNav" class="fw-bold fs-5 text-success mb-3"></div>
+      <div class="d-flex gap-2 mt-4 mb-4">
+  <button id="breadcrumbNav" class="btn btn-outline-success btn-sm fw-bold" disabled>
+  </button>
+</div>
+
       <div id="jobList" class="row g-3"></div>
     </div>
-
     <!-- Injected Footer -->
     <div class="footer-container"></div>
 
@@ -110,7 +113,7 @@
     const section = document.createElement("div");
     section.className = "mb-4";
     section.innerHTML = `
-      <h5 class="modern-section-title">📄 ${formattedType} Jobs</h5>
+     
       <div class="row g-3"></div>
     `;
 
