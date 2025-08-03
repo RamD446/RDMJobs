@@ -10,25 +10,19 @@
 </head>
 <body>
   <div class="site-wrapper">
-    
-    <!-- Footer injected by footer.js -->
     <div class="header-container"></div>
-<div class="d-flex gap-2 p-3">
-  <button class="btn btn-outline-success btn-sm fw-bold" disabled>Home / Job Details Page</button>
-</div>
 
+    <div class="d-flex gap-2 p-3">
+      <button class="btn btn-outline-success btn-sm fw-bold" disabled>Home / Job Details Page</button>
+    </div>
 
-
-    <!-- Main Content -->
     <div class="main-content p-3">
       <div id="jobDetails" class="p-4 bg-light border rounded shadow-sm mb-4"></div>
       <h5 class="text-secondary mb-3">Related Jobs</h5>
       <div id="relatedJobs" class="row g-3 mb-5"></div>
     </div>
 
-   <!-- Footer injected by footer.js -->
     <div class="footer-container"></div>
-
   </div>
 
   <!-- Firebase and Logic Script -->
@@ -74,58 +68,83 @@
         }
 
         const job = docSnap.data();
+        const currentUrl = window.location.href;
+
         jobDetailsEl.innerHTML = `
-  <h4 class="fw-bold text-danger">${job.title}</h4>
-  <div class="mb-3 small text-secondary d-flex flex-wrap gap-2">
-    <span><strong class="text-dark">Posted by:</strong> ${job.createdBy}</span>
-    <span>|</span>
-    <span><strong class="text-dark">Created:</strong> ${job.createdDate}</span>
-  </div>
-  <div>${job.content}</div>
-`;
+          <h4 class="fw-bold text-danger">${job.title}</h4>
+          <div class="mb-3 small text-secondary d-flex flex-wrap gap-2">
+            <span><strong class="text-dark">Posted by:</strong> ${job.createdBy}</span>
+            <span>|</span>
+            <span><strong class="text-dark">Created:</strong> ${job.createdDate}</span>
+          </div>
 
+          <div class="mb-3">
+            <strong>Share this job:</strong>
+            <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
+              <a href="https://api.whatsapp.com/send?text=${encodeURIComponent(currentUrl)}"
+                class="btn btn-sm btn-success" target="_blank">
+                <i class="bi bi-whatsapp"></i> WhatsApp
+              </a>
+              <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}"
+                class="btn btn-sm btn-primary" target="_blank">
+                <i class="bi bi-facebook"></i> Facebook
+              </a>
+              <a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}"
+                class="btn btn-sm btn-info text-white" target="_blank">
+                <i class="bi bi-twitter-x"></i> X (Twitter)
+              </a>
+              <button class="btn btn-sm btn-secondary" onclick="navigator.clipboard.writeText('${currentUrl}')">
+                <i class="bi bi-clipboard"></i> Copy Link
+              </button>
+            </div>
+          </div>
 
-        const relatedQuery = query(collection(db, "jobs"), where("type", "==", job.type));
-        const querySnapshot = await getDocs(relatedQuery);
+          <div>${job.content}</div>
+        `;
 
-        relatedJobsEl.innerHTML = "";
-        let cardCount = 0;
-
-        querySnapshot.forEach((docItem) => {
-          if (docItem.id === jobId || cardCount >= 6) return;
-
-          const related = docItem.data();
-          const tempDiv = document.createElement("div");
-          tempDiv.innerHTML = related.content || "";
-          const imgEl = tempDiv.querySelector("img");
-          const imageUrl = imgEl ? imgEl.src : "assets/RDMjobslogo.png";
-          const titleShort = related.title.length > 80 ? related.title.substring(0, 80).trim() + "..." : related.title;
-
-          const card = document.createElement("div");
-          card.className = "col-12 col-sm-6";
-          card.innerHTML = `
-            <a href="job-details.html?jobId=${docItem.id}" class="text-decoration-none text-dark">
-              <div class="border rounded shadow-sm p-2 h-100 d-flex gap-2 align-items-start">
-                <img src="${imageUrl}" class="rounded" style="width: 100px; height: 70px; object-fit: cover;" />
-                <div>
-                  <div style="font-size: 0.9rem; color: #0d6efd;"><strong>${titleShort}</strong></div>
-                </div>
-              </div>
-            </a>
-          `;
-          relatedJobsEl.appendChild(card);
-          cardCount++;
-        });
-
-        if (cardCount === 0) {
-          relatedJobsEl.innerHTML = `<p class="text-muted">No related jobs found.</p>`;
-        }
-
+        await loadRelatedJobs(job.type);
         await loadMoreJobs(job.type);
-
       } catch (err) {
         console.error("Error loading job:", err);
         jobDetailsEl.innerHTML = "<p class='text-danger'>Failed to load job details.</p>";
+      }
+    }
+
+    async function loadRelatedJobs(type) {
+      const relatedQuery = query(collection(db, "jobs"), where("type", "==", type));
+      const querySnapshot = await getDocs(relatedQuery);
+
+      relatedJobsEl.innerHTML = "";
+      let cardCount = 0;
+
+      querySnapshot.forEach((docItem) => {
+        if (docItem.id === jobId || cardCount >= 6) return;
+
+        const related = docItem.data();
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = related.content || "";
+        const imgEl = tempDiv.querySelector("img");
+        const imageUrl = imgEl ? imgEl.src : "assets/RDMjobslogo.png";
+        const titleShort = related.title.length > 80 ? related.title.substring(0, 80).trim() + "..." : related.title;
+
+        const card = document.createElement("div");
+        card.className = "col-12 col-sm-6";
+        card.innerHTML = `
+          <a href="job-details.html?jobId=${docItem.id}" class="text-decoration-none text-dark">
+            <div class="border rounded shadow-sm p-2 h-100 d-flex gap-2 align-items-start">
+              <img src="${imageUrl}" class="rounded" style="width: 100px; height: 70px; object-fit: cover;" />
+              <div>
+                <div style="font-size: 0.9rem; color: #0d6efd;"><strong>${titleShort}</strong></div>
+              </div>
+            </div>
+          </a>
+        `;
+        relatedJobsEl.appendChild(card);
+        cardCount++;
+      });
+
+      if (cardCount === 0) {
+        relatedJobsEl.innerHTML = `<p class="text-muted">No related jobs found.</p>`;
       }
     }
 

@@ -89,25 +89,25 @@
       text?.length > maxLength ? text.slice(0, maxLength).trim() + "…" : text || "";
 
     const renderJobCard = (job) => {
-      const tempDiv = document.createElement("div");
-      tempDiv.innerHTML = job.content || "";
-      const firstImg = tempDiv.querySelector("img");
-      const imageUrl = firstImg ? firstImg.src : "assets/RDMjobslogo.png";
+  const tempDiv = document.createElement("div");
+  tempDiv.innerHTML = job.content || "";
+  const firstImg = tempDiv.querySelector("img");
+  const imageUrl = firstImg ? firstImg.src : "assets/RDMjobslogo.png";
 
-      return `
-        <a href="job-details.html?jobId=${job.id}" class="text-decoration-none text-dark">
-          <div class="job-card shadow-sm">
-            <img src="${imageUrl}" alt="${job.title}" class="job-card-img" />
-            <div class="job-info">
-              <h6 class="title"><strong>${truncateText(job.title, 60)}</strong></h6>
-              <p class="mb-1"><strong style="color:#0d6efd;">${job.company || "N/A"}</strong></p>
-              <p class="mb-1"><strong style="color:#dc3545;">Last Date apply:</strong> 
-                <span style="color:#dc3545;">${job.lastDate || "N/A"}</span></p>
-            </div>
-          </div>
-        </a>
-      `;
-    };
+  return `
+    <a href="job-details.html?jobId=${job.id}" class="text-decoration-none text-dark">
+      <div class="job-card shadow-sm">
+        <img src="${imageUrl}" alt="${job.title}" class="job-card-img" />
+        <div class="job-info">
+          <h6 class="title"><strong>${truncateText(job.title, 60)}</strong></h6>
+          <p class="mb-1"><strong style="color:#0d6efd;">${truncateText(job.company, 40) || "N/A"}</strong></p>
+          <p class="mb-1"><strong style="color:#dc3545;">Last Date apply:</strong> 
+            <span style="color:#dc3545;">${job.lastDate || "N/A"}</span></p>
+        </div>
+      </div>
+    </a>
+  `;
+};
 
     // Add section header
     const section = document.createElement("div");

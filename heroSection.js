@@ -5,135 +5,143 @@ export function renderHeroSection() {
     <style>
       .hero-wrapper {
         background: linear-gradient(135deg, #e6f4ea, #f5fdfd);
-        min-height: 60vh;
-        padding: 4rem 1rem;
+        padding: 1.5rem 1rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        position: relative;
         overflow: hidden;
+        position: relative;
+        animation: fadeIn 1.2s ease-in-out;
       }
 
       .hero-glass {
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 2rem;
-        padding: 3rem 2.5rem;
-        max-width: 900px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 1rem;
+        padding: 2rem;
+        max-width: 1000px;
         width: 100%;
         text-align: center;
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.05);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        animation: fadeInUp 1s ease forwards;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+        animation: slideUp 1s ease forwards;
+        transform: translateY(30px);
         opacity: 0;
-        transform: translateY(40px);
-      }
-
-      .hero-heading {
-        font-size: 2.6rem;
-        font-weight: 700;
-        color: #212529;
-        margin-bottom: 1rem;
-      }
-
-      .hero-heading .highlight {
-        color: #157347;
       }
 
       .hero-subtitle {
-        font-size: 1.15rem;
-        color: #5c5c5c;
-        margin-bottom: 2.2rem;
-        line-height: 1.6;
+        font-size: 1.1rem;
+        color: #555;
+        margin-bottom: 1.5rem;
       }
 
-      .hero-buttons {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 1rem;
-        margin-bottom: 2rem;
+      .hero-features .card {
+        border: none;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        padding: 1rem;
       }
 
-      .hero-buttons button,
-      .hero-buttons a {
-        padding: 0.75rem 1.6rem;
-        min-width: 160px;
+      .hero-features .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+      }
+
+      .btn-custom-sm {
         font-weight: 600;
+        padding: 0.4rem 1rem;
         border-radius: 999px;
-        transition: 0.3s ease;
+        font-size: 0.875rem;
+        transition: all 0.25s ease-in-out;
       }
 
-      .hero-buttons button:hover,
-      .hero-buttons a:hover {
-        transform: translateY(-2px);
-        opacity: 0.95;
+      .btn-custom-sm:hover {
+        background-color: #157347;
+        transform: scale(1.03);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       }
 
-      .hero-social {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 1.2rem;
-        font-size: 1.4rem;
+      .hero-social i {
+        font-size: 1.3rem;
+        margin: 0 0.6rem;
+        color: #333;
+        transition: transform 0.2s;
       }
 
-      .hero-social a {
-        transition: transform 0.25s ease;
+      .hero-social i:hover {
+        transform: scale(1.2);
       }
 
-      .hero-social a:hover {
-        transform: scale(1.15);
-      }
-
-      @keyframes fadeInUp {
+      @keyframes slideUp {
         to {
-          opacity: 1;
           transform: translateY(0);
+          opacity: 1;
         }
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
       }
 
       @media (max-width: 576px) {
-        .hero-glass {
-          padding: 2rem 1.5rem;
-          border-radius: 1rem;
-        }
-
-        .hero-heading {
-          font-size: 1.9rem;
-        }
-
-        .hero-subtitle {
-          font-size: 1rem;
-        }
-
-        .hero-buttons button,
-        .hero-buttons a {
-          min-width: 140px;
-          font-size: 0.95rem;
-        }
+        .hero-subtitle { font-size: 1rem; }
+        .hero-features .card div { font-size: 0.95rem; }
+        .hero-features .card small { font-size: 0.75rem; }
+        .btn-custom-sm { font-size: 0.85rem; padding: 0.35rem 0.8rem; }
       }
     </style>
 
     <section class="hero-wrapper">
       <div class="hero-glass">
-        <h1 class="hero-heading">
-          Welcome to <span class="highlight">RDM JOBS</span> Portal
-        </h1>
         <p class="hero-subtitle">
-          Get the latest <strong>Government</strong> and <strong>Private sector</strong> jobs, updated daily to help you stay ahead.
+          Get the latest <strong>Government</strong> and <strong>Private</strong> jobs, updated daily for your career success.
         </p>
 
-        <div class="hero-buttons">
-          <button id="scrollToJobs" class="btn btn-success">🚀 See Jobs</button>
-          <a  class="btn btn-outline-primary">🔔 Follow Updates</a>
+        <!-- Category Highlights -->
+        <div class="container">
+          <div class="row hero-features mb-4">
+            <div class="col-6 col-sm-3 mb-3">
+              <div class="card text-center">
+                <div class="fw-bold text-success">🏛️ Govt Jobs</div>
+                <small class="text-muted">Updated Daily</small>
+              </div>
+            </div>
+            <div class="col-6 col-sm-3 mb-3">
+              <div class="card text-center">
+                <div class="fw-bold text-primary">💻 Software Jobs</div>
+                <small class="text-muted">Tech Roles</small>
+              </div>
+            </div>
+            <div class="col-6 col-sm-3 mb-3">
+              <div class="card text-center">
+                <div class="fw-bold text-warning">🎓 Internships</div>
+                <small class="text-muted">For Freshers</small>
+              </div>
+            </div>
+            <div class="col-6 col-sm-3 mb-3">
+              <div class="card text-center">
+                <div class="fw-bold text-danger">🚶 Walk-in Drives</div>
+                <small class="text-muted">Weekly Posts</small>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="hero-social">
-          <span class="text-muted">Follow:</span>
-          <a href="https://wa.me/your-number" target="_blank" class="text-success" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-          <a href="https://facebook.com/your-page" target="_blank" class="text-primary" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-          <a href="https://youtube.com/your-channel" target="_blank" class="text-danger" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <!-- Button & Social Links -->
+        <div class="hero-buttons d-flex flex-column align-items-center gap-3 mb-3">
+          <button id="scrollToJobs" class="btn btn-success btn-custom-sm">
+           See Jobs below
+          </button>
+
+          <div class="hero-social d-flex justify-content-center align-items-center mt-2">
+            <a href="https://wa.me/your-number" target="_blank" title="WhatsApp">
+              <i class="fab fa-whatsapp text-success"></i>
+            </a>
+            <a href="https://facebook.com/your-page" target="_blank" title="Facebook">
+              <i class="fab fa-facebook-f text-primary"></i>
+            </a>
+            <a href="https://youtube.com/your-channel" target="_blank" title="YouTube">
+              <i class="fab fa-youtube text-danger"></i>
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -142,7 +150,6 @@ export function renderHeroSection() {
       document.addEventListener("DOMContentLoaded", function () {
         const scrollBtn = document.getElementById("scrollToJobs");
         const jobList = document.getElementById("jobList");
-
         if (scrollBtn && jobList) {
           scrollBtn.addEventListener("click", function () {
             jobList.scrollIntoView({ behavior: "smooth" });
