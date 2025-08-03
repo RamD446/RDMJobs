@@ -301,10 +301,14 @@ async function loadJobs() {
     if (top20Jobs.length > 0) {
       const section = document.createElement("div");
       section.className = "mb-4";
-      section.innerHTML = `
-        <h5 class="modern-section-title">🆕 Latest Job Information</h5>
-        <div class="row g-3"></div>
-      `;
+    section.innerHTML = `
+  <div class="section-label" style="display:inline-block;font-size:0.85rem;font-weight:600;color:#0f172a;background-color:#d1fae5;padding:0.35rem 0.9rem;border-radius:0.5rem;margin-bottom:0.75rem;cursor:default;user-select:none;transition:all 0.25s ease;" onmouseover="this.style.backgroundColor='#d1fae5';this.style.color='#065f46'" onmouseout="this.style.backgroundColor='#f1f5f9';this.style.color='#0f172a'">
+    🆕 Latest Job Updates
+  </div>
+  <div class="row g-3"></div>
+`;
+
+
       const row = section.querySelector(".row");
 
       top20Jobs.forEach((job) => {
