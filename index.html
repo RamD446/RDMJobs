@@ -243,8 +243,7 @@ async function loadJobs() {
 
     snapshot.forEach((docSnap) => {
       const job = docSnap.data();
-      const jobId = docSnap.id; // Custom ID used as Firestore doc ID
-
+      const jobId = docSnap.id;
       const fullJob = { ...job, id: jobId };
       allJobs.push(fullJob);
 
@@ -265,6 +264,7 @@ async function loadJobs() {
     const truncateText = (text, maxLength) =>
       text.length > maxLength ? text.substring(0, maxLength).trim() + "..." : text;
 
+    // Full job card for Latest Jobs
     const renderJobCard = (job) => {
       const tempDiv = document.createElement("div");
       tempDiv.innerHTML = job.content || "";
@@ -272,56 +272,75 @@ async function loadJobs() {
       const imageUrl = firstImg ? firstImg.src : "assets/RDMjobslogo.png";
 
       return `
-        <a href="job-details.html?jobId=${job.id}" class="text-decoration-none text-dark">
-          <div class="job-card shadow-sm">
-            <img src="${imageUrl}" alt="${job.title}" class="job-card-img" />
-            <div class="job-info">
-  <h6 class="title">
-    <strong class="text-dark">${truncateText(job.title, 60)}</strong>
-  </h6>
-  
-  ${job.company ? `
-    <p class="mb-1" style="font-size: 0.80rem; color: #0d6efd; font-weight: 500;">
-      🏢 ${job.company}
-    </p>` : ""}
+      <a href="job-details.html?jobId=${job.id}" class="text-decoration-none text-dark">
+  <div class="job-card shadow-sm" style="
+    padding: 0.6rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+  " onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='white'">
 
-  ${job.lastDate ? `
-    <p class="mb-1" style="font-size: 0.80rem; color: #dc3545; font-weight: 500;">
-      ⏳ ApplyDate: ${formatDate(job.lastDate)}
-    </p>` : ""}
-</div>
+    <img src="${imageUrl}" alt="${job.title}" class="job-card-img" style="
+     
+    " />
 
-          </div>
-        </a>
+    <div class="job-info" style="padding: 0.25rem 0.5rem; font-size: 1rem;">
+
+      <!-- Line 1: Job Title -->
+      <div style="color: #0d6efd; margin-bottom: 4px;">${job.title}</div>
+
+      <!-- Line 2: Company Name -->
+      <div style="color: #198754; margin-bottom: 4px;">${job.company}</div>
+
+      <!-- Line 3: Last Date -->
+      <div style="color: #dc3545;">${job.lastDate}</div>
+
+    </div>
+  </div>
+</a>
+
+
+
+
       `;
     };
 
-    // Latest Jobs
-    const top20Jobs = allJobs.slice(0, 20);
+    // Simple title-only job card for categorized jobs
+   const renderSimpleJobCard = (job) => {
+  return `
+    <div class="mb-1">
+      <a href="job-details.html?jobId=${job.id}" class="text-decoration-none" style="color:#0d6efd;">
+        🔹 ${job.title}
+      </a>
+    </div>
+  `;
+};
+
+    // 🆕 Latest Job Updates
+    const top20Jobs = allJobs.slice(0, 1000);
     if (top20Jobs.length > 0) {
       const section = document.createElement("div");
       section.className = "mb-4";
-    section.innerHTML = `
-  <div class="section-label" style="display:inline-block;font-size:0.85rem;font-weight:600;color:#0f172a;background-color:#d1fae5;padding:0.35rem 0.9rem;border-radius:0.5rem;margin-bottom:0.75rem;cursor:default;user-select:none;transition:all 0.25s ease;" onmouseover="this.style.backgroundColor='#d1fae5';this.style.color='#065f46'" onmouseout="this.style.backgroundColor='#f1f5f9';this.style.color='#0f172a'">
-    🆕 Latest Job Updates
-  </div>
-  <div class="row g-3"></div>
-`;
-
-
+      section.innerHTML = `
+        <div class="section-label"
+          style="display:inline-block;font-size:0.85rem;font-weight:600;color:#0f172a;background-color:#d1fae5;padding:0.35rem 0.9rem;border-radius:0.5rem;margin-bottom:0.75rem;cursor:default;user-select:none;transition:all 0.25s ease;"
+          onmouseover="this.style.backgroundColor='#bbf7d0';this.style.color='#065f46'"
+          onmouseout="this.style.backgroundColor='#d1fae5';this.style.color='#0f172a'">
+          🆕 Latest Job Updates
+        </div>
+        <div class="row g-3"></div>
+      `;
       const row = section.querySelector(".row");
-
       top20Jobs.forEach((job) => {
         const col = document.createElement("div");
         col.className = "col-12 col-md-6";
         col.innerHTML = renderJobCard(job);
         row.appendChild(col);
       });
-
       jobList.appendChild(section);
     }
 
-    // Categorized (Govt / Private)
+    // Government & Private Jobs
     const types = ["Government", "Private"];
     const categoryTitles = {
       Government: "🏛 Government Jobs",
@@ -345,8 +364,8 @@ async function loadJobs() {
         wrapper.className = "job-category-wrapper";
 
         const header = `
-          <div class="job-category-header">
-            <span>${categoryTitles[type]}</span>
+          <div class="job-category-header d-flex justify-content-between align-items-center mb-2">
+            <span style="font-weight:600;">${categoryTitles[type]}</span>
             <a href="jobinformation.html?type=${encodeURIComponent(type)}" title="See All">
               <i class="bi bi-box-arrow-up-right"></i>
             </a>
@@ -358,7 +377,7 @@ async function loadJobs() {
         if (jobs.length === 0) {
           content = `<p class="job-category-empty">No ${categoryTitles[type]} found.</p>`;
         } else {
-          const cards = jobs.map(renderJobCard).join("");
+          const cards = jobs.map(renderSimpleJobCard).join("");
           content = `<div class="job-category-cards">${cards}</div>`;
           contentAdded = true;
         }
@@ -381,6 +400,7 @@ async function loadJobs() {
 }
 
 loadJobs();
+
 window.navigateToType = function(type) {
   window.location.href = `jobinformation.html?type=${encodeURIComponent(type)}`;
 };

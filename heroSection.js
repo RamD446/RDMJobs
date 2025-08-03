@@ -29,8 +29,8 @@ export function renderHeroSection() {
 
       .hero-subtitle {
         font-size: 1rem;
-        color: #ccc;
-        margin-bottom: 1rem;
+        color: #334155;
+        margin-bottom: 1.2rem;
         font-weight: 500;
       }
 
@@ -105,11 +105,9 @@ export function renderHeroSection() {
     <section class="hero-wrapper">
       <div class="hero-glass">
         <p class="hero-subtitle">
-          <strong class="text-success">Get The Latest Government</strong>
-          <span class="text-primary"> And </span>
-          <strong class="text-warning">Private Jobs ,</strong>
-          <span class="text-danger"> Updated Daily</span>
-          <span class="text-info"> For Your Career Success.</span>
+          <strong class="text-success">Get The Latest Government And Private Jobs</strong>,
+          <span class="text-danger">Updated Daily</span>
+          <span class="text-info">For Your Career Success.</span>
         </p>
 
         <!-- Category Highlights -->
@@ -144,23 +142,22 @@ export function renderHeroSection() {
 
         <!-- Button & Share Links -->
         <div class="hero-buttons d-flex flex-column align-items-center gap-3 mb-3">
-          <button id="scrollToJobs" class="btn btn-custom-sm">
+          <button id="scrollToJobs" class="btn btn-outline-warning">
             See Jobs Below
           </button>
 
           <div class="mb-3">
-           <strong>Follow Us On Social Media:</strong>
+            <strong>Follow Us On Social Media:</strong>
             <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
-              <a  class="btn btn-sm btn-success d-flex align-items-center gap-1" target="_blank">
+              <a class="btn btn-sm btn-success d-flex align-items-center gap-1" target="_blank">
                 <i class="bi bi-whatsapp"></i> WhatsApp
               </a>
-              <a  class="btn btn-sm btn-primary d-flex align-items-center gap-1" target="_blank">
+              <a class="btn btn-sm btn-primary d-flex align-items-center gap-1" target="_blank">
                 <i class="bi bi-facebook"></i> Facebook
               </a>
-              <a  class="btn btn-sm btn-info text-white d-flex align-items-center gap-1" target="_blank">
+              <a class="btn btn-sm btn-info text-white d-flex align-items-center gap-1" target="_blank">
                 <i class="bi bi-twitter-x"></i> X (Twitter)
               </a>
-             
             </div>
           </div>
         </div>
