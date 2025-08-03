@@ -17,18 +17,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 <!-- Add this to <head> -->
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<!-- Font Awesome CDN for Icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
+
 </head>
 <body>
 <div class="site-wrapper">
 
-<!-- Sticky Header -->
-<!-- HEADER CONTAINER -->
+
 <div class="header-container"></div>
-<div class="d-flex gap-2 p-3">
-  <button class="btn btn-outline-success btn-sm fw-bold" disabled>Home Page </button>
-</div>
+<div id="hero-section"></div>
 <main class="main-content" id="jobList"></main>
-<div class="footer-container"></div> <!-- ✅ Footer inserted here -->
+<div class="footer-container"></div> 
 </div>
 
 <!-- Modals -->
@@ -208,7 +209,11 @@ async function loadJobs() {
   try {
     const q = query(collection(db, "jobs"), orderBy("postedAt", "desc"));
     const snapshot = await getDocs(q);
-    jobList.innerHTML = "";
+   jobList.innerHTML = `
+ 
+`;
+
+
 
     if (snapshot.empty) {
       jobList.innerHTML = "<p class='text-center'>No jobs posted yet.</p>";
@@ -235,6 +240,11 @@ async function loadJobs() {
         }
       }
     });
+const formatDate = (dateStr) => {
+  const date = new Date(dateStr);
+  if (isNaN(date)) return ''; // Invalid date
+  return `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}/${date.getFullYear()}`;
+};
 
     const truncateText = (text, maxLength) =>
       text.length > maxLength ? text.substring(0, maxLength).trim() + "..." : text;
@@ -250,12 +260,30 @@ async function loadJobs() {
   <div class="job-card shadow-sm">
     <img src="${imageUrl}" alt="${job.title}" class="job-card-img" />
     <div class="job-info">
-      <h6 class="title"> <strong>${truncateText(job.title, 60)}</strong></h6>
-      <p class="mb-1"><strong style="color:#0d6efd;">${job.company || "N/A"}</strong></p>
-      <p class="mb-1"><strong style="color:#dc3545;">Last Date apply:</strong> <span style="color:#dc3545;">${job.lastDate || "N/A"}</span></p>
+      <h6 class="title">
+        <strong>${truncateText(job.title, 60)}</strong>
+      </h6>
+      ${job.company && job.company.trim() ? `
+  <p class="mb-1 text-primary font-semibold" style="font-size: 0.80rem;">${job.company}</p>
+` : ''}
+
+${job.lastDate && job.lastDate.trim() ? `
+  <p class="mb-1 text-red-500" style="font-size: 0.80rem;">
+    ${formatDate(job.lastDate)}
+  </p>
+` : ''}
+
+
+
+
+  
+
+
+      
     </div>
   </div>
 </a>
+
       `;
     };
 
@@ -373,6 +401,29 @@ window.navigateToType = function(type) {
 });
 
 </script>
+<!-- Load hero section module -->
+<script type="module">
+  import { renderHeroSection } from './heroSection.js';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById('hero-section');
+    if (container) {
+      container.innerHTML = renderHeroSection();
+    }
+  });
+  document.addEventListener("DOMContentLoaded", function () {
+  const scrollBtn = document.getElementById("scrollToJobs");
+  const jobList = document.getElementById("jobList");
+
+  if (scrollBtn && jobList) {
+    scrollBtn.addEventListener("click", function () {
+      jobList.scrollIntoView({ behavior: "smooth" });
+    });
+  }
+});
+
+</script>
+
 
 </body>
 </html>
