@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>RDM Jobs Admin</title>
+
+  <!-- Bootstrap & Quill CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
+
+  <!-- Firebase Compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-dark bg-primary">
+    <div class="container-fluid d-flex justify-content-between">
+      <span class="navbar-brand mb-0 h1">RDM Admin</span>
+      <a href="index.html" class="btn btn-light btn-sm">
+        <i class="bi bi-house-door-fill"></i> Home
+      </a>
+    </div>
+  </nav>
+
+  <!-- Login Section -->
+  <div class="container mt-5" id="loginSection">
+    <h3 class="text-center mb-4">Admin Login</h3>
+    <div class="card p-4 mx-auto" style="max-width: 400px;">
+      <input type="email" id="email" class="form-control mb-3" placeholder="Email" required />
+      <input type="password" id="password" class="form-control mb-3" placeholder="Password" required />
+      <button onclick="login()" class="btn btn-primary w-100">Login</button>
+    </div>
+  </div>
+
+  <!-- Admin Panel -->
+  <div class="container mt-4" id="adminPanel" style="display: none;">
+    <h5 class="text-center mb-3">Welcome, <span id="userEmail"></span></h5>
+
+    <div class="d-flex justify-content-end mb-3">
+      <button onclick="logout()" class="btn btn-secondary">Logout</button>
+    </div>
+
+    <div class="d-flex justify-content-start mb-4">
+      <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createJobModal">
+        <i class="bi bi-plus-circle"></i> + Create New Job
+      </button>
+    </div>
+
+    <h6>All Jobs</h6>
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered table-hover mt-3" id="jobsTable">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Type</th>
+            <th>Posted On</th>
+            <th>Created By</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="jobsBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Create Job Modal -->
+  <div class="modal fade" id="createJobModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <form id="jobForm">
+          <div class="modal-header">
+            <h5 class="modal-title">Post a New Job</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Job Title</label>
+                <input type="text" id="jobTitle" class="form-control" required />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Company Name</label>
+                <input type="text" id="jobCompany" class="form-control" required />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Job Type</label>
+                <select id="jobType" class="form-select" required>
+                  <option value="">Select Job Type</option>
+                  <option value="Government">Government</option>
+                  <option value="Private">Private</option>
+                  <option value="Software">Software</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Last Date</label>
+                <input type="date" id="jobLastDate" class="form-control" required />
+              </div>
+            </div>
+            <div class="mt-3">
+              <label class="form-label">Job Details</label>
+              <div id="quillEditor" style="height: 200px;"></div>
+            </div>
+            <input type="hidden" id="createdDate" />
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Save Job</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap & Quill JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+  <!-- App Script -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAzXgI8kvqz9CEo9393W48yEZjUx6l_YNM",
+      authDomain: "rdmjobs-78da3.firebaseapp.com",
+      projectId: "rdmjobs-78da3",
+      storageBucket: "rdmjobs-78da3.appspot.com",
+      messagingSenderId: "850369074130",
+      appId: "1:850369074130:web:c96133288fb6cabdd82e0b"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    const quill = new Quill("#quillEditor", {
+      theme: "snow",
+      modules: {
+        toolbar: [
+          [{ header: [1, 2, false] }],
+          ["bold", "italic", "underline"],
+          ["image", "link"],
+          [{ list: "ordered" }, { list: "bullet" }]
+        ]
+      }
+    });
+
+    function login() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      auth.signInWithEmailAndPassword(email, password)
+        .then((userCred) => {
+          document.getElementById("loginSection").style.display = "none";
+          document.getElementById("adminPanel").style.display = "block";
+          document.getElementById("userEmail").innerText = userCred.user.email;
+          loadJobs();
+        })
+        .catch((err) => alert("Login failed: " + err.message));
+    }
+
+    function logout() {
+      auth.signOut().then(() => location.reload());
+    }
+
+    function generateCustomJobId(title) {
+      const cleanTitle = title.replace(/[^a-zA-Z0-9 ]/g, "").trim().replace(/\s+/g, "_");
+      const random = Math.random().toString(36).substring(2, 6);
+      return `${cleanTitle}_${random}`;
+    }
+
+    document.getElementById("jobForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const titleRaw = document.getElementById("jobTitle").value;
+      const jobId = generateCustomJobId(titleRaw);
+
+      const job = {
+        id: jobId,
+        title: titleRaw,
+        company: document.getElementById("jobCompany").value,
+        type: document.getElementById("jobType").value,
+        lastDate: document.getElementById("jobLastDate").value,
+        content: quill.root.innerHTML,
+        createdBy: auth.currentUser.email,
+        createdDate: new Date().toISOString().split("T")[0],
+        postedAt: new Date().toISOString()
+      };
+
+      try {
+        await db.collection("jobs").doc(jobId).set(job);
+        document.getElementById("jobForm").reset();
+        quill.setText("");
+        bootstrap.Modal.getInstance(document.getElementById("createJobModal")).hide();
+        loadJobs();
+      } catch (err) {
+        console.error(err);
+        alert("Error saving job");
+      }
+    });
+
+    async function loadJobs() {
+      const tbody = document.getElementById("jobsBody");
+      tbody.innerHTML = "<tr><td colspan='6'>Loading...</td></tr>";
+
+      try {
+        const snapshot = await db.collection("jobs").orderBy("postedAt", "desc").get();
+        tbody.innerHTML = "";
+        let count = 1;
+
+        snapshot.forEach((doc) => {
+          const job = doc.data();
+          const row = document.createElement("tr");
+
+          row.innerHTML = `
+            <td>${count++}</td>
+            <td>${job.title}</td>
+            <td>${job.type}</td>
+            <td>${new Date(job.postedAt).toLocaleDateString()}</td>
+            <td>${job.createdBy}</td>
+            <td>
+              <button class="btn btn-sm btn-danger" onclick="deleteJob('${job.id}')">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+      } catch (err) {
+        tbody.innerHTML = "<tr><td colspan='6' class='text-danger'>Failed to load jobs</td></tr>";
+      }
+    }
+
+    window.deleteJob = async function (id) {
+      if (!confirm("Delete this job?")) return;
+      try {
+        await db.collection("jobs").doc(id).delete();
+        loadJobs();
+      } catch (err) {
+        alert("Error deleting job");
+        console.error(err);
+      }
+    };
+
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        document.getElementById("loginSection").style.display = "none";
+        document.getElementById("adminPanel").style.display = "block";
+        document.getElementById("userEmail").innerText = user.email;
+        loadJobs();
+      }
+    });
+  </script>
+</body>
+</html>

@@ -17,10 +17,12 @@
     <div class="header-container"></div>
 
     <!-- About Content -->
-    <main class="main-content">
-      <div id="aboutContent" class="text-center py-5 text-muted">
-        <div class="spinner-border text-success mb-3" role="status"></div><br />
-        Loading About Us...
+    <main class="main-content p-4">
+      <div class="bg-light p-4 rounded shadow-sm text-muted" id="aboutContent">
+        <div class="text-center">
+          <div class="spinner-border text-success mb-3" role="status"></div><br />
+          Loading About Us...
+        </div>
       </div>
     </main>
 
@@ -32,22 +34,6 @@
   <script src="header.js"></script>
   <script src="footer.js"></script>
   <script>
-    // Update date after header loads
-    document.addEventListener("DOMContentLoaded", () => {
-      const interval = setInterval(() => {
-        const dateBox = document.getElementById("currentDate");
-        if (dateBox) {
-          dateBox.textContent = new Date().toLocaleDateString('en-IN', {
-            weekday: 'short',
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric'
-          });
-          clearInterval(interval);
-        }
-      }, 100);
-    });
-
     // Navigation function used in header
     function navigateToType(type) {
       const encodedType = encodeURIComponent(type);
@@ -58,7 +44,9 @@
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         document.getElementById("aboutContent").innerHTML = `
-          <h3 class="mb-3"> <button class="btn btn-outline-success btn-sm fw-bold" disabled>About Us</button></h3>
+          <h3 class="mb-3">
+            <button class="btn btn-outline-success btn-sm fw-bold" disabled>About Us</button>
+          </h3>
           <p>Hi, hello everyone! 🙏 Thank you for visiting <strong>RDM Jobs</strong>. I hope this website is helpful to all of you who are searching for job opportunities.</p>
           <p>My name is <strong>Yalla Ramana</strong>. I am a software developer and the creator of this website. I designed and developed this platform to help job seekers easily find updates on government, private, and software jobs—all in one place.</p>
           <p>I post job-related information daily, aiming to keep the content accurate and helpful. If you find this site useful, please support and encourage me to continue by sharing it with your friends.</p>

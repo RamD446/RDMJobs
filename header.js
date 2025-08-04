@@ -29,17 +29,12 @@ document.addEventListener("DOMContentLoaded", function () {
           <i class="bi bi-card-text"></i>
           <span class="btn-label">Admit</span>
         </button>
-        <!-- Create Job Button (Hidden until Admin login) -->
-      <button class="btn btn-success d-none" id="createJobBtn" data-bs-toggle="modal" data-bs-target="#createJobModal">
-  <i class="bi bi-plus-circle"></i>
-  <span>Create Job</span>
+
+       <button class="btn btn-outline-primary" onclick="location.href='admin.html';">
+  <i class="bi bi-person-lock"></i>
+  <span class="btn-label">Admin</span>
 </button>
 
-        <!-- Admin Login Button -->
-        <button title="Admin" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#adminLoginModal">
-          <i class="bi bi-person-lock"></i>
-          <span class="btn-label">Admin</span>
-        </button>
       </div>
     </div>
   </header>

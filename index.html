@@ -8,131 +8,31 @@
   <!-- CSS Dependencies -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
-  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
-  <!-- Add this in <head> -->
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
-  <!-- Add this to your <head> if not already included -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-<!-- Add this to <head> -->
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
-<!-- Font Awesome CDN for Icons -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
-
-
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
 </head>
+
 <body>
 <div class="site-wrapper">
-
-
-<div class="header-container"></div>
-<div id="hero-section"></div>
-<main class="main-content" id="jobList"></main>
-<div class="footer-container"></div> 
+  <div class="header-container"></div>
+  <div id="hero-section"></div>
+  <main class="main-content" id="jobList"></main>
+  <div class="footer-container"></div> 
 </div>
-
-<!-- Modals -->
-<!-- Create Job Modal -->
-<div class="modal fade" id="createJobModal" tabindex="-1">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <form id="jobForm">
-        <div class="modal-header">
-          <h5 class="modal-title">Post a New Job</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" title="Close" aria-label="Close"></button>
-        </div>
-
-        <div class="modal-body">
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label for="jobTitle" class="form-label">Job Title</label>
-              <input type="text" id="jobTitle" class="form-control" required />
-            </div>
-
-            <div class="col-md-6">
-              <label for="jobCompany" class="form-label">Company Name</label>
-              <input type="text" id="jobCompany" class="form-control" required />
-            </div>
-
-            <div class="col-md-6">
-              <label for="jobType" class="form-label">Job Type</label>
-              <select id="jobType" class="form-select" required>
-                <option value="">Select Job Type</option>
-                <option value="Government">Government</option>
-                <option value="Private">Private</option>
-                <option value="Software">Software</option>
-              </select>
-            </div>
-
-            <div class="col-md-6">
-              <label for="jobLastDate" class="form-label">Last Date to Apply</label>
-              <input type="date" id="jobLastDate" class="form-control" required />
-            </div>
-          </div>
-
-          <div class="mt-3">
-            <label class="form-label">Job Details</label>
-            <div id="quillEditor" style="height: 200px;"></div>
-          </div>
-
-          <input type="hidden" id="createdDate" />
-        </div>
-
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-success">Save Job</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-
-<!-- Admin Login Modal -->
-<div class="modal fade" id="adminLoginModal" tabindex="-1">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content">
-      <form id="adminLoginForm">
-        <div class="modal-header">
-          <h5 class="modal-title">Admin Access</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-2">
-            <label>Email</label>
-            <input type="text" class="form-control" id="adminEmail" placeholder="Enter your email" />
-          </div>
-          <div class="mb-2">
-            <label>Password</label>
-            <input type="password" class="form-control" id="adminPassword" placeholder="Enter your password" />
-          </div>
-          <div class="text-danger small d-none" id="adminError">Invalid credentials</div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary btn-sm">Login</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
 
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="footer.js"></script>
 <script src="header.js"></script>
 
-
 <script type="module">
-// Firebase Setup
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
 import {
   getFirestore,
   collection,
   doc,
-  setDoc,
   getDocs,
   query,
   orderBy
@@ -150,73 +50,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Quill Editor Init
-const quill = new Quill("#quillEditor", {
-  theme: "snow",
-  modules: {
-    toolbar: [
-      [{ header: [1, 2, false] }],
-      ["bold", "italic", "underline"],
-      ["image", "link"],
-      [{ list: "ordered" }, { list: "bullet" }]
-    ]
-  }
-});
-
-// Set created date
-const createModalEl = document.getElementById("createJobModal");
-createModalEl.addEventListener("show.bs.modal", () => {
-  document.getElementById("createdDate").value = new Date().toISOString().split("T")[0];
-});
-
-// Submit Job
-const jobForm = document.getElementById("jobForm");
-
-jobForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  // Generate custom job ID
-  const titleRaw = document.getElementById("jobTitle").value;
-  const jobId = generateCustomJobId(titleRaw);
-
-  const job = {
-    id: jobId,
-    title: titleRaw,
-    company: document.getElementById("jobCompany").value,
-    type: document.getElementById("jobType").value,
-    lastDate: document.getElementById("jobLastDate").value,
-    content: quill.root.innerHTML,
-    createdBy: "Yalla Ramana",
-    createdDate: document.getElementById("createdDate").value,
-    postedAt: new Date().toISOString()
-  };
-
-  try {
-    const jobRef = doc(db, "jobs", jobId); // Use custom ID as document ID
-    await setDoc(jobRef, job); // Save job with custom ID
-    jobForm.reset();
-    quill.setText("");
-    bootstrap.Modal.getInstance(createModalEl).hide();
-    loadJobs();
-  } catch (error) {
-    alert("Error posting job.");
-    console.error(error);
-  }
-});
-
-// Utility: Generate custom ID like IBPS_Clerk_2025_Notification_xyz1
-function generateCustomJobId(title) {
-  const cleanTitle = title
-    .replace(/[^a-zA-Z0-9 ]/g, "") // Remove special characters
-    .trim()
-    .replace(/\s+/g, "_"); // Replace spaces with underscores
-
-  const randomSuffix = Math.random().toString(36).substring(2, 6);
-  return `${cleanTitle}_${randomSuffix}`;
-}
-
 // Load Jobs
 async function loadJobs() {
+  const jobList = document.getElementById("jobList");
   jobList.innerHTML = `
     <div class="text-center text-muted py-5">
       <div class="spinner-border text-success mb-3" role="status"></div><br>
@@ -261,10 +97,6 @@ async function loadJobs() {
       return `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}/${date.getFullYear()}`;
     };
 
-    const truncateText = (text, maxLength) =>
-      text.length > maxLength ? text.substring(0, maxLength).trim() + "..." : text;
-
-    // Full job card for Latest Jobs
     const renderJobCard = (job) => {
       const tempDiv = document.createElement("div");
       tempDiv.innerHTML = job.content || "";
@@ -272,53 +104,33 @@ async function loadJobs() {
       const imageUrl = firstImg ? firstImg.src : "assets/RDMjobslogo.png";
 
       return `
-      <a href="job-details.html?jobId=${job.id}" class="text-decoration-none text-dark">
-  <div class="job-card shadow-sm" style="
-    padding: 0.6rem;
-    border-radius: 0.5rem;
-    transition: background-color 0.3s ease;
-    cursor: pointer;
-  " onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='white'">
-
-    <img src="${imageUrl}" alt="${job.title}" class="job-card-img" style="
-     
-    " />
-
-    <div class="job-info" style="padding: 0.25rem 0.5rem; font-size: 1rem;">
-
-      <!-- Line 1: Job Title -->
-      <div style="color: #0d6efd; margin-bottom: 4px;">${job.title}</div>
-
-      <!-- Line 2: Company Name -->
-      <div style="color: #198754; margin-bottom: 4px;">${job.company}</div>
-
-      <!-- Line 3: Last Date -->
-      <div style="color: #dc3545;">${job.lastDate}</div>
-
-    </div>
-  </div>
-</a>
-
-
-
-
+        <a href="job-details.html?jobId=${job.id}" class="text-decoration-none text-dark">
+          <div class="job-card shadow-sm" style="padding: 0.6rem; border-radius: 0.5rem; transition: background-color 0.3s ease; cursor: pointer;"
+            onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='white'">
+            <img src="${imageUrl}" alt="${job.title}" class="job-card-img" />
+            <div class="job-info" style="padding: 0.25rem 0.5rem; font-size: 1rem;">
+              <div style="color: #0d6efd; margin-bottom: 4px;">${job.title}</div>
+              <div style="color: #198754; margin-bottom: 4px;">${job.company}</div>
+              <div style="color: #dc3545;">${job.lastDate}</div>
+            </div>
+          </div>
+        </a>
       `;
     };
 
-    // Simple title-only job card for categorized jobs
-   const renderSimpleJobCard = (job) => {
-  return `
-    <div class="mb-1">
-      <a href="job-details.html?jobId=${job.id}" class="text-decoration-none" style="color:#0d6efd;">
-        🔹 ${job.title}
-      </a>
-    </div>
-  `;
-};
+    const renderSimpleJobCard = (job) => {
+      return `
+        <div class="mb-1">
+          <a href="job-details.html?jobId=${job.id}" class="text-decoration-none" style="color:#0d6efd;">
+            🔹 ${job.title}
+          </a>
+        </div>
+      `;
+    };
 
     // 🆕 Latest Job Updates
-    const top20Jobs = allJobs.slice(0, 1000);
-    if (top20Jobs.length > 0) {
+    const topJobs = allJobs.slice(0, 1000);
+    if (topJobs.length > 0) {
       const section = document.createElement("div");
       section.className = "mb-4";
       section.innerHTML = `
@@ -331,7 +143,7 @@ async function loadJobs() {
         <div class="row g-3"></div>
       `;
       const row = section.querySelector(".row");
-      top20Jobs.forEach((job) => {
+      topJobs.forEach((job) => {
         const col = document.createElement("div");
         col.className = "col-12 col-md-6";
         col.innerHTML = renderJobCard(job);
@@ -340,7 +152,7 @@ async function loadJobs() {
       jobList.appendChild(section);
     }
 
-    // Government & Private Jobs
+    // Categorized Jobs
     const types = ["Government", "Private"];
     const categoryTitles = {
       Government: "🏛 Government Jobs",
@@ -405,36 +217,8 @@ window.navigateToType = function(type) {
   window.location.href = `jobinformation.html?type=${encodeURIComponent(type)}`;
 };
 </script>
-<script>
-  
-    document.addEventListener("DOMContentLoaded", function () {
-  const adminLoginForm = document.getElementById("adminLoginForm");
-  if (!adminLoginForm) return;
 
-  adminLoginForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const email = document.getElementById("adminEmail").value.trim();
-    const password = document.getElementById("adminPassword").value.trim();
-    const errorDiv = document.getElementById("adminError");
-    const createJobBtn = document.getElementById("createJobBtn");
-
-    if (email === "446" && password === "446") {
-      errorDiv.classList.add("d-none");
-      if (createJobBtn) createJobBtn.classList.remove("d-none");
-
-      // Hide modal
-      const modalEl = document.getElementById("adminLoginModal");
-      const modalInstance = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
-      modalInstance.hide();
-    } else {
-      errorDiv.classList.remove("d-none");
-    }
-  });
-});
-
-</script>
-<!-- Load hero section module -->
+<!-- Hero Section -->
 <script type="module">
   import { renderHeroSection } from './heroSection.js';
 
@@ -444,19 +228,17 @@ window.navigateToType = function(type) {
       container.innerHTML = renderHeroSection();
     }
   });
+
   document.addEventListener("DOMContentLoaded", function () {
-  const scrollBtn = document.getElementById("scrollToJobs");
-  const jobList = document.getElementById("jobList");
+    const scrollBtn = document.getElementById("scrollToJobs");
+    const jobList = document.getElementById("jobList");
 
-  if (scrollBtn && jobList) {
-    scrollBtn.addEventListener("click", function () {
-      jobList.scrollIntoView({ behavior: "smooth" });
-    });
-  }
-});
-
+    if (scrollBtn && jobList) {
+      scrollBtn.addEventListener("click", function () {
+        jobList.scrollIntoView({ behavior: "smooth" });
+      });
+    }
+  });
 </script>
-
-
 </body>
 </html>
