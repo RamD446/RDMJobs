@@ -1,125 +1,132 @@
-// heroSection.js
 export function renderHeroSection() {
   return `
     <style>
       .hero-wrapper {
-        background: linear-gradient(135deg, #e6f4ea, #f5fdfd);
-        padding: 1rem 1rem 1.5rem;
-        margin-top: 3.5rem; /* space from header */
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        background: linear-gradient(135deg, #ffecd2, #fcb69f);
+        padding: 4rem 1rem 5rem;
+        margin-top: 2rem;
         overflow: hidden;
-        position: relative;
-        animation: fadeIn 1.2s ease-in-out;
+        animation: fadeInBg 2s ease-in-out;
       }
-
       .hero-glass {
         background: rgba(255, 255, 255, 0.95);
         border-radius: 1rem;
-        padding: 1.25rem;
+        padding: 2rem;
         max-width: 1000px;
-        width: 100%;
+        margin: 0 auto;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         text-align: center;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
-        animation: slideUp 1s ease forwards;
-        transform: translateY(30px);
-        opacity: 0;
+        animation: fireRise 1.5s ease-in-out;
+      }
+      .hero-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #d62828;
+        text-shadow: 1px 1px #fcd5ce;
+        margin-bottom: 0.5rem;
       }
 
       .hero-subtitle {
-        font-size: 1rem;
-        color: #334155;
-        margin-bottom: 1rem;
-        font-weight: 500;
+        font-size: 1.1rem;
+        color: #444;
+        margin-bottom: 2rem;
       }
 
       .card-sm {
-        padding: 0.65rem;
-        font-size: 0.75rem;
-        border-radius: 0.5rem;
+        padding: 0.7rem;
+        font-size: 0.85rem;
+        border-radius: 0.6rem;
         color: #fff;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: pointer;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        animation: fadeInCard 0.8s ease forwards;
+        opacity: 0;
+        transform: translateY(20px);
       }
 
       .card-sm:hover {
-        transform: scale(1.02);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        transform: translateY(-5px) scale(1.03);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
       }
 
       .bg-govt { background-color: #14532d; }
-      .bg-software { background-color: #1e3a8a; }
       .bg-intern { background-color: #fde047; color: #111; }
-      .bg-walkin { background-color: #991b1b; }
+      .bg-software { background-color: #1e3a8a; }
+      .bg-medical { background-color: #991b1b; }
 
-      .btn-custom-sm {
+      .btn-flame {
+        font-size: 0.95rem;
         font-weight: 600;
-        padding: 0.3rem 0.8rem;
-        border-radius: 999px;
-        font-size: 0.75rem;
-        background-color: #198754;
+        background: linear-gradient(to right, #ff8800, #ff4500);
         border: none;
-        color: #fff;
-        transition: all 0.25s ease-in-out;
+        color: white;
+        padding: 0.5rem 1.2rem;
+        border-radius: 50px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease;
+        margin-top: 1.5rem;
       }
 
-      .btn-custom-sm:hover {
-        background-color: #146c43;
-        transform: scale(1.03);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      .btn-flame:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
       }
 
-      .hero-social i {
-        font-size: 1.1rem;
-        margin: 0 0.4rem;
-        color: #aaa;
-        transition: transform 0.2s, color 0.2s;
+      .hero-social {
+        margin-top: 2rem;
+        font-size: 0.9rem;
       }
 
-      .hero-social i:hover {
-        transform: scale(1.2);
-        color: #fff;
+      .hero-social a {
+        margin: 0 0.5rem;
+        text-decoration: none;
+        color: #d62828;
+        font-weight: bold;
       }
 
-      @keyframes slideUp {
-        to {
-          transform: translateY(0);
-          opacity: 1;
-        }
+      @keyframes fireRise {
+        0% { transform: translateY(40px); opacity: 0; }
+        100% { transform: translateY(0); opacity: 1; }
       }
 
-      @keyframes fadeIn {
+      @keyframes fadeInBg {
         from { opacity: 0; }
         to { opacity: 1; }
       }
 
+      @keyframes fadeInCard {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
       @media (max-width: 576px) {
-        .hero-subtitle { font-size: 0.9rem; }
-        .btn-custom-sm { font-size: 0.7rem; padding: 0.25rem 0.7rem; }
-        .card-sm div { font-size: 0.75rem; }
-        .card-sm small { font-size: 0.65rem; }
-        .hero-wrapper { margin-top: 3.8rem; }
+        .hero-title { font-size: 1.5rem; }
+        .hero-subtitle { font-size: 1rem; }
+        .card-sm { font-size: 0.75rem; padding: 0.6rem; }
+        .btn-flame { font-size: 0.85rem; }
       }
     </style>
 
     <section class="hero-wrapper">
       <div class="hero-glass">
-        <p class="hero-subtitle">
-          <strong class="text-success">Get The Latest Government And Private Jobs</strong>,
-          <span class="text-danger">Updated Daily</span>
-          <span class="text-info">For Your Career Success.</span>
-        </p>
+        <div class="hero-subtitle">
+           <strong>Get the hottest updates on Govt & Private Jobs</strong><br>
+           <span class="text-success">Stay ahead in your career journey</span>.
+        </div>
 
         <div class="container px-2">
-          <div class="row g-2 justify-content-center mb-3">
+          <div class="row g-3 justify-content-center">
             ${[
-              { title: "🏛️ Govt & Private", color: "bg-govt", description: "Daily Employment News" },
-              { title: "🎓 Interns & Freshers", color: "bg-intern", description: "Opportunities For Students" },
-              { title: "💻 IT Software Jobs", color: "bg-secondary", description: "Developer & Tech Roles" },
-              { title: "🩺 Medical Jobs", color: "bg-danger", description: "Healthcare & Hospitals" }
+              { title: "🏛️ Govt & Private", class: "bg-govt", description: "Daily News" },
+              { title: "🎓 Interns", class: "bg-intern", description: " For Students" },
+              { title: "💻 IT Software Jobs", class: "bg-software", description: "Developer & Tech Roles" },
+              { title: "🩺 Medical Jobs", class: "bg-medical", description: "Healthcare & Hospitals" }
             ].map(cat => `
               <div class="col-6 col-sm-3">
-                <div class="card-sm text-center ${cat.color}">
+                <div class="card-sm ${cat.class}">
                   <div class="fw-bold">${cat.title}</div>
                   <small>${cat.description}</small>
                 </div>
@@ -128,9 +135,10 @@ export function renderHeroSection() {
           </div>
         </div>
 
-        <div class="hero-buttons d-flex flex-column align-items-center gap-3 mb-3">
-          <button id="scrollToJobs" class="btn btn-outline-warning">See Jobs Below</button>
-          <div class="mb-2">
+        <button id="scrollToJobs" class="btn btn-flame">
+          See Jobs Below <i class="bi bi-arrow-down-circle ms-1"></i>
+        </button>
+         <div class="mb-2">
             <strong>Follow Us On Social Media:</strong>
             <div class="d-flex flex-wrap align-items-center gap-2 mt-2 justify-content-center">
               <a class="btn btn-sm btn-success d-flex align-items-center gap-1" href="#" target="_blank"><i class="bi bi-whatsapp"></i> WhatsApp</a>
@@ -138,7 +146,6 @@ export function renderHeroSection() {
               <a class="btn btn-sm btn-info text-white d-flex align-items-center gap-1" href="#" target="_blank"><i class="bi bi-twitter-x"></i> X (Twitter)</a>
             </div>
           </div>
-        </div>
       </div>
     </section>
   `;

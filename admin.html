@@ -19,18 +19,10 @@
 <body>
   <div class="site-wrapper">
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-dark bg-primary sticky-top shadow-sm">
-      <div class="container-fluid justify-content-between">
-        <span class="navbar-brand fw-semibold">RDM Admin</span>
-        <a href="index.html" class="btn btn-light btn-sm">
-          <i class="bi bi-house-door-fill"></i> Home
-        </a>
-      </div>
-    </nav>
+   <div id="header-container"></div>
 
     <!-- Admin Login Section -->
-<section id="loginSection" class="d-flex justify-content-center align-items-center bg-light"
+<section id="loginSection" class="d-flex justify-content-center align-items-center bg-light mt-5"
          style="min-height: calc(70vh - 36px);">
   <div class="card shadow border-0 p-4" style="max-width: 360px; width: 100%;">
     <div class="text-center mb-4">
@@ -139,7 +131,9 @@
       </div>
     </div>
 
-    <div class="footer-container"></div>
+     <!-- Load shared header and footer -->
+  <script src="header.js"></script>
+  <script src="footer.js"></script>
   </div>
 
   <!-- Scripts -->
