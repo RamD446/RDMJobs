@@ -18,114 +18,11 @@ body {
 }
 
 .site-wrapper {
-  width: 960px;
+  width: 1200px;
   background: white;
   border-radius: 12px;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
   
-}
-
-/* === Sticky Header Only === */
-.top-header {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  background: linear-gradient(90deg, #004aad, #007bff);
-  color: white;
-  padding: 12px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #ccc;
-}
-
-.header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
-
-/* === Brand/Logo === */
-.navbar-brand {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  text-decoration: none;
-  color: white;
-}
-
-.logo-img {
-  width: 36px;
-  height: 36px;
-  border-radius: 6px;
-}
-
-.brand-text-wrap {
-  display: flex;
-  flex-direction: column;
-  line-height: 1;
-}
-
-.brand-highlight {
-  font-weight: bold;
-  color: #ffc107;
-  font-size: 1rem;
-}
-
-.brand-text {
-  font-size: 0.75rem;
-  font-weight: bold;
-}
-
-/* === Header Buttons === */
-.header-buttons {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.header-buttons button {
-  background-color: white;
-  color: #004aad;
-  border: none;
-  border-radius: 4px;
-  padding: 6px 10px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.header-buttons button:hover {
-  background-color: #e2ecff;
-}
-
-.header-buttons i {
-  font-size: 1rem;
-}
-
-/* === Mobile Responsive === */
-@media (max-width: 576px) {
-  .btn-label {
-    display: none;
-  }
-
-  .header-buttons button {
-    padding: 6px;
-  }
-
-  .logo-img {
-    width: 32px;
-    height: 32px;
-  }
-
-  .top-header {
-    padding: 10px 12px;
-  }
 }
 
 /* === Main Content === */
