@@ -7,24 +7,62 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
   <link href="styles.css" rel="stylesheet" />
+  <style>
+    .job-card {
+      background-color: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      gap: 12px;
+      padding: 12px;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .job-card:hover {
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .job-card-img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      border: 1px solid #eee;
+      background-color: #fafafa;
+      padding: 4px;
+      border-radius: 6px;
+    }
+
+    .job-info {
+      flex-grow: 1;
+    }
+
+    .breadcrumb-text {
+      font-size: 0.8rem;
+      color: #ffc107;
+      font-weight: 600;
+    }
+  </style>
 </head>
 <body>
   <div class="site-wrapper">
+    <div id="header-container"></div>
 
-  <div id="header-container"></div>
+    <div class="main-content p-3 mt-4">
+      <!-- Breadcrumb -->
+      <div class="d-flex gap-2 mt-2 mb-4">
+        <button id="breadcrumbNav" class="btn btn-sm border-0 breadcrumb-text" disabled></button>
+      </div>
 
-    <!-- Main Content -->
-    <div class="main-content p-3 mt-5">
-      <div class="d-flex gap-2 mt-4 mb-4">
-  <button id="breadcrumbNav" class="btn btn-outline-success btn-sm fw-bold" disabled>
-  </button>
-</div>
+      <!-- Section Heading -->
+      <h5 class="mb-3 text-warning fw-semibold">
+        <i class="bi bi-filter-circle me-1"></i> Filtered Jobs
+      </h5>
 
       <div id="jobList" class="row g-3"></div>
     </div>
-    <!-- Injected Footer -->
-    <div class="footer-container"></div>
 
+    <div class="footer-container"></div>
   </div>
 
   <!-- Firebase Script -->
@@ -61,86 +99,72 @@
       ? selectedType.replace(/([A-Z])/g, " $1").trim()
       : "All Jobs";
 
-    breadcrumb.innerHTML = `Home / <span class="fw-bold">${formattedType}</span>`;
+    breadcrumb.innerHTML = `Home / ${formattedType}`;
 
     async function loadFilteredJobs() {
-  jobList.innerHTML = `
-    <div class="text-center text-muted py-5">
-      <div class="spinner-border text-success mb-3" role="status"></div><br>
-      Loading jobs...
-    </div>
-  `;
-
-  try {
-    const jobsRef = collection(db, "jobs");
-    const q = selectedType
-      ? query(jobsRef, where("type", "==", selectedType), orderBy("createdDate", "desc"))
-      : query(jobsRef, orderBy("createdDate", "desc"));
-
-    const snapshot = await getDocs(q);
-    jobList.innerHTML = "";
-
-    if (snapshot.empty) {
-      jobList.innerHTML = `<p class="text-center text-muted">No jobs found for type: ${formattedType}</p>`;
-      return;
-    }
-
-    const truncateText = (text, maxLength) =>
-      text?.length > maxLength ? text.slice(0, maxLength).trim() + "…" : text || "";
-
-    const renderJobCard = (job) => {
-  const tempDiv = document.createElement("div");
-  tempDiv.innerHTML = job.content || "";
-  const firstImg = tempDiv.querySelector("img");
-  const imageUrl = firstImg ? firstImg.src : "assets/RDMjobslogo.png";
-
-  return `
-    <a href="job-details.html?jobId=${job.id}" class="text-decoration-none text-dark">
-      <div class="job-card shadow-sm">
-        <img src="${imageUrl}" alt="${job.title}" class="job-card-img" />
-        <div class="job-info">
-          <h6 class="title"><strong>${truncateText(job.title, 60)}</strong></h6>
-          <p class="mb-1"><strong style="color:#0d6efd;">${truncateText(job.company, 40) || "N/A"}</strong></p>
-          <p class="mb-1"><strong style="color:#dc3545;">Last Date apply:</strong> 
-            <span style="color:#dc3545;">${job.lastDate || "N/A"}</span></p>
+      jobList.innerHTML = `
+        <div class="text-center text-muted py-5">
+          <div class="spinner-border text-success mb-3" role="status"></div><br>
+          Loading jobs...
         </div>
-      </div>
-    </a>
-  `;
-};
+      `;
 
-    // Add section header
-    const section = document.createElement("div");
-    section.className = "mb-4";
-    section.innerHTML = `
-     
-      <div class="row g-3"></div>
-    `;
+      try {
+        const jobsRef = collection(db, "jobs");
+        const q = selectedType
+          ? query(jobsRef, where("type", "==", selectedType), orderBy("createdDate", "desc"))
+          : query(jobsRef, orderBy("createdDate", "desc"));
 
-    const row = section.querySelector(".row");
+        const snapshot = await getDocs(q);
+        jobList.innerHTML = "";
 
-    snapshot.forEach((doc) => {
-      const job = doc.data();
-      const jobId = doc.id;
-      const jobData = { ...job, id: jobId };
+        if (snapshot.empty) {
+          jobList.innerHTML = `<p class="text-center text-muted">No jobs found for type: ${formattedType}</p>`;
+          return;
+        }
 
-      const col = document.createElement("div");
-      col.className = "col-12 col-md-6";
-      col.innerHTML = renderJobCard(jobData);
-      row.appendChild(col);
-    });
+        const truncateText = (text, maxLength) =>
+          text?.length > maxLength ? text.slice(0, maxLength).trim() + "…" : text || "";
 
-    jobList.appendChild(section);
-  } catch (error) {
-    console.error("Error loading filtered jobs:", error);
-    jobList.innerHTML = `<p class="text-center text-danger">Error loading jobs. Please try again later.</p>`;
-  }
-}
+        snapshot.forEach((doc) => {
+          const job = doc.data();
+          const jobId = doc.id;
+
+          const tempDiv = document.createElement("div");
+          tempDiv.innerHTML = job.content || "";
+          const firstImg = tempDiv.querySelector("img");
+          const imageUrl = firstImg ? firstImg.src : "assets/RDMjobslogo.png";
+
+          const col = document.createElement("div");
+          col.className = "col-12 col-md-6";
+
+          col.innerHTML = `
+            <a href="job-details.html?jobId=${jobId}" class="text-decoration-none text-dark">
+              <div class="job-card">
+                <img src="${imageUrl}" alt="${job.title}" class="job-card-img" />
+                <div class="job-info">
+                  <h6 class="title"><strong>${truncateText(job.title, 60)}</strong></h6>
+                  <p class="mb-1"><strong style="color:#0d6efd;">${truncateText(job.company, 40) || "N/A"}</strong></p>
+                  <p class="mb-1"><strong style="color:#dc3545;">Last Date apply:</strong> 
+                    <span style="color:#dc3545;">${job.lastDate || "N/A"}</span>
+                  </p>
+                </div>
+              </div>
+            </a>
+          `;
+          jobList.appendChild(col);
+        });
+
+      } catch (error) {
+        console.error("Error loading filtered jobs:", error);
+        jobList.innerHTML = `<p class="text-center text-danger">Error loading jobs. Please try again later.</p>`;
+      }
+    }
 
     loadFilteredJobs();
   </script>
 
-  <!-- Navigation function -->
+  <!-- Navigation -->
   <script>
     function navigateToType(type) {
       const encodedType = encodeURIComponent(type);
@@ -148,7 +172,7 @@
     }
   </script>
 
-  <!-- Header & Footer injection -->
+  <!-- Header & Footer -->
   <script src="header.js"></script>
   <script src="footer.js"></script>
 </body>

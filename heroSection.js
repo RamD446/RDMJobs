@@ -3,27 +3,21 @@ export function renderHeroSection() {
     <style>
       .hero-wrapper {
         background: linear-gradient(135deg, #ffecd2, #fcb69f);
-        padding: 4rem 1rem 5rem;
+        padding: 2rem 1rem 3rem;
         margin-top: 2rem;
         overflow: hidden;
         animation: fadeInBg 2s ease-in-out;
       }
+
       .hero-glass {
         background: rgba(255, 255, 255, 0.95);
         border-radius: 1rem;
-        padding: 2rem;
+        padding: 1rem;
         max-width: 1000px;
         margin: 0 auto;
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         text-align: center;
         animation: fireRise 1.5s ease-in-out;
-      }
-      .hero-title {
-        font-size: 2rem;
-        font-weight: 700;
-        color: #d62828;
-        text-shadow: 1px 1px #fcd5ce;
-        margin-bottom: 0.5rem;
       }
 
       .hero-subtitle {
@@ -55,34 +49,28 @@ export function renderHeroSection() {
       .bg-software { background-color: #1e3a8a; }
       .bg-medical { background-color: #991b1b; }
 
-      .btn-flame {
-        font-size: 0.95rem;
-        font-weight: 600;
-        background: linear-gradient(to right, #ff8800, #ff4500);
-        border: none;
-        color: white;
-        padding: 0.5rem 1.2rem;
-        border-radius: 50px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        transition: all 0.3s ease;
-        margin-top: 1.5rem;
-      }
-
-      .btn-flame:hover {
-        transform: scale(1.05);
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-      }
-
       .hero-social {
         margin-top: 2rem;
         font-size: 0.9rem;
       }
 
-      .hero-social a {
-        margin: 0 0.5rem;
-        text-decoration: none;
-        color: #d62828;
-        font-weight: bold;
+      .hero-social .btn {
+        pointer-events: none;
+        user-select: none;
+        border: none;
+      }
+
+      .scroll-down-icon {
+        font-size: 2.4rem;
+        margin-top: 2.5rem;
+        animation: bounceDown 1.5s infinite;
+        color: #ff5722;
+        cursor: pointer;
+      }
+
+      @keyframes bounceDown {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(10px); }
       }
 
       @keyframes fireRise {
@@ -103,25 +91,24 @@ export function renderHeroSection() {
       }
 
       @media (max-width: 576px) {
-        .hero-title { font-size: 1.5rem; }
         .hero-subtitle { font-size: 1rem; }
         .card-sm { font-size: 0.75rem; padding: 0.6rem; }
-        .btn-flame { font-size: 0.85rem; }
+        .scroll-down-icon { font-size: 2rem; }
       }
     </style>
 
     <section class="hero-wrapper">
       <div class="hero-glass">
         <div class="hero-subtitle">
-           <strong>Get the hottest updates on Govt & Private Jobs</strong><br>
-           <span class="text-success">Stay ahead in your career journey</span>.
+          <strong>Get the updates on Govt & Private Jobs</strong><br>
+          <span class="text-success">Stay ahead in your career journey</span>.
         </div>
 
         <div class="container px-2">
           <div class="row g-3 justify-content-center">
             ${[
               { title: "🏛️ Govt & Private", class: "bg-govt", description: "Daily News" },
-              { title: "🎓 Interns", class: "bg-intern", description: " For Students" },
+              { title: "🎓 Interns", class: "bg-intern", description: "For Students" },
               { title: "💻 IT Software Jobs", class: "bg-software", description: "Developer & Tech Roles" },
               { title: "🩺 Medical Jobs", class: "bg-medical", description: "Healthcare & Hospitals" }
             ].map(cat => `
@@ -135,17 +122,19 @@ export function renderHeroSection() {
           </div>
         </div>
 
-        <button id="scrollToJobs" class="btn btn-flame">
-          See Jobs Below <i class="bi bi-arrow-down-circle ms-1"></i>
-        </button>
-         <div class="mb-2">
-            <strong>Follow Us On Social Media:</strong>
-            <div class="d-flex flex-wrap align-items-center gap-2 mt-2 justify-content-center">
-              <a class="btn btn-sm btn-success d-flex align-items-center gap-1" href="#" target="_blank"><i class="bi bi-whatsapp"></i> WhatsApp</a>
-              <a class="btn btn-sm btn-primary d-flex align-items-center gap-1" href="#" target="_blank"><i class="bi bi-facebook"></i> Facebook</a>
-              <a class="btn btn-sm btn-info text-white d-flex align-items-center gap-1" href="#" target="_blank"><i class="bi bi-twitter-x"></i> X (Twitter)</a>
-            </div>
+        <!-- Social buttons (non-clickable, mobile friendly) -->
+        <div class="hero-social mt-4">
+          <strong>Follow Us On Social Media:</strong>
+          <div class="d-flex flex-wrap align-items-center gap-2 mt-2 justify-content-center">
+            <button class="btn btn-sm btn-success d-flex align-items-center gap-1"><i class="bi bi-whatsapp"></i> WhatsApp</button>
+            <button class="btn btn-sm btn-primary d-flex align-items-center gap-1"><i class="bi bi-facebook"></i> Facebook</button>
+            <button class="btn btn-sm btn-info text-white d-flex align-items-center gap-1"><i class="bi bi-twitter-x"></i> X (Twitter)</button>
           </div>
+        </div>
+        <!-- Clickable down icon -->
+        <div class="text-center mt-4">
+          <i class="bi bi-arrow-down-circle-fill scroll-down-icon" onclick="document.getElementById('jobList').scrollIntoView({ behavior: 'smooth' });"></i>
+        </div>
       </div>
     </section>
   `;
