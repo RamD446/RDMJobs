@@ -1,67 +1,77 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+// 🔹 Firebase Setup
+import { db } from './firebase.js';
+
 import {
-  getFirestore,
   collection,
   getDocs,
   query,
   orderBy
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
-// Firebase Config
-const firebaseConfig = {
-  apiKey: "AIzaSyAzXgI8kvqz9CEo9393W48yEZjUx6l_YNM",
-  authDomain: "rdmjobs-78da3.firebaseapp.com",
-  projectId: "rdmjobs-78da3",
-  storageBucket: "rdmjobs-78da3.appspot.com",
-  messagingSenderId: "850369074130",
-  appId: "1:850369074130:web:c96133288fb6cabdd82e0b"
-};
+// 🔹 Time Formatting
+function getTimeAgo(postedAt) {
+  const now = new Date();
+  const postDate = new Date(postedAt);
+  const diffMs = now - postDate;
+  const diffMin = Math.floor(diffMs / 60000);
+  const diffHour = Math.floor(diffMin / 60);
+  const diffDay = Math.floor(diffHour / 24);
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-// Utility: Format Date
-function formatDate(dateStr) {
-  const date = new Date(dateStr);
-  if (isNaN(date)) return "";
-  return `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}/${date.getFullYear()}`;
+  if (diffMin < 1) return { text: "Just now", color: "text-success" };
+  if (diffMin < 60) return { text: `${diffMin} min ago`, color: "text-success" };
+  if (diffHour < 24) return { text: `${diffHour} hour${diffHour !== 1 ? "s" : ""} ago`, color: "text-warning" };
+  return { text: `${diffDay} day${diffDay !== 1 ? "s" : ""} ago`, color: "text-danger" };
 }
 
-// Render Full Job Card
+// 🔹 Badge by Job Type
+function getTypeBadge(type) {
+  if (!type) return `<span class="badge bg-secondary">N/A</span>`;
+  const t = type.toLowerCase();
+  if (t.includes("government")) return `<span class="badge bg-primary">${type}</span>`;
+  if (t.includes("private")) return `<span class="badge bg-info text-dark">${type}</span>`;
+  return `<span class="badge bg-success">${type}</span>`;
+}
+
+// 🔹 Render Job Card (No image, clean 2-column layout)
 function renderJobCard(job) {
   const tempDiv = document.createElement("div");
   tempDiv.innerHTML = job.content || "";
-  const firstImg = tempDiv.querySelector("img");
-  const imageUrl = firstImg ? firstImg.src : "assets/RDMjobslogo.png";
+  const shortContent = tempDiv.textContent.trim().slice(0, 200) + "...";
+  const time = getTimeAgo(job.postedAt);
 
   return `
-    <a href="job-details.html?jobId=${job.id}" class="text-decoration-none text-dark">
-      <div class="job-card shadow-sm p-2 mb-2 rounded" style="transition: background-color 0.3s ease; cursor: pointer;"
-        onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='white'">
-        <img src="${imageUrl}" alt="${job.title}" class="job-card-img" />
-        <div class="job-info mt-2">
-          <div style="color: #0d6efd;">${job.title}</div>
-          <div style="color: #198754;">${job.company}</div>
-          <div style="color: #dc3545;">${job.lastDate}</div>
+    <div class="col-md-6">
+      <div class="card h-100 border-0 shadow-sm" style="border-radius: 12px; overflow: hidden; transition: all 0.3s;">
+        
+        <!-- Header -->
+        <div class="bg-light px-3 py-2 border-bottom d-flex justify-content-between align-items-center">
+          <h6 class="fw-semibold text-primary mb-0" style="font-size: 1.05rem;">
+            ${job.title || 'Untitled Job'}
+          </h6>
         </div>
-      </div>
-    </a>
-  `;
-}
 
-// Render Simple Job Link
-function renderSimpleJobCard(job) {
-  return `
-    <div class="mb-1">
-      <a href="job-details.html?jobId=${job.id}" class="text-decoration-none" style="color:#0d6efd;">
-        🔹 ${job.title}
-      </a>
+        <!-- Body -->
+        <div class="card-body bg-white" style="font-size: 0.95rem;">
+          <p class="text-muted small mb-2">${shortContent}</p>
+          <p class="mb-1 text-dark"><strong>🏢 Company:</strong> <span class="text-secondary">${job.company || 'N/A'}</span></p>
+          <p class="mb-1 text-dark"><strong>📅 Last Date:</strong> <span class="text-danger">${job.lastDate || 'N/A'}</span></p>
+          <p class="mb-1 text-dark"><strong>👤 Posted by:</strong> <span class="text-muted">${job.createdBy || 'N/A'}</span></p>
+        </div>
+
+        <!-- Footer -->
+        <div class="bg-light px-3 py-2 d-flex justify-content-between align-items-center border-top">
+          <span class="${time.color} small"><i class="bi bi-clock me-1"></i>${time.text}</span>
+          <a href="jobdetails.html?id=${job.id}" class="btn btn-sm btn-outline-success">
+            <i class="bi bi-eye-fill me-1"></i> Full Details
+          </a>
+        </div>
+
+      </div>
     </div>
   `;
 }
 
-// Load Jobs Function
+// 🔹 Load Jobs from Firebase
 export async function loadJobs() {
   const jobList = document.getElementById("jobList");
   jobList.innerHTML = `
@@ -81,95 +91,53 @@ export async function loadJobs() {
       return;
     }
 
-    const jobGroups = { Government: [], Private: [] };
     const allJobs = [];
+    const governmentJobs = [];
+    const privateJobs = [];
 
     snapshot.forEach((docSnap) => {
       const job = docSnap.data();
       const fullJob = { ...job, id: docSnap.id };
       allJobs.push(fullJob);
 
-      if (job.type && typeof job.type === "string") {
-        const key = job.type.replace(/\s+/g, "");
-        if (jobGroups[key] && jobGroups[key].length < 5) {
-          jobGroups[key].push(fullJob);
-        }
+      if (job.type?.toLowerCase().includes("government")) {
+        governmentJobs.push(fullJob);
+      } else if (job.type?.toLowerCase().includes("private")) {
+        privateJobs.push(fullJob);
       }
     });
 
-    // Latest Jobs Section
-    if (allJobs.length > 0) {
-      const section = document.createElement("div");
-      section.className = "mb-4";
-      section.innerHTML = `
-        <div class="section-label"
-          style="display:inline-block;font-size:0.85rem;font-weight:600;color:#0f172a;background-color:#d1fae5;padding:0.35rem 0.9rem;border-radius:0.5rem;margin-bottom:0.75rem;">
-          🆕 Latest Job Updates
-        </div>
-        <div class="row g-3"></div>
-      `;
-      const row = section.querySelector(".row");
-      allJobs.slice(0, 1000).forEach((job) => {
-        const col = document.createElement("div");
-        col.className = "col-12 col-md-6";
-        col.innerHTML = renderJobCard(job);
-        row.appendChild(col);
-      });
-      jobList.appendChild(section);
+    // 🟡 Latest
+    const latestSection = document.createElement("div");
+    latestSection.innerHTML = `
+      <h5 class="fw-semibold text-warning mb-3">
+        <i class="bi bi-broadcast-pin me-1"></i> Latest Job Updates
+      </h5>
+      <div class="row g-3">${allJobs.map(renderJobCard).join("")}</div>`;
+    jobList.appendChild(latestSection);
+
+    // 🔵 Government
+    if (governmentJobs.length) {
+      const govSection = document.createElement("div");
+      govSection.className = "mt-5";
+      govSection.innerHTML = `
+        <h5 class="fw-semibold text-primary mb-3">
+          <i class="bi bi-bank2 me-1"></i> Government Jobs
+        </h5>
+        <div class="row g-3">${governmentJobs.map(renderJobCard).join("")}</div>`;
+      jobList.appendChild(govSection);
     }
 
-    // Categorized Jobs
-    const types = ["Government", "Private"];
-    const categoryTitles = {
-      Government: "🏛 Government Jobs",
-      Private: "🏢 Private Jobs"
-    };
-
-    let contentAdded = false;
-
-    for (let i = 0; i < types.length; i += 2) {
-      const row = document.createElement("div");
-      row.className = "row";
-
-      [types[i], types[i + 1]].forEach((type) => {
-        if (!type) return;
-        const jobs = jobGroups[type] || [];
-
-        const col = document.createElement("div");
-        col.className = "col-12 col-md-6";
-
-        const wrapper = document.createElement("div");
-        wrapper.className = "job-category-wrapper";
-
-        const header = `
-          <div class="job-category-header d-flex justify-content-between align-items-center mb-2">
-            <span style="font-weight:600;">${categoryTitles[type]}</span>
-            <a href="jobinformation.html?type=${encodeURIComponent(type)}" title="See All">
-              <i class="bi bi-box-arrow-up-right"></i>
-            </a>
-          </div>
-        `;
-
-        let content = "";
-
-        if (jobs.length === 0) {
-          content = `<p class="text-muted">No ${categoryTitles[type]} found.</p>`;
-        } else {
-          const cards = jobs.map(renderSimpleJobCard).join("");
-          content = `<div class="job-category-cards">${cards}</div>`;
-          contentAdded = true;
-        }
-
-        wrapper.innerHTML = header + content;
-        col.appendChild(wrapper);
-        row.appendChild(col);
-      });
-
-      jobList.appendChild(row);
-    }
-
-    if (!contentAdded) {
-      jobList.innerHTML += "<p class='text-center text-muted'>No categorized jobs found to display.</p>";
+    // 🔷 Private
+    if (privateJobs.length) {
+      const priSection = document.createElement("div");
+      priSection.className = "mt-5";
+      priSection.innerHTML = `
+        <h5 class="fw-semibold text-info mb-3">
+          <i class="bi bi-building-check me-1"></i> Private Jobs
+        </h5>
+        <div class="row g-3">${privateJobs.map(renderJobCard).join("")}</div>`;
+      jobList.appendChild(priSection);
     }
 
   } catch (error) {
@@ -178,10 +146,10 @@ export async function loadJobs() {
   }
 }
 
-// Call loadJobs (optional if importing only)
+// 🔹 Auto Load
 loadJobs();
 
-// Export navigateToType globally
-window.navigateToType = function(type) {
+// 🔹 Navigation by Type
+window.navigateToType = function (type) {
   window.location.href = `jobinformation.html?type=${encodeURIComponent(type)}`;
 };

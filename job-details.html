@@ -15,10 +15,10 @@
     <div class="main-content p-3 mt-5">
       <div id="jobDetails" class="p-4 bg-light border rounded shadow-sm mb-4"></div>
 
-      <!-- Updated Jobs Heading -->
-      <h5 class="mb-3 btn btn-sm fw-semibold " style="color: #ffc107; cursor: default; border-color: #ffc107;">
-  <i class="bi bi-briefcase-fill me-1"></i> Related Job Posts
-</h5>
+      <!-- Related Jobs Title -->
+      <h5 class="mb-3 btn btn-sm fw-semibold" style="color: #ffc107; cursor: default; border-color: #ffc107;">
+        <i class="bi bi-briefcase-fill me-1"></i> Related Job Posts
+      </h5>
 
       <div id="relatedJobs" class="row g-3 mb-5"></div>
     </div>
@@ -26,26 +26,28 @@
     <div class="footer-container"></div>
   </div>
 
-  <!-- Firebase + Job Logic -->
+  <!-- 🔹 Script to Load Job Details and Related Jobs -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-    import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyAzXgI8kvqz9CEo9393W48yEZjUx6l_YNM",
-      authDomain: "rdmjobs-78da3.firebaseapp.com",
-      projectId: "rdmjobs-78da3",
-      storageBucket: "rdmjobs-78da3.appspot.com",
-      messagingSenderId: "850369074130",
-      appId: "1:850369074130:web:c96133288fb6cabdd82e0b"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    import { db } from './firebase.js'; // ✅ Only import Firestore
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      collection,
+      getDocs
+    } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
     const jobId = new URLSearchParams(window.location.search).get("jobId");
     const jobDetailsEl = document.getElementById("jobDetails");
     const relatedJobsEl = document.getElementById("relatedJobs");
+
+    function getTypeBadge(type) {
+      if (!type) return `<span class="badge bg-secondary">N/A</span>`;
+      const t = type.toLowerCase();
+      if (t.includes("government")) return `<span class="badge bg-primary">${type}</span>`;
+      if (t.includes("private")) return `<span class="badge bg-info text-dark">${type}</span>`;
+      return `<span class="badge bg-success">${type}</span>`;
+    }
 
     async function loadJobDetails() {
       jobDetailsEl.innerHTML = `
@@ -105,31 +107,38 @@
     }
 
     async function loadRelatedJobs() {
-      const allJobsQuery = collection(db, "jobs");
-      const querySnapshot = await getDocs(allJobsQuery);
-
+      const snapshot = await getDocs(collection(db, "jobs"));
       relatedJobsEl.innerHTML = "";
+
       let count = 0;
 
-      querySnapshot.forEach((docItem) => {
+      snapshot.forEach((docItem) => {
         if (docItem.id === jobId) return;
 
         const job = docItem.data();
-        const cleanContent = job.content?.replace(/<img[^>]*>/g, '').replace(/<[^>]+>/g, '');
-        const shortContent = cleanContent ? cleanContent.substring(0, 100).trim() + "..." : "No description available.";
+        const shortContent = job.content?.replace(/<img[^>]*>/g, '').replace(/<[^>]+>/g, '').slice(0, 120).trim() + "...";
 
         const card = document.createElement("div");
         card.className = "col-12 col-sm-6";
         card.innerHTML = `
-          <div class="border rounded shadow-sm p-3 h-100">
-            <h6 class="text-primary fw-bold">${job.title}</h6>
-            <p class="mb-1"><strong>Company:</strong> ${job.company || 'N/A'}</p>
-            <p class="mb-1"><strong>Last Date:</strong> ${job.lastDate || 'N/A'}</p>
-            <p class="mb-1"><strong>Posted by:</strong> ${job.createdBy || 'N/A'}</p>
-            <p class="text-muted small">${shortContent}</p>
-            <a href="job-details.html?jobId=${docItem.id}" class="btn btn-sm btn-outline-success mt-2">
-              <i class="bi bi-eye-fill me-1"></i> Full Details
-            </a>
+          <div class="card h-100 border-0 shadow-sm" style="border-radius: 12px; overflow: hidden;">
+            <div class="bg-light px-3 py-2 border-bottom d-flex justify-content-between align-items-center">
+              <h6 class="fw-semibold text-primary mb-0" style="font-size: 1.05rem;">${job.title || 'Untitled Job'}</h6>
+              <div class="small">${getTypeBadge(job.type)}</div>
+            </div>
+
+            <div class="card-body bg-white" style="font-size: 0.95rem;">
+              <p class="text-muted small mb-2">${shortContent}</p>
+              <p class="mb-1 text-dark"><strong>🏢 Company:</strong> <span class="text-secondary">${job.company || 'N/A'}</span></p>
+              <p class="mb-1 text-dark"><strong>📅 Last Date:</strong> <span class="text-danger">${job.lastDate || 'N/A'}</span></p>
+              <p class="mb-1 text-dark"><strong>👤 Posted by:</strong> <span class="text-muted">${job.createdBy || 'N/A'}</span></p>
+            </div>
+
+            <div class="bg-light px-3 py-2 d-flex justify-content-end border-top">
+              <a href="job-details.html?jobId=${docItem.id}" class="btn btn-sm btn-outline-success">
+                <i class="bi bi-eye-fill me-1"></i> Full Details
+              </a>
+            </div>
           </div>
         `;
         relatedJobsEl.appendChild(card);
@@ -142,9 +151,12 @@
     }
 
     loadJobDetails();
+
+    window.navigateToType = function (type) {
+      window.location.href = `jobinformation.html?type=${encodeURIComponent(type)}`;
+    };
   </script>
 
-  <!-- Header/Footer Scripts -->
   <script src="header.js"></script>
   <script src="footer.js"></script>
 </body>

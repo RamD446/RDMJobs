@@ -1,3 +1,4 @@
+<!-- filtered-jobs.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,33 +9,12 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
   <link href="styles.css" rel="stylesheet" />
   <style>
-    .job-card {
-      background-color: #fff;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      overflow: hidden;
-      display: flex;
-      gap: 12px;
-      padding: 12px;
+    .hover-card {
       transition: box-shadow 0.3s ease;
     }
 
-    .job-card:hover {
+    .hover-card:hover {
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    .job-card-img {
-      width: 80px;
-      height: 80px;
-      object-fit: contain;
-      border: 1px solid #eee;
-      background-color: #fafafa;
-      padding: 4px;
-      border-radius: 6px;
-    }
-
-    .job-info {
-      flex-grow: 1;
     }
 
     .breadcrumb-text {
@@ -65,29 +45,9 @@
     <div class="footer-container"></div>
   </div>
 
-  <!-- Firebase Script -->
+  <!-- Updated Firebase Script Import -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-    import {
-      getFirestore,
-      collection,
-      query,
-      where,
-      orderBy,
-      getDocs
-    } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyAzXgI8kvqz9CEo9393W48yEZjUx6l_YNM",
-      authDomain: "rdmjobs-78da3.firebaseapp.com",
-      projectId: "rdmjobs-78da3",
-      storageBucket: "rdmjobs-78da3.appspot.com",
-      messagingSenderId: "850369074130",
-      appId: "1:850369074130:web:c96133288fb6cabdd82e0b"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    import { db, collection, query, where, orderBy, getDocs } from './firebase.js';
 
     const urlParams = new URLSearchParams(window.location.search);
     const selectedType = urlParams.get("type");
@@ -130,28 +90,40 @@
           const job = doc.data();
           const jobId = doc.id;
 
-          const tempDiv = document.createElement("div");
-          tempDiv.innerHTML = job.content || "";
-          const firstImg = tempDiv.querySelector("img");
-          const imageUrl = firstImg ? firstImg.src : "assets/RDMjobslogo.png";
+          const cleanContent = job.content?.replace(/<img[^>]*>/g, '').replace(/<[^>]+>/g, '');
+          const shortContent = cleanContent ? cleanContent.substring(0, 100).trim() + "..." : "No description available.";
 
           const col = document.createElement("div");
           col.className = "col-12 col-md-6";
 
           col.innerHTML = `
-            <a href="job-details.html?jobId=${jobId}" class="text-decoration-none text-dark">
-              <div class="job-card">
-                <img src="${imageUrl}" alt="${job.title}" class="job-card-img" />
-                <div class="job-info">
-                  <h6 class="title"><strong>${truncateText(job.title, 60)}</strong></h6>
-                  <p class="mb-1"><strong style="color:#0d6efd;">${truncateText(job.company, 40) || "N/A"}</strong></p>
-                  <p class="mb-1"><strong style="color:#dc3545;">Last Date apply:</strong> 
-                    <span style="color:#dc3545;">${job.lastDate || "N/A"}</span>
-                  </p>
-                </div>
+            <div class="card h-100 border-0 shadow-sm hover-card" style="border-radius: 12px; overflow: hidden;">
+
+              <!-- Header -->
+              <div class="bg-light px-3 py-2 border-bottom">
+                <h6 class="fw-semibold text-primary mb-0" style="font-size: 1.05rem;">
+                  ${truncateText(job.title, 60)}
+                </h6>
               </div>
-            </a>
+
+              <!-- Body -->
+              <div class="card-body bg-white d-flex flex-column gap-2" style="font-size: 0.95rem;">
+                <p class="mb-1 text-dark"><strong>🏢 Company:</strong> <span class="text-secondary">${truncateText(job.company, 40) || "N/A"}</span></p>
+                <p class="mb-1 text-dark"><strong>📅 Last Date:</strong> <span class="text-danger">${job.lastDate || "N/A"}</span></p>
+                <p class="text-muted small mb-0">${shortContent}</p>
+              </div>
+
+              <!-- Footer -->
+              <div class="bg-light px-3 py-2 d-flex justify-content-between align-items-center border-top">
+                <span class="small text-muted"><i class="bi bi-filter-circle me-1"></i>Filtered</span>
+                <a href="job-details.html?jobId=${jobId}" class="btn btn-sm btn-outline-success">
+                  <i class="bi bi-eye-fill me-1"></i> Full Details
+                </a>
+              </div>
+
+            </div>
           `;
+
           jobList.appendChild(col);
         });
 
@@ -164,7 +136,7 @@
     loadFilteredJobs();
   </script>
 
-  <!-- Navigation -->
+  <!-- Header & Footer -->
   <script>
     function navigateToType(type) {
       const encodedType = encodeURIComponent(type);
@@ -172,7 +144,6 @@
     }
   </script>
 
-  <!-- Header & Footer -->
   <script src="header.js"></script>
   <script src="footer.js"></script>
 </body>
