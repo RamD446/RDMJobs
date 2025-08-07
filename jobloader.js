@@ -32,7 +32,6 @@ function getTypeBadge(type) {
   return `<span class="badge bg-success">${type}</span>`;
 }
 
-// 🔹 Render Job Card (No image, clean 2-column layout)
 function renderJobCard(job) {
   const tempDiv = document.createElement("div");
   tempDiv.innerHTML = job.content || "";
@@ -42,7 +41,7 @@ function renderJobCard(job) {
   return `
     <div class="col-md-6">
       <div class="card h-100 border-0 shadow-sm" style="border-radius: 12px; overflow: hidden; transition: all 0.3s;">
-        
+
         <!-- Header -->
         <div class="bg-light px-3 py-2 border-bottom d-flex justify-content-between align-items-center">
           <h6 class="fw-semibold text-primary mb-0" style="font-size: 1.05rem;">
@@ -61,7 +60,7 @@ function renderJobCard(job) {
         <!-- Footer -->
         <div class="bg-light px-3 py-2 d-flex justify-content-between align-items-center border-top">
           <span class="${time.color} small"><i class="bi bi-clock me-1"></i>${time.text}</span>
-          <a href="jobdetails.html?id=${job.id}" class="btn btn-sm btn-outline-success">
+          <a href="job-details.html?jobId=${job.id}" class="btn btn-sm btn-outline-success">
             <i class="bi bi-eye-fill me-1"></i> Full Details
           </a>
         </div>
@@ -70,6 +69,8 @@ function renderJobCard(job) {
     </div>
   `;
 }
+
+
 
 // 🔹 Load Jobs from Firebase
 export async function loadJobs() {
