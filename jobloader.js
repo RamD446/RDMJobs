@@ -56,33 +56,35 @@ function renderJobCard(job) {
 
   return `
     <div class="col-md-6">
-      <div class="card h-100 border-0 shadow-sm" style="border-radius: 12px; overflow: hidden; transition: all 0.3s;">
+  <div class="card h-100 border border-warning shadow-sm"
+       style="border-radius: 12px; overflow: hidden; transition: all 0.3s;">
 
-        <!-- Header -->
-        <div class="bg-light px-3 py-2 border-bottom d-flex justify-content-between align-items-center">
-          <h6 class="fw-semibold text-primary mb-0" style="font-size: 1.05rem;">
-            ${job.title || 'Untitled Job'}
-          </h6>
-        </div>
-
-        <!-- Body -->
-        <div class="card-body bg-white" style="font-size: 0.95rem;">
-          <p class="text-muted small mb-2">${shortContent}</p>
-          <p class="mb-1 text-dark"><strong>🏢 Company:</strong> <span class="text-secondary">${job.company || 'N/A'}</span></p>
-          <p class="mb-1 text-dark"><strong>📅 Last Date:</strong> <span class="text-danger">${job.lastDate || 'N/A'}</span></p>
-          <p class="mb-1 text-dark"><strong>👤 Posted by:</strong> <span class="text-muted">${job.createdBy || 'N/A'}</span></p>
-        </div>
-
-        <!-- Footer -->
-        <div class="bg-light px-3 py-2 d-flex justify-content-between align-items-center border-top">
-          <span class="${time.color} small"><i class="bi bi-clock me-1"></i>${time.text}</span>
-          <a href="job-details.html?jobId=${job.id}" class="btn btn-sm btn-outline-success">
-            <i class="bi bi-eye-fill me-1"></i> Full Details
-          </a>
-        </div>
-
-      </div>
+    <!-- Header -->
+    <div class="bg-light px-3 py-2 border-bottom d-flex justify-content-between align-items-center">
+      <h6 class="fw-semibold text-primary mb-0" style="font-size: 1.05rem;">
+        ${job.title || 'Untitled Job'}
+      </h6>
     </div>
+
+    <!-- Body -->
+    <div class="card-body bg-white" style="font-size: 0.95rem;">
+      <p class="text-muted small mb-2">${shortContent}</p>
+      <p class="mb-1 text-dark"><strong>🏢 Company:</strong> <span class="text-secondary">${job.company || 'N/A'}</span></p>
+      <p class="mb-1 text-dark"><strong>📅 Last Date:</strong> <span class="text-danger">${job.lastDate || 'N/A'}</span></p>
+      <p class="mb-1 text-dark"><strong>👤 Posted by:</strong> <span class="text-muted">Yalla Ramana</span></p>
+    </div>
+
+    <!-- Footer -->
+    <div class="bg-light px-3 py-2 d-flex justify-content-between align-items-center border-top">
+      <span class="${time.color} small"><i class="bi bi-clock me-1"></i>${time.text}</span>
+      <a href="job-details.html?jobId=${job.id}" class="btn btn-sm btn-outline-success">
+        <i class="bi bi-eye-fill me-1"></i> Full Details
+      </a>
+    </div>
+
+  </div>
+</div>
+
   `;
 }
 

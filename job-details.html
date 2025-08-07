@@ -80,7 +80,7 @@
         jobDetailsEl.innerHTML = `
           <h4 class="fw-bold text-danger">${job.title}</h4>
           <div class="mb-3 small text-secondary d-flex flex-wrap gap-2">
-            <span><strong class="text-dark">Posted by:</strong> ${job.createdBy}</span>
+            <span><strong class="text-dark">Posted by:</strong> Yalla Ramana</span>
             <span>|</span>
             <span><strong class="text-dark">Created:</strong> ${job.createdDate}</span>
           </div>
@@ -125,7 +125,7 @@
         const card = document.createElement("div");
         card.className = "col-12 col-sm-6";
         card.innerHTML = `
-          <div class="card h-100 border-0 shadow-sm" style="border-radius: 12px; overflow: hidden;">
+          <div class="card h-100 border border-warning shadow-sm" style="border-radius: 12px; overflow: hidden;">
             <div class="bg-light px-3 py-2 border-bottom d-flex justify-content-between align-items-center">
               <h6 class="fw-semibold text-primary mb-0" style="font-size: 1.05rem;">${job.title || 'Untitled Job'}</h6>
             </div>
@@ -134,7 +134,7 @@
               <p class="text-muted small mb-2">${shortContent}</p>
               <p class="mb-1 text-dark"><strong>🏢 Company:</strong> <span class="text-secondary">${job.company || 'N/A'}</span></p>
               <p class="mb-1 text-dark"><strong>📅 Last Date:</strong> <span class="text-danger">${job.lastDate || 'N/A'}</span></p>
-              <p class="mb-1 text-dark"><strong>👤 Posted by:</strong> <span class="text-muted">${job.createdBy || 'N/A'}</span></p>
+              <p class="mb-1 text-dark"><strong>👤 Posted by:</strong> <span class="text-muted">Yalla Ramana</span></p>
             </div>
 
             <div class="bg-light px-3 py-2 d-flex justify-content-end border-top">
