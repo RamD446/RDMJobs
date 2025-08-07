@@ -304,6 +304,9 @@
         toggleSections(false);
       }
     });
+    window.navigateToType = function (type) {
+  window.location.href = `jobinformation.html?type=${encodeURIComponent(type)}`;
+};
   </script>
 </body>
 </html>
