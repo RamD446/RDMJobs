@@ -1,12 +1,27 @@
-// 🔹 Firebase Setup
-import { db } from './firebase.js';
+// jobloader.js
 
+// 🔹 Firebase Setup (No external firebase.js needed)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
 import {
+  getFirestore,
   collection,
   getDocs,
   query,
   orderBy
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+// 🔹 Initialize Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyAzXgI8kvqz9CEo9393W48yEZjUx6l_YNM",
+  authDomain: "rdmjobs-78da3.firebaseapp.com",
+  projectId: "rdmjobs-78da3",
+  storageBucket: "rdmjobs-78da3.appspot.com",
+  messagingSenderId: "850369074130",
+  appId: "1:850369074130:web:c96133288fb6cabdd82e0b"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 // 🔹 Time Formatting
 function getTimeAgo(postedAt) {
@@ -32,6 +47,7 @@ function getTypeBadge(type) {
   return `<span class="badge bg-success">${type}</span>`;
 }
 
+// 🔹 Render Each Job Card
 function renderJobCard(job) {
   const tempDiv = document.createElement("div");
   tempDiv.innerHTML = job.content || "";
@@ -70,8 +86,6 @@ function renderJobCard(job) {
   `;
 }
 
-
-
 // 🔹 Load Jobs from Firebase
 export async function loadJobs() {
   const jobList = document.getElementById("jobList");
@@ -108,7 +122,7 @@ export async function loadJobs() {
       }
     });
 
-    // 🟡 Latest
+    // 🟡 Latest Jobs
     const latestSection = document.createElement("div");
     latestSection.innerHTML = `
       <h5 class="fw-semibold text-warning mb-3">
@@ -117,7 +131,7 @@ export async function loadJobs() {
       <div class="row g-3">${allJobs.map(renderJobCard).join("")}</div>`;
     jobList.appendChild(latestSection);
 
-    // 🔵 Government
+    // 🔵 Government Jobs
     if (governmentJobs.length) {
       const govSection = document.createElement("div");
       govSection.className = "mt-5";
@@ -129,7 +143,7 @@ export async function loadJobs() {
       jobList.appendChild(govSection);
     }
 
-    // 🔷 Private
+    // 🔷 Private Jobs
     if (privateJobs.length) {
       const priSection = document.createElement("div");
       priSection.className = "mt-5";
@@ -150,7 +164,7 @@ export async function loadJobs() {
 // 🔹 Auto Load
 loadJobs();
 
-// 🔹 Navigation by Type
+// 🔹 Optional Navigation Handler
 window.navigateToType = function (type) {
   window.location.href = `jobinformation.html?type=${encodeURIComponent(type)}`;
 };

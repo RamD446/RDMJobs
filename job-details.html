@@ -15,7 +15,6 @@
     <div class="main-content p-3 mt-5">
       <div id="jobDetails" class="p-4 bg-light border rounded shadow-sm mb-4"></div>
 
-      <!-- Related Jobs Title -->
       <h5 class="mb-3 btn btn-sm fw-semibold" style="color: #ffc107; cursor: default; border-color: #ffc107;">
         <i class="bi bi-briefcase-fill me-1"></i> Related Job Posts
       </h5>
@@ -26,9 +25,9 @@
     <div class="footer-container"></div>
   </div>
 
-  <!-- 🔹 Script to Load Job Details and Related Jobs -->
+  <!-- ✅ Firebase + Firestore Setup and Job Loading Logic -->
   <script type="module">
-    import { db } from './firebase.js'; // ✅ Only import Firestore
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
     import {
       getFirestore,
       doc,
@@ -37,17 +36,22 @@
       getDocs
     } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
+    // ✅ Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAzXgI8kvqz9CEo9393W48yEZjUx6l_YNM",
+      authDomain: "rdmjobs-78da3.firebaseapp.com",
+      projectId: "rdmjobs-78da3",
+      storageBucket: "rdmjobs-78da3.appspot.com",
+      messagingSenderId: "850369074130",
+      appId: "1:850369074130:web:c96133288fb6cabdd82e0b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
     const jobId = new URLSearchParams(window.location.search).get("jobId");
     const jobDetailsEl = document.getElementById("jobDetails");
     const relatedJobsEl = document.getElementById("relatedJobs");
-
-    function getTypeBadge(type) {
-      if (!type) return `<span class="badge bg-secondary">N/A</span>`;
-      const t = type.toLowerCase();
-      if (t.includes("government")) return `<span class="badge bg-primary">${type}</span>`;
-      if (t.includes("private")) return `<span class="badge bg-info text-dark">${type}</span>`;
-      return `<span class="badge bg-success">${type}</span>`;
-    }
 
     async function loadJobDetails() {
       jobDetailsEl.innerHTML = `
@@ -150,10 +154,9 @@
     }
 
     loadJobDetails();
-
     window.navigateToType = function (type) {
-      window.location.href = `jobinformation.html?type=${encodeURIComponent(type)}`;
-    };
+  window.location.href = `jobinformation.html?type=${encodeURIComponent(type)}`;
+};
   </script>
 
   <script src="header.js"></script>
