@@ -142,10 +142,6 @@
                   <option value="">Select Job Type</option>
                   <option value="Government">Government</option>
                   <option value="Private">Private</option>
-                  <option value="Software">Software</option>
-                  <option value="Admit Card">Admit Card</option>
-                  <option value="Result">Result</option>
-                  <option value="Upcoming Notification">Upcoming Notification</option>
                 </select>
               </div>
               <div class="col-md-6">
@@ -189,17 +185,20 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    const quill = new Quill("#quillEditor", {
-      theme: "snow",
-      modules: {
-        toolbar: [
-          [{ header: [1, 2, false] }],
-          ["bold", "italic", "underline"],
-          ["image", "link"],
-          [{ list: "ordered" }, { list: "bullet" }]
-        ]
-      }
-    });
+  const quill = new Quill("#quillEditor", {
+  theme: "snow",
+  modules: {
+    toolbar: [
+      [{ header: [1, 2, false] }],
+      ["bold", "italic", "underline"],
+      ["link"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ color: [] }],         // enables full color palette
+      [{ background: [] }]     // enables full background color palette
+    ]
+  }
+});
+
 
     function toggleSections(isLoggedIn, email = "") {
       document.getElementById("loginSection").classList.toggle("d-none", isLoggedIn);
