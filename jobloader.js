@@ -49,9 +49,7 @@ function renderJobCard(job) {
     <div class="col-md-6">
       <div class="card h-100 border border-warning shadow-sm" style="border-radius: 12px; overflow: hidden;">
         <div class="bg-light px-3 py-2 border-bottom d-flex justify-content-between align-items-center">
-          <h6 class="fw-semibold text-primary mb-0" style="font-size: 1.05rem;">
-            ${job.title || 'Untitled Job'}
-          </h6>
+         <h6 class="fw-bold text-primary mb-0" style="font-size: .9rem;">${job.title || 'Untitled Job'}</h6>
         </div>
         <div class="card-body bg-white" style="font-size: 0.95rem;">
           <p class="text-muted small mb-2">${shortContent}</p>
