@@ -1,6 +1,6 @@
 // jobloader.js
 
-// 🔹 Firebase Setup (No external firebase.js needed)
+// 🔹 Firebase Setup
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
 import {
   getFirestore,
@@ -26,7 +26,7 @@ const db = getFirestore(app);
 // 🔹 Time Formatting
 function getTimeAgo(postedAt) {
   const now = new Date();
-  const postDate = new Date(postedAt);
+  const postDate = postedAt?.toDate ? postedAt.toDate() : new Date(postedAt);
   const diffMs = now - postDate;
   const diffMin = Math.floor(diffMs / 60000);
   const diffHour = Math.floor(diffMin / 60);
@@ -38,15 +38,6 @@ function getTimeAgo(postedAt) {
   return { text: `${diffDay} day${diffDay !== 1 ? "s" : ""} ago`, color: "text-danger" };
 }
 
-// 🔹 Badge by Job Type
-function getTypeBadge(type) {
-  if (!type) return `<span class="badge bg-secondary">N/A</span>`;
-  const t = type.toLowerCase();
-  if (t.includes("government")) return `<span class="badge bg-primary">${type}</span>`;
-  if (t.includes("private")) return `<span class="badge bg-info text-dark">${type}</span>`;
-  return `<span class="badge bg-success">${type}</span>`;
-}
-
 // 🔹 Render Each Job Card
 function renderJobCard(job) {
   const tempDiv = document.createElement("div");
@@ -56,36 +47,77 @@ function renderJobCard(job) {
 
   return `
     <div class="col-md-6">
-  <div class="card h-100 border border-warning shadow-sm"
-       style="border-radius: 12px; overflow: hidden; transition: all 0.3s;">
-
-    <!-- Header -->
-    <div class="bg-light px-3 py-2 border-bottom d-flex justify-content-between align-items-center">
-      <h6 class="fw-semibold text-primary mb-0" style="font-size: 1.05rem;">
-        ${job.title || 'Untitled Job'}
-      </h6>
+      <div class="card h-100 border border-warning shadow-sm" style="border-radius: 12px; overflow: hidden;">
+        <div class="bg-light px-3 py-2 border-bottom d-flex justify-content-between align-items-center">
+          <h6 class="fw-semibold text-primary mb-0" style="font-size: 1.05rem;">
+            ${job.title || 'Untitled Job'}
+          </h6>
+        </div>
+        <div class="card-body bg-white" style="font-size: 0.95rem;">
+          <p class="text-muted small mb-2">${shortContent}</p>
+          <p class="mb-1 text-dark"><strong>🏢 Company:</strong> <span class="text-secondary">${job.company || 'N/A'}</span></p>
+          <p class="mb-1 text-dark"><strong>📅 Last Date:</strong> <span class="text-danger">${job.lastDate || 'N/A'}</span></p>
+          <p class="mb-1 text-dark"><strong>🎓 Qualification:</strong> <span class="text-muted">Any Graduate</span></p>
+        </div>
+        <div class="bg-light px-3 py-2 d-flex justify-content-between align-items-center border-top">
+          <span class="${time.color} small"><i class="bi bi-clock me-1"></i>${time.text}</span>
+          <a href="job-details.html?jobId=${job.id}" class="btn btn-sm btn-outline-success">
+            <i class="bi bi-eye-fill me-1"></i> Full Details
+          </a>
+        </div>
+      </div>
     </div>
+  `;
+}
 
-    <!-- Body -->
-    <div class="card-body bg-white" style="font-size: 0.95rem;">
-      <p class="text-muted small mb-2">${shortContent}</p>
-      <p class="mb-1 text-dark"><strong>🏢 Company:</strong> <span class="text-secondary">${job.company || 'N/A'}</span></p>
-      <p class="mb-1 text-dark"><strong>📅 Last Date:</strong> <span class="text-danger">${job.lastDate || 'N/A'}</span></p>
-      <p class="mb-1 text-dark"><strong>🎓 Qualification:</strong> <span class="text-muted">Any Graduate</span></p>
+// 🔹 Render Title-Only List with Time Ago & Custom Colors
+function renderTitleList(jobs, type) {
+  let borderColor = type === "Government" ? "#28a745" : "#fd7e14";
+  let buttonBgColor = borderColor;
 
+  return `
+    <div class="p-3 border rounded mb-4" style="border-color:${borderColor} !important;">
+      <h5 class="fw-bold mb-3" style="color:${borderColor};">
+        ${type} Jobs
+      </h5>
+      <ul class="list-unstyled mb-0">
+        ${jobs.slice(0, 20).map(job => {
+          const time = getTimeAgo(job.postedAt);
+          return `
+            <li class="mb-2">
+              <a href="job-details.html?jobId=${job.id}" 
+                 class="text-decoration-none fw-medium text-primary">
+                🔹 ${job.title || 'Untitled Job'}
+              </a>
+              <span class="ms-2 small ${time.color}">
+                ${time.text}
+              </span>
+            </li>
+          `;
+        }).join("")}
+        <li class="mt-3">
+          <a href="jobinformation.html?type=${encodeURIComponent(type)}" 
+             class="fw-semibold text-white px-3 py-1 rounded-pill d-inline-block text-decoration-none"
+             style="background-color:${buttonBgColor};">
+            <i class="bi bi-box-arrow-up-right me-1"></i> See more ${type} jobs
+          </a>
+        </li>
+      </ul>
     </div>
+  `;
+}
 
-    <!-- Footer -->
-    <div class="bg-light px-3 py-2 d-flex justify-content-between align-items-center border-top">
-      <span class="${time.color} small"><i class="bi bi-clock me-1"></i>${time.text}</span>
-      <a href="job-details.html?jobId=${job.id}" class="btn btn-sm btn-outline-success">
-        <i class="bi bi-eye-fill me-1"></i> Full Details
-      </a>
-    </div>
+// 🔹 Fetch & Render Government + Private Jobs
+function renderGovAndPrivateJobs(allJobs) {
+  let governmentJobs = allJobs.filter(job => job.type === "Government");
+  let privateJobs = allJobs.filter(job => job.type === "Private");
 
-  </div>
-</div>
+  let govHTML = renderTitleList(governmentJobs, "Government");
+  let privateHTML = renderTitleList(privateJobs, "Private");
 
+  document.getElementById("govPrivateJobsSection").innerHTML = `
+    ${govHTML}
+    ${privateHTML}
   `;
 }
 
@@ -131,31 +163,25 @@ export async function loadJobs() {
       <h5 class="fw-semibold text-warning mb-3">
         <i class="bi bi-broadcast-pin me-1"></i> Latest Job Updates
       </h5>
-      <div class="row g-3">${allJobs.map(renderJobCard).join("")}</div>`;
+      <div class="row g-3">${allJobs.map(renderJobCard).join("")}</div>
+    `;
     jobList.appendChild(latestSection);
 
-    // 🔵 Government Jobs
-    if (governmentJobs.length) {
-      const govSection = document.createElement("div");
-      govSection.className = "mt-5";
-      govSection.innerHTML = `
-        <h5 class="fw-semibold text-primary mb-3">
-          <i class="bi bi-bank2 me-1"></i> Government Jobs
-        </h5>
-        <div class="row g-3">${governmentJobs.map(renderJobCard).join("")}</div>`;
-      jobList.appendChild(govSection);
-    }
-
-    // 🔷 Private Jobs
-    if (privateJobs.length) {
-      const priSection = document.createElement("div");
-      priSection.className = "mt-5";
-      priSection.innerHTML = `
-        <h5 class="fw-semibold text-info mb-3">
-          <i class="bi bi-building-check me-1"></i> Private Jobs
-        </h5>
-        <div class="row g-3">${privateJobs.map(renderJobCard).join("")}</div>`;
-      jobList.appendChild(priSection);
+    // 🟦 Government + Private Jobs
+    if (governmentJobs.length || privateJobs.length) {
+      const twoColSection = document.createElement("div");
+      twoColSection.className = "mt-5";
+      twoColSection.innerHTML = `
+        <div class="row">
+          <div class="col-md-6">
+            ${governmentJobs.length ? renderTitleList(governmentJobs, "Government") : "<p class='text-muted'>No government jobs</p>"}
+          </div>
+          <div class="col-md-6">
+            ${privateJobs.length ? renderTitleList(privateJobs, "Private") : "<p class='text-muted'>No private jobs</p>"}
+          </div>
+        </div>
+      `;
+      jobList.appendChild(twoColSection);
     }
 
   } catch (error) {
@@ -167,7 +193,7 @@ export async function loadJobs() {
 // 🔹 Auto Load
 loadJobs();
 
-// 🔹 Optional Navigation Handler
+// 🔹 Navigation Handler
 window.navigateToType = function (type) {
   window.location.href = `jobinformation.html?type=${encodeURIComponent(type)}`;
 };
