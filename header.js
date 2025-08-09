@@ -7,59 +7,58 @@ document.addEventListener("DOMContentLoaded", function () {
 
   headerContainer.innerHTML = `
     <style>
-  .custom-rdm-btn {
-    background: linear-gradient(to right, #ffcc00, #ff9900);
-    color: #212529;
-    border: none;
-    font-weight: bold;
-    font-family: 'Orbitron', sans-serif;
-    letter-spacing: 1px;
-    padding: 4px 10px; /* increased padding */
-    font-size: 0.85rem;
-    border-radius: 6px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    line-height: 1.2;
-  }
-  .custom-rdm-btn:hover {
-    transform: scale(1.03);
-    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2);
-  }
+      .custom-rdm-btn {
+        background: linear-gradient(to right, #ffcc00, #ff9900);
+        color: #212529;
+        border: none;
+        font-weight: bold;
+        font-family: 'Orbitron', sans-serif;
+        letter-spacing: 1px;
+        padding: 5px 12px; /* slightly smaller than last version */
+        font-size: 0.88rem;
+        border-radius: 6px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        line-height: 1.25;
+      }
+      .custom-rdm-btn:hover {
+        transform: scale(1.03);
+        box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2);
+      }
 
-  header.top-header .container-fluid {
-    padding-top: 0.6rem !important;   /* increased from 0.1 to 0.6 */
-    padding-bottom: 0.6rem !important;
-  }
+      header.top-header .container-fluid {
+        padding-top: 0.8rem !important;   /* reduced from 1rem */
+        padding-bottom: 0.8rem !important;
+      }
 
-  header.top-header .btn-light,
-  header.top-header .btn-outline-warning {
-    padding: 0.35rem 0.75rem !important; /* slightly larger buttons */
-    font-size: 0.78rem !important;
-    line-height: 1.2 !important;
-  }
+      header.top-header .btn-light,
+      header.top-header .btn-outline-warning {
+        padding: 0.45rem 0.85rem !important; /* slightly reduced */
+        font-size: 0.82rem !important;
+        line-height: 1.25 !important;
+      }
 
-  .offcanvas-body {
-    padding: 1rem 1rem 0.5rem 1rem;
-  }
+      .offcanvas-body {
+        padding: 1rem 1rem 0.5rem 1rem;
+      }
 
-  .offcanvas-header {
-    padding: 0.5rem 1rem;
-  }
+      .offcanvas-header {
+        padding: 0.5rem 1rem;
+      }
 
-  .offcanvas .btn {
-    font-size: 0.75rem !important;
-    padding: 0.3rem 0.5rem !important;
-  }
+      .offcanvas .btn {
+        font-size: 0.8rem !important;
+        padding: 0.35rem 0.6rem !important;
+      }
 
-  .offcanvas-footer {
-    font-size: 0.7rem;
-    color: #ccc;
-    padding: 0.75rem 1rem 0.5rem;
-    border-top: 1px solid #555;
-    text-align: center;
-  }
-</style>
-
+      .offcanvas-footer {
+        font-size: 0.75rem;
+        color: #ccc;
+        padding: 0.75rem 1rem 0.5rem;
+        border-top: 1px solid #555;
+        text-align: center;
+      }
+    </style>
 
     <!-- Header -->
     <header class="top-header position-fixed top-0 start-0 end-0 shadow-sm"
@@ -74,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <!-- Mobile toggle -->
         <button class="btn btn-outline-light d-md-none" type="button" data-bs-toggle="offcanvas"
           data-bs-target="#mobileMenu" aria-controls="mobileMenu"
-          style="padding: 0.15rem 0.35rem; font-size: 0.72rem;">
+          style="padding: 0.18rem 0.38rem; font-size: 0.78rem;">
           <i class="bi bi-list"></i>
         </button>
 

@@ -131,10 +131,6 @@ export function renderHeroSection() {
             <button class="btn btn-sm btn-info text-white d-flex align-items-center gap-1"><i class="bi bi-twitter-x"></i> X (Twitter)</button>
           </div>
         </div>
-        <!-- Clickable down icon -->
-        <div class="text-center mt-4">
-          <i class="bi bi-arrow-down-circle-fill scroll-down-icon" onclick="document.getElementById('jobList').scrollIntoView({ behavior: 'smooth' });"></i>
-        </div>
       </div>
     </section>
   `;
