@@ -71,7 +71,8 @@ function renderJobCard(job) {
       <p class="text-muted small mb-2">${shortContent}</p>
       <p class="mb-1 text-dark"><strong>🏢 Company:</strong> <span class="text-secondary">${job.company || 'N/A'}</span></p>
       <p class="mb-1 text-dark"><strong>📅 Last Date:</strong> <span class="text-danger">${job.lastDate || 'N/A'}</span></p>
-      <p class="mb-1 text-dark"><strong>👤 Posted by:</strong> <span class="text-muted">Yalla Ramana</span></p>
+      <p class="mb-1 text-dark"><strong>🎓 Qualification:</strong> <span class="text-muted">Any Graduate</span></p>
+
     </div>
 
     <!-- Footer -->

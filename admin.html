@@ -11,47 +11,39 @@
   <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Custom Inline Styling -->
+  <!-- Custom Styling -->
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
       background-color: #f8f9fa;
+      padding-top: 80px; /* Space for header */
     }
-
     #loginSection .card {
       border-radius: 12px;
     }
-
     .btn-sm, .form-control, .form-select {
       font-size: 0.9rem;
     }
-
     .table td, .table th {
       vertical-align: middle;
     }
-
     @media (max-width: 576px) {
       .modal-lg {
         max-width: 95% !important;
       }
     }
-
     #adminPanel h5 {
       font-size: 1.1rem;
     }
-
     .table thead th {
       font-size: 0.85rem;
     }
-
     .form-label {
       font-size: 0.9rem;
     }
-
     .form-control, .form-select {
       padding: 0.4rem 0.5rem;
     }
-
     #quillEditor {
       background-color: white;
     }
@@ -146,8 +138,8 @@
                 </select>
               </div>
               <div class="col-md-6">
-                <label class="form-label">Last Date</label>
-                <input type="date" id="jobLastDate" class="form-control" required />
+                <label class="form-label">Last Date / Time Info</label>
+                <input type="text" id="jobLastDate" class="form-control" placeholder="e.g., 15 Aug 2025, 5 PM" required />
               </div>
             </div>
             <div class="mt-3">
@@ -167,7 +159,6 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
   <script src="header.js"></script>
   <script src="footer.js"></script>
@@ -186,20 +177,19 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-  const quill = new Quill("#quillEditor", {
-  theme: "snow",
-  modules: {
-    toolbar: [
-      [{ header: [1, 2, false] }],
-      ["bold", "italic", "underline"],
-      ["link"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      [{ color: [] }],         // enables full color palette
-      [{ background: [] }]     // enables full background color palette
-    ]
-  }
-});
-
+    const quill = new Quill("#quillEditor", {
+      theme: "snow",
+      modules: {
+        toolbar: [
+          [{ header: [1, 2, false] }],
+          ["bold", "italic", "underline"],
+          ["link"],
+          [{ list: "ordered" }, { list: "bullet" }],
+          [{ color: [] }],
+          [{ background: [] }]
+        ]
+      }
+    });
 
     function toggleSections(isLoggedIn, email = "") {
       document.getElementById("loginSection").classList.toggle("d-none", isLoggedIn);
@@ -236,7 +226,7 @@
         title,
         company: document.getElementById("jobCompany").value,
         type: document.getElementById("jobType").value,
-        lastDate: document.getElementById("jobLastDate").value,
+        lastDate: document.getElementById("jobLastDate").value, // free text
         content: quill.root.innerHTML,
         createdBy: auth.currentUser.email,
         createdDate: new Date().toISOString().split("T")[0],
@@ -258,7 +248,6 @@
     async function loadJobs() {
       const tbody = document.getElementById("jobsBody");
       tbody.innerHTML = "<tr><td colspan='6'>Loading...</td></tr>";
-
       try {
         const snapshot = await db.collection("jobs").orderBy("postedAt", "desc").get();
         tbody.innerHTML = "";
@@ -304,9 +293,10 @@
         toggleSections(false);
       }
     });
+
     window.navigateToType = function (type) {
-  window.location.href = `jobinformation.html?type=${encodeURIComponent(type)}`;
-};
+      window.location.href = `jobinformation.html?type=${encodeURIComponent(type)}`;
+    };
   </script>
 </body>
 </html>
