@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
         font-weight: bold;
         font-family: 'Orbitron', sans-serif;
         letter-spacing: 1px;
-        padding: 5px 12px; /* slightly smaller than last version */
+        padding: 5px 12px;
         font-size: 0.88rem;
         border-radius: 6px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -27,13 +27,12 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       header.top-header .container-fluid {
-        padding-top: 0.8rem !important;   /* reduced from 1rem */
+        padding-top: 0.8rem !important;
         padding-bottom: 0.8rem !important;
       }
 
-      header.top-header .btn-light,
-      header.top-header .btn-outline-warning {
-        padding: 0.45rem 0.85rem !important; /* slightly reduced */
+      header.top-header .btn-light {
+        padding: 0.45rem 0.85rem !important;
         font-size: 0.82rem !important;
         line-height: 1.25 !important;
       }
@@ -88,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <button class="btn btn-light" onclick="navigateToType('Private')">
             <i class="bi bi-briefcase-fill me-1"></i> Private
           </button>
-          <button class="btn btn-outline-warning" onclick="location.href='admin.html'">
+          <button class="btn btn-light" onclick="location.href='admin.html'">
             <i class="bi bi-lock-fill me-1"></i> Admin
           </button>
         </div>
@@ -113,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <button class="btn btn-sm btn-light text-start w-100" onclick="navigateToType('Private')">
             <i class="bi bi-briefcase-fill me-2"></i> Private Jobs
           </button>
-          <button class="btn btn-sm btn-outline-warning text-start w-100" onclick="location.href='admin.html'">
+          <button class="btn btn-sm btn-light text-start w-100" onclick="location.href='admin.html'">
             <i class="bi bi-lock-fill me-2"></i> Admin Panel
           </button>
         </div>
@@ -121,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       <!-- Footer -->
       <div class="offcanvas-footer">
-        🛠️ Developed by <strong class="text-warning">Yalla Ramana</strong>
+        🛠️ Developed by<br> <strong class="text-warning">Yalla Ramana</strong>
       </div>
     </div>
   `;

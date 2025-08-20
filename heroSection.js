@@ -122,16 +122,7 @@ export function renderHeroSection() {
           </div>
         </div>
 
-        <!-- Social buttons (non-clickable, mobile friendly) -->
-        <div class="hero-social mt-4">
-          <strong>Follow Us On Social Media:</strong>
-          <div class="d-flex flex-wrap align-items-center gap-2 mt-2 justify-content-center">
-            <button class="btn btn-sm btn-success d-flex align-items-center gap-1"><i class="bi bi-whatsapp"></i> WhatsApp</button>
-            <button class="btn btn-sm btn-primary d-flex align-items-center gap-1"><i class="bi bi-facebook"></i> Facebook</button>
-            <button class="btn btn-sm btn-info text-white d-flex align-items-center gap-1"><i class="bi bi-twitter-x"></i> X (Twitter)</button>
-          </div>
-        </div>
-      </div>
+        
     </section>
   `;
 }
