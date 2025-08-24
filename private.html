@@ -12,10 +12,13 @@
   <style>
     .hover-card {
       transition: all 0.3s ease;
-      border: 1px solid #e0e0e0 !important;
+      border: 1px solid #198754 !important; /* Green border */
       border-radius: 12px;
       background: #fff;
       overflow: hidden;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
     }
     .hover-card:hover {
       box-shadow: 0 6px 18px rgba(0,0,0,0.12);
@@ -23,26 +26,26 @@
     }
     .card-accent {
       height: 6px;
-      background: #0d6efd; /* Bootstrap Blue */
+      background: #198754; /* Green accent */
     }
     .job-time {
       font-size: 0.8rem;
       color: #6c757d;
     }
-    .pagination { 
-      justify-content: center; 
-      margin-top: 20px; 
-    }
+    .pagination { justify-content: center; margin-top: 20px; }
     .page-link { cursor: pointer; }
+    .main-content { min-height: 80vh; }
+    .card-body { padding: 0.75rem 1rem; flex-grow: 1; }
+    #jobList { min-height: 80vh; }
   </style>
 </head>
 <body>
   <div class="site-wrapper">
     <div id="header-container"></div>
 
-    <div class="main-content p-3 mt-5 min-height: 80vh">
+    <div class="main-content p-3 mt-5">
       <!-- Heading -->
-      <h4 class="mb-4 text-primary fw-bold d-flex align-items-center">
+      <h4 class="mb-4 text-success fw-bold d-flex align-items-center">
         <i class="bi bi-briefcase-fill me-2"></i> Private Jobs
       </h4>
 
@@ -82,7 +85,6 @@
     let currentPage = 1;
     let allJobs = [];
 
-    // ✅ Convert Firestore Timestamp to "time ago"
     function timeAgo(timestamp) {
       if (!timestamp) return "N/A";
       const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
@@ -100,7 +102,6 @@
       return `${days}d ago`;
     }
 
-    // Render jobs for a page
     function renderJobs(page) {
       jobList.innerHTML = "";
       const start = (page - 1) * jobsPerPage;
@@ -110,12 +111,12 @@
       jobsToShow.forEach(({ id, job }) => {
         const postedAgo = job.createdDate ? timeAgo(job.createdDate) : "N/A";
         jobList.innerHTML += `
-          <div class="col-12 col-md-6">
-            <div class="card h-100 shadow-sm hover-card">
+          <div class="col-12 col-md-4 d-flex">
+            <div class="card shadow-sm hover-card w-100">
               <div class="card-accent"></div>
               <!-- Title + Time -->
               <div class="px-3 py-2 border-bottom bg-light">
-                <h6 class="fw-semibold text-primary mb-0">
+                <h6 class="fw-semibold text-success mb-0">
                   ${job.title || "Untitled"} 
                   <small class="job-time">(${postedAgo})</small>
                 </h6>
@@ -124,12 +125,12 @@
               <div class="card-body bg-white">
                 <p><strong>🏢 Company:</strong> ${job.company || "N/A"}</p>
                 <p><strong>📅 Last Date:</strong> <span class="text-danger">${job.lastDate || "N/A"}</span></p>
-                <p class="small text-muted">${job.content?.replace(/<[^>]+>/g, '').slice(0, 100) || "No description"}...</p>
+                <p class="small text-muted">${job.content?.replace(/<[^>]+>/g, '').slice(0, 80) || "No description"}...</p>
               </div>
               <!-- Footer -->
               <div class="bg-light px-3 py-2 border-top d-flex justify-content-between align-items-center">
                 <span class="small text-muted"><i class="bi bi-briefcase-fill"></i> Private Job</span>
-                <a href="job-details.html?jobId=${id}" class="btn btn-sm btn-outline-primary">
+                <a href="job-details.html?jobId=${id}" class="btn btn-sm btn-outline-success">
                   <i class="bi bi-eye-fill"></i> Full Details
                 </a>
               </div>
@@ -140,7 +141,6 @@
       renderPagination();
     }
 
-    // Render pagination buttons
     function renderPagination() {
       pagination.innerHTML = "";
       const totalPages = Math.ceil(allJobs.length / jobsPerPage);
@@ -160,11 +160,10 @@
       });
     }
 
-    // Load jobs from Firestore
     async function loadPrivateJobs() {
       jobList.innerHTML = `
         <div class="text-center text-muted py-5">
-          <div class="spinner-border text-primary mb-3"></div><br>Loading jobs...
+          <div class="spinner-border text-success mb-3"></div><br>Loading jobs...
         </div>`;
 
       try {

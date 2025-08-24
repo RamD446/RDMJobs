@@ -12,10 +12,13 @@
   <style>
     .hover-card {
       transition: all 0.3s ease;
-      border: 1px solid #e0e0e0 !important;
+      border: 1px solid #0d6efd !important; /* Blue border */
       border-radius: 12px;
       background: #fff;
       overflow: hidden;
+      height: 100%; /* Ensure equal height */
+      display: flex;
+      flex-direction: column;
     }
     .hover-card:hover {
       box-shadow: 0 6px 18px rgba(0,0,0,0.12);
@@ -23,7 +26,7 @@
     }
     .card-accent {
       height: 6px;
-      background: #198754; /* Bootstrap green */
+      background: #0d6efd; /* Blue accent */
     }
     .job-time {
       font-size: 0.8rem;
@@ -34,6 +37,14 @@
       margin-top: 20px; 
     }
     .page-link { cursor: pointer; }
+    .main-content { min-height: 80vh; } /* keep footer bottom */
+    .card-body { 
+      padding: 0.75rem 1rem; 
+      flex-grow: 1; /* expand middle section */
+    }
+    #jobList {
+      min-height: 80vh; /* ✅ ensure job list area fills viewport */
+    }
   </style>
 </head>
 <body>
@@ -42,7 +53,7 @@
 
     <div class="main-content p-3 mt-5">
       <!-- Heading -->
-      <h4 class="mb-4 text-success fw-bold d-flex align-items-center">
+      <h4 class="mb-4 text-primary fw-bold d-flex align-items-center">
         <i class="bi bi-bank me-2"></i> Government Jobs
       </h4>
 
@@ -78,7 +89,6 @@
     const jobList = document.getElementById("jobList");
     const pagination = document.getElementById("pagination");
 
-    // Pagination variables
     let jobsPerPage = 6;
     let currentPage = 1;
     let allJobs = [];
@@ -111,12 +121,12 @@
       jobsToShow.forEach(({ id, job }) => {
         const postedAgo = job.createdDate ? timeAgo(job.createdDate) : "N/A";
         jobList.innerHTML += `
-          <div class="col-12 col-md-6">
-            <div class="card h-100 shadow-sm hover-card">
+          <div class="col-12 col-md-4 d-flex">
+            <div class="card shadow-sm hover-card w-100">
               <div class="card-accent"></div>
               <!-- Title + Time -->
               <div class="px-3 py-2 border-bottom bg-light">
-                <h6 class="fw-semibold text-success mb-0">
+                <h6 class="fw-semibold text-primary mb-0">
                   ${job.title || "Untitled"} 
                   <small class="job-time">(${postedAgo})</small>
                 </h6>
@@ -125,12 +135,12 @@
               <div class="card-body bg-white">
                 <p><strong>🏢 Company:</strong> ${job.company || "N/A"}</p>
                 <p><strong>📅 Last Date:</strong> <span class="text-danger">${job.lastDate || "N/A"}</span></p>
-                <p class="small text-muted">${job.content?.replace(/<[^>]+>/g, '').slice(0, 100) || "No description"}...</p>
+                <p class="small text-muted">${job.content?.replace(/<[^>]+>/g, '').slice(0, 80) || "No description"}...</p>
               </div>
               <!-- Footer -->
               <div class="bg-light px-3 py-2 border-top d-flex justify-content-between align-items-center">
                 <span class="small text-muted"><i class="bi bi-bank"></i> Govt Job</span>
-                <a href="job-details.html?jobId=${id}" class="btn btn-sm btn-outline-success">
+                <a href="job-details.html?jobId=${id}" class="btn btn-sm btn-outline-primary">
                   <i class="bi bi-eye-fill"></i> Full Details
                 </a>
               </div>
@@ -153,7 +163,6 @@
           </li>`;
       }
 
-      // Add event listeners
       document.querySelectorAll(".page-link").forEach((btn, index) => {
         btn.addEventListener("click", () => {
           currentPage = index + 1;
@@ -166,7 +175,7 @@
     async function loadGovernmentJobs() {
       jobList.innerHTML = `
         <div class="text-center text-muted py-5">
-          <div class="spinner-border text-success mb-3"></div><br>Loading jobs...
+          <div class="spinner-border text-primary mb-3"></div><br>Loading jobs...
         </div>`;
 
       try {

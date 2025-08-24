@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <i class="bi bi-briefcase-fill me-1"></i> Private
           </button>
           <button class="btn btn-light" onclick="location.href='admin.html'">
-            <i class="bi bi-lock-fill me-1"></i> Admin
+            <i class="bi bi-lock-fill me-1"></i> Login
           </button>
         </div>
       </div>
@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <i class="bi bi-briefcase-fill me-2"></i> Private Jobs
           </button>
           <button class="btn btn-sm btn-light text-start w-100" onclick="location.href='admin.html'">
-            <i class="bi bi-lock-fill me-2"></i> Admin Panel
+            <i class="bi bi-lock-fill me-2"></i> Login
           </button>
         </div>
       </div>
