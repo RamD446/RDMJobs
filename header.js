@@ -81,10 +81,10 @@ document.addEventListener("DOMContentLoaded", function () {
           <button class="btn btn-light" onclick="location.href='index.html'">
             <i class="bi bi-house-door-fill me-1"></i> All
           </button>
-          <button class="btn btn-light" onclick="navigateToType('Government')">
+          <button class="btn btn-light" onclick="location.href='government.html'">
             <i class="bi bi-bank me-1"></i> Govt
           </button>
-          <button class="btn btn-light" onclick="navigateToType('Private')">
+          <button class="btn btn-light" onclick="location.href='private.html'">
             <i class="bi bi-briefcase-fill me-1"></i> Private
           </button>
           <button class="btn btn-light" onclick="location.href='admin.html'">
@@ -106,10 +106,10 @@ document.addEventListener("DOMContentLoaded", function () {
           <button class="btn btn-sm btn-light text-start w-100" onclick="location.href='index.html'">
             <i class="bi bi-house-door-fill me-2"></i> All Jobs
           </button>
-          <button class="btn btn-sm btn-light text-start w-100" onclick="navigateToType('Government')">
+          <button class="btn btn-sm btn-light text-start w-100" onclick="location.href='government.html'">
             <i class="bi bi-bank me-2"></i> Government Jobs
           </button>
-          <button class="btn btn-sm btn-light text-start w-100" onclick="navigateToType('Private')">
+          <button class="btn btn-sm btn-light text-start w-100" onclick="location.href='private.html'">
             <i class="bi bi-briefcase-fill me-2"></i> Private Jobs
           </button>
           <button class="btn btn-sm btn-light text-start w-100" onclick="location.href='admin.html'">

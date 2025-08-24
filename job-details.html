@@ -17,10 +17,10 @@
       <div id="jobDetails" class="p-4 bg-light border rounded shadow-sm mb-4"></div>
 
       <h5 class="mb-3 btn btn-sm fw-semibold" style="color: #ffc107; cursor: default; border-color: #ffc107;">
-        <i class="bi bi-briefcase-fill me-1"></i> Related Job Posts
+        <i class="bi bi-list-task me-1"></i> More Jobs
       </h5>
 
-      <div id="relatedJobs" class="row g-3 mb-5"></div>
+      <div id="relatedJobs" class="mb-5"></div>
     </div>
 
     <div class="footer-container"></div>
@@ -54,6 +54,22 @@
     const jobDetailsEl = document.getElementById("jobDetails");
     const relatedJobsEl = document.getElementById("relatedJobs");
 
+    // ✅ Convert timestamp to "time ago" format
+    function timeAgo(dateStr) {
+      const now = new Date();
+      const past = new Date(dateStr);
+      const diffMs = now - past;
+      const seconds = Math.floor(diffMs / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+
+      if (seconds < 60) return `${seconds}s ago`;
+      if (minutes < 60) return `${minutes}m ago`;
+      if (hours < 24) return `${hours}h ago`;
+      return `${days}d ago`;
+    }
+
     async function loadJobDetails() {
       jobDetailsEl.innerHTML = `
         <div class="text-center text-muted py-5">
@@ -77,23 +93,25 @@
 
         const job = docSnap.data();
         const currentUrl = window.location.href;
+        const postedAgo = job.createdDate ? timeAgo(job.createdDate) : "";
 
         jobDetailsEl.innerHTML = `
           <h4 class="fw-bold text-danger">${job.title}</h4>
           <div class="mb-3 small text-secondary d-flex flex-wrap gap-2">
             <span><strong class="text-dark">Posted by:</strong> Yalla Ramana</span>
             <span>|</span>
-            <span><strong class="text-dark">Created:</strong> ${job.createdDate}</span>
+            <span><strong class="text-dark">Posted:</strong> ${postedAgo}</span>
           </div>
 
           <div class="mb-3">
             <strong>Share this job:</strong>
             <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
-           <a href="https://www.whatsapp.com/channel/0029Vb6737f9hXF1XlyTuI1q" target="_blank" class="btn btn-sm btn-success">
-           <i class="bi bi-whatsapp"></i> WhatsApp Channel</a>
-           <a href="https://www.youtube.com/@yourChannel" target="_blank" class="btn btn-sm btn-danger">
-             <i class="bi bi-youtube"></i> YouTube Channel</a>
-
+              <a href="https://www.whatsapp.com/channel/0029Vb6737f9hXF1XlyTuI1q" target="_blank" class="btn btn-sm btn-success">
+                <i class="bi bi-whatsapp"></i> WhatsApp Channel
+              </a>
+              <a href="https://www.youtube.com/@yourChannel" target="_blank" class="btn btn-sm btn-danger">
+                <i class="bi bi-youtube"></i> YouTube Channel
+              </a>
               <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}" class="btn btn-sm btn-primary" target="_blank">
                 <i class="bi bi-facebook"></i> Facebook
               </a>
@@ -115,51 +133,46 @@
 
     async function loadRelatedJobs() {
       const snapshot = await getDocs(collection(db, "jobs"));
-      relatedJobsEl.innerHTML = "";
+      relatedJobsEl.innerHTML = `<ul class="list-group"></ul>`;
 
-      let count = 0;
+      const listGroup = relatedJobsEl.querySelector("ul");
+      let jobs = [];
 
       snapshot.forEach((docItem) => {
-        if (docItem.id === jobId) return;
-
-        const job = docItem.data();
-        const shortContent = job.content?.replace(/<img[^>]*>/g, '').replace(/<[^>]+>/g, '').slice(0, 120).trim() + "...";
-
-        const card = document.createElement("div");
-        card.className = "col-12 col-sm-6";
-        card.innerHTML = `
-          <div class="card h-100 border border-warning shadow-sm" style="border-radius: 12px; overflow: hidden;">
-            <div class="bg-light px-3 py-2 border-bottom d-flex justify-content-between align-items-center">
-              <h6 class="fw-semibold text-primary mb-0" style="font-size: 1.05rem;">${job.title || 'Untitled Job'}</h6>
-            </div>
-
-            <div class="card-body bg-white" style="font-size: 0.95rem;">
-              <p class="text-muted small mb-2">${shortContent}</p>
-              <p class="mb-1 text-dark"><strong>🏢 Company:</strong> <span class="text-secondary">${job.company || 'N/A'}</span></p>
-              <p class="mb-1 text-dark"><strong>📅 Last Date:</strong> <span class="text-danger">${job.lastDate || 'N/A'}</span></p>
-              <p class="mb-1 text-dark"><strong>👤 Posted by:</strong> <span class="text-muted">Yalla Ramana</span></p>
-            </div>
-
-            <div class="bg-light px-3 py-2 d-flex justify-content-end border-top">
-              <a href="job-details.html?jobId=${docItem.id}" class="btn btn-sm btn-outline-success">
-                <i class="bi bi-eye-fill me-1"></i> Full Details
-              </a>
-            </div>
-          </div>
-        `;
-        relatedJobsEl.appendChild(card);
-        count++;
+        if (docItem.id === jobId) return; // Skip current job
+        jobs.push({ id: docItem.id, ...docItem.data() });
       });
 
-      if (count === 0) {
-        relatedJobsEl.innerHTML = `<p class="text-muted">No jobs available.</p>`;
+      // ✅ Sort by createdDate (newest first)
+      jobs.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
+
+      if (jobs.length === 0) {
+        relatedJobsEl.innerHTML = `<p class="text-muted">No other jobs available.</p>`;
+        return;
       }
+
+      jobs.forEach((job) => {
+        const postedAgo = job.createdDate ? timeAgo(job.createdDate) : "";
+        const li = document.createElement("li");
+        li.className = "list-group-item list-group-item-action";
+
+        li.innerHTML = `
+          <a href="job-details.html?jobId=${job.id}" class="text-decoration-none fw-semibold text-primary">
+            📌 ${job.title || "Untitled Job"}
+          </a>
+          <small class="text-muted ms-2">Posted: ${postedAgo}</small>
+        `;
+
+        listGroup.appendChild(li);
+      });
     }
 
     loadJobDetails();
+
+    // ✅ Navigation function
     window.navigateToType = function (type) {
-  window.location.href = `jobinformation.html?type=${encodeURIComponent(type)}`;
-};
+      window.location.href = `jobinformation.html?type=${encodeURIComponent(type)}`;
+    };
   </script>
 
   <script src="header.js"></script>

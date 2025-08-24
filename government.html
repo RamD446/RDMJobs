@@ -1,0 +1,201 @@
+<!-- government.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Government Jobs</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="styles.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    .hover-card {
+      transition: all 0.3s ease;
+      border: 1px solid #e0e0e0 !important;
+      border-radius: 12px;
+      background: #fff;
+      overflow: hidden;
+    }
+    .hover-card:hover {
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+      transform: translateY(-3px);
+    }
+    .card-accent {
+      height: 6px;
+      background: #198754; /* Bootstrap green */
+    }
+    .job-time {
+      font-size: 0.8rem;
+      color: #6c757d;
+    }
+    .pagination { 
+      justify-content: center; 
+      margin-top: 20px; 
+    }
+    .page-link { cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="site-wrapper">
+    <div id="header-container"></div>
+
+    <div class="main-content p-3 mt-5">
+      <!-- Heading -->
+      <h4 class="mb-4 text-success fw-bold d-flex align-items-center">
+        <i class="bi bi-bank me-2"></i> Government Jobs
+      </h4>
+
+      <div id="jobList" class="row g-3"></div>
+
+      <!-- Pagination -->
+      <nav>
+        <ul class="pagination" id="pagination"></ul>
+      </nav>
+    </div>
+
+    <div class="footer-container"></div>
+  </div>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getFirestore, collection, query, where, orderBy, getDocs } 
+      from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAzXgI8kvqz9CEo9393W48yEZjUx6l_YNM",
+      authDomain: "rdmjobs-78da3.firebaseapp.com",
+      projectId: "rdmjobs-78da3",
+      storageBucket: "rdmjobs-78da3.appspot.com",
+      messagingSenderId: "850369074130",
+      appId: "1:850369074130:web:c96133288fb6cabdd82e0b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const jobList = document.getElementById("jobList");
+    const pagination = document.getElementById("pagination");
+
+    // Pagination variables
+    let jobsPerPage = 6;
+    let currentPage = 1;
+    let allJobs = [];
+
+    // ✅ Convert Firestore Timestamp to "time ago"
+    function timeAgo(timestamp) {
+      if (!timestamp) return "N/A";
+      const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+      const now = new Date();
+      const diffMs = now - date;
+
+      const seconds = Math.floor(diffMs / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+
+      if (seconds < 60) return `${seconds}s ago`;
+      if (minutes < 60) return `${minutes}m ago`;
+      if (hours < 24) return `${hours}h ago`;
+      return `${days}d ago`;
+    }
+
+    // Render jobs for a page
+    function renderJobs(page) {
+      jobList.innerHTML = "";
+      const start = (page - 1) * jobsPerPage;
+      const end = start + jobsPerPage;
+      const jobsToShow = allJobs.slice(start, end);
+
+      jobsToShow.forEach(({ id, job }) => {
+        const postedAgo = job.createdDate ? timeAgo(job.createdDate) : "N/A";
+        jobList.innerHTML += `
+          <div class="col-12 col-md-6">
+            <div class="card h-100 shadow-sm hover-card">
+              <div class="card-accent"></div>
+              <!-- Title + Time -->
+              <div class="px-3 py-2 border-bottom bg-light">
+                <h6 class="fw-semibold text-success mb-0">
+                  ${job.title || "Untitled"} 
+                  <small class="job-time">(${postedAgo})</small>
+                </h6>
+              </div>
+              <!-- Body -->
+              <div class="card-body bg-white">
+                <p><strong>🏢 Company:</strong> ${job.company || "N/A"}</p>
+                <p><strong>📅 Last Date:</strong> <span class="text-danger">${job.lastDate || "N/A"}</span></p>
+                <p class="small text-muted">${job.content?.replace(/<[^>]+>/g, '').slice(0, 100) || "No description"}...</p>
+              </div>
+              <!-- Footer -->
+              <div class="bg-light px-3 py-2 border-top d-flex justify-content-between align-items-center">
+                <span class="small text-muted"><i class="bi bi-bank"></i> Govt Job</span>
+                <a href="job-details.html?jobId=${id}" class="btn btn-sm btn-outline-success">
+                  <i class="bi bi-eye-fill"></i> Full Details
+                </a>
+              </div>
+            </div>
+          </div>`;
+      });
+
+      renderPagination();
+    }
+
+    // Render pagination buttons
+    function renderPagination() {
+      pagination.innerHTML = "";
+      const totalPages = Math.ceil(allJobs.length / jobsPerPage);
+
+      for (let i = 1; i <= totalPages; i++) {
+        pagination.innerHTML += `
+          <li class="page-item ${i === currentPage ? 'active' : ''}">
+            <a class="page-link">${i}</a>
+          </li>`;
+      }
+
+      // Add event listeners
+      document.querySelectorAll(".page-link").forEach((btn, index) => {
+        btn.addEventListener("click", () => {
+          currentPage = index + 1;
+          renderJobs(currentPage);
+        });
+      });
+    }
+
+    // Load jobs from Firestore
+    async function loadGovernmentJobs() {
+      jobList.innerHTML = `
+        <div class="text-center text-muted py-5">
+          <div class="spinner-border text-success mb-3"></div><br>Loading jobs...
+        </div>`;
+
+      try {
+        const jobsRef = collection(db, "jobs");
+        const q = query(jobsRef, where("type", "==", "Government"), orderBy("createdDate", "desc"));
+        const snapshot = await getDocs(q);
+
+        allJobs = [];
+        snapshot.forEach((doc) => {
+          allJobs.push({ id: doc.id, job: doc.data() });
+        });
+
+        if (allJobs.length === 0) {
+          jobList.innerHTML = `<p class="text-center text-muted">No Government jobs found.</p>`;
+          return;
+        }
+
+        renderJobs(currentPage);
+
+      } catch (error) {
+        jobList.innerHTML = `<p class="text-danger text-center">Error loading jobs.</p>`;
+        console.error(error);
+      }
+    }
+
+    loadGovernmentJobs();
+  </script>
+
+  <script src="header.js"></script>
+  <script src="footer.js"></script>
+</body>
+</html>
