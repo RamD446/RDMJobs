@@ -57,7 +57,9 @@ function renderJobCard(job) {
           <p class="text-muted small mb-2">${shortContent}</p>
           <p class="mb-1 text-dark"><strong>🏢 Company:</strong> <span class="text-secondary">${job.company || 'N/A'}</span></p>
           <p class="mb-1 text-dark"><strong>📅 Last Date:</strong> <span class="text-danger">${job.lastDate || 'N/A'}</span></p>
-          <p class="mb-1 text-dark"><strong>🎓 Qualification:</strong> <span class="text-muted">Any Graduate</span></p>
+          <p class="mb-1 text-dark"><strong>🎓 Qualification:</strong> 
+            <span class="text-muted">${job.qualification || 'N/A'}</span>
+          </p>
           <p class="mb-1 text-dark"><strong>📌 Job Type:</strong> 
             <span class="${job.type?.toLowerCase() === "government" ? "text-success fw-bold" : "text-info fw-bold"}">
               ${job.type || "Other"}

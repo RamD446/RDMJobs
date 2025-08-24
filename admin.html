@@ -11,42 +11,21 @@
   <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Custom Styling -->
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
       background-color: #f8f9fa;
-      padding-top: 80px; /* Space for header */
+      padding-top: 80px;
     }
-    #loginSection .card {
-      border-radius: 12px;
-    }
-    .btn-sm, .form-control, .form-select {
-      font-size: 0.9rem;
-    }
-    .table td, .table th {
-      vertical-align: middle;
-    }
-    @media (max-width: 576px) {
-      .modal-lg {
-        max-width: 95% !important;
-      }
-    }
-    #adminPanel h5 {
-      font-size: 1.1rem;
-    }
-    .table thead th {
-      font-size: 0.85rem;
-    }
-    .form-label {
-      font-size: 0.9rem;
-    }
-    .form-control, .form-select {
-      padding: 0.4rem 0.5rem;
-    }
-    #quillEditor {
-      background-color: white;
-    }
+    #loginSection .card { border-radius: 12px; }
+    .btn-sm, .form-control, .form-select { font-size: 0.9rem; }
+    .table td, .table th { vertical-align: middle; }
+    @media (max-width: 576px) { .modal-lg { max-width: 95% !important; } }
+    #adminPanel h5 { font-size: 1.1rem; }
+    .table thead th { font-size: 0.85rem; }
+    .form-label { font-size: 0.9rem; }
+    .form-control, .form-select { padding: 0.4rem 0.5rem; }
+    #quillEditor { background-color: white; }
   </style>
 </head>
 <body>
@@ -100,6 +79,7 @@
             <th>#</th>
             <th>Title</th>
             <th>Type</th>
+            <th>Qualification</th> <!-- Added Qualification Column -->
             <th>Posted On</th>
             <th>Created By</th>
             <th>Actions</th>
@@ -138,6 +118,10 @@
                 </select>
               </div>
               <div class="col-md-6">
+                <label class="form-label">Qualification</label> <!-- New Input -->
+                <input type="text" id="jobQualification" class="form-control" placeholder="e.g., B.Sc, MBA, Diploma" required />
+              </div>
+              <div class="col-md-12">
                 <label class="form-label">Last Date / Time Info</label>
                 <input type="text" id="jobLastDate" class="form-control" placeholder="e.g., 15 Aug 2025, 5 PM" required />
               </div>
@@ -155,7 +139,7 @@
     </div>
   </div>
 
-  <!-- Firebase Config & App -->
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -226,7 +210,8 @@
         title,
         company: document.getElementById("jobCompany").value,
         type: document.getElementById("jobType").value,
-        lastDate: document.getElementById("jobLastDate").value, // free text
+        qualification: document.getElementById("jobQualification").value, // NEW
+        lastDate: document.getElementById("jobLastDate").value,
         content: quill.root.innerHTML,
         createdBy: auth.currentUser.email,
         createdDate: new Date().toISOString().split("T")[0],
@@ -247,7 +232,7 @@
 
     async function loadJobs() {
       const tbody = document.getElementById("jobsBody");
-      tbody.innerHTML = "<tr><td colspan='6'>Loading...</td></tr>";
+      tbody.innerHTML = "<tr><td colspan='7'>Loading...</td></tr>";
       try {
         const snapshot = await db.collection("jobs").orderBy("postedAt", "desc").get();
         tbody.innerHTML = "";
@@ -259,6 +244,7 @@
               <td>${count++}</td>
               <td>${job.title}</td>
               <td>${job.type}</td>
+              <td>${job.qualification || "-"}</td>
               <td>${new Date(job.postedAt).toLocaleDateString()}</td>
               <td>${job.createdBy}</td>
               <td>
@@ -270,7 +256,7 @@
           `;
         });
       } catch (err) {
-        tbody.innerHTML = "<tr><td colspan='6' class='text-danger'>Failed to load jobs</td></tr>";
+        tbody.innerHTML = "<tr><td colspan='7' class='text-danger'>Failed to load jobs</td></tr>";
       }
     }
 
