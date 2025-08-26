@@ -38,32 +38,45 @@ function getTimeAgo(postedAt) {
   return { text: `${diffDay} day${diffDay !== 1 ? "s" : ""} ago`, color: "text-danger" };
 }
 
-// 🔹 Render Each Job Card (Unified style)
+// 🔹 Render Each Job Card (Title → Type → Content)
 function renderJobCard(job) {
+  // Extract plain text from HTML content for snippet
   const tempDiv = document.createElement("div");
   tempDiv.innerHTML = job.content || "";
-  const shortContent = tempDiv.textContent.trim().slice(0, 90) + "...";
+  const shortContent = tempDiv.textContent.trim().slice(0, 120) + "..."; // Slightly longer snippet
+
+  // Get "time ago" display
   const time = getTimeAgo(job.postedAt);
 
+  // Return card HTML
   return `
-    <div class="col-md-6 col-lg-4">
+    <div class="col-md-6 col-lg-4 mb-4">
       <div class="card h-100 border border-warning shadow-sm" style="border-radius: 12px; overflow: hidden;">
-       <div class="bg-light px-3 py-2 border-bottom">
-  <h6 class="fw-bold text-success mb-0 job-title" style="font-size: 1rem;">
-    ${job.title || 'Untitled Job'}
-  </h6>
-</div>
+        
+        <!-- Job Title -->
+        <div class="bg-light px-3 py-2 border-bottom">
+          <h6 class="fw-bold mb-1 job-title" style="font-size: 1rem; color: #0d6efd;">
+            ${job.title || 'Untitled Job'}
+          </h6>
+        </div>
+
+        <!-- Card Body -->
         <div class="card-body bg-white" style="font-size: 0.95rem;">
-          <p class="text-muted small mb-2">${shortContent}</p>
-         
-          <p class="mb-1 text-dark"><strong> Job Type:</strong> 
-            <span class="fw-bold text-dark">
-              ${job.type || "N/A"} ${job.tags ? `|| ${job.tags}` : ""}
+          <!-- Job Type -->
+          <p class="mb-2">
+            <span class="fw-bold ">
+              ${job.type || "N/A"} Job ${job.tags ? `|| ${job.tags}` : ""}
             </span>
           </p>
+          <!-- Content Snippet -->
+          <p class="text-muted small mb-0">${shortContent}</p>
         </div>
+
+        <!-- Footer: Time & Details -->
         <div class="bg-light px-3 py-2 d-flex justify-content-between align-items-center border-top">
-          <span class="${time.color} small"><i class="bi bi-clock me-1"></i>${time.text}</span>
+          <span class="${time.color} small">
+            <i class="bi bi-clock me-1"></i>${time.text}
+          </span>
           <a href="job-details.html?jobId=${job.id}" class="btn btn-sm btn-outline-success">
             <i class="bi bi-eye-fill me-1"></i> Full Details
           </a>
@@ -72,6 +85,9 @@ function renderJobCard(job) {
     </div>
   `;
 }
+
+
+
 
 // 🔹 Global for pagination
 let allJobs = [];
