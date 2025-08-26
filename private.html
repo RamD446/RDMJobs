@@ -80,7 +80,7 @@
       const tempDiv = document.createElement("div");
       tempDiv.innerHTML = job.content || "";
       const shortContent = tempDiv.textContent.trim().slice(0, 90) + "...";
-      const time = getTimeAgo(job.createdDate || job.postedAt);
+      const time = getTimeAgo(job.postedAt);
 
       return `
         <div class="col-md-6 col-lg-4">
