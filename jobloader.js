@@ -50,7 +50,7 @@ function renderJobCard(job) {
 
   // Return card HTML
   return `
-    <div class="col-md-6 col-lg-4 mb-4">
+    <div class="col-md-6 col-lg-4 mb-1">
       <div class="card h-100 border border-warning shadow-sm" style="border-radius: 12px; overflow: hidden;">
         
         <!-- Job Title -->
