@@ -56,7 +56,7 @@ function renderJobCard(job) {
         <div class="card-body bg-white" style="font-size: 0.95rem;">
           <p class="text-muted small mb-2">${shortContent}</p>
          
-          <p class="mb-1 text-dark"><strong>📌 Job Type:</strong> 
+          <p class="mb-1 text-dark"><strong> Job Type:</strong> 
             <span class="fw-bold text-dark">
               ${job.type || "N/A"} ${job.tags ? `|| ${job.tags}` : ""}
             </span>
