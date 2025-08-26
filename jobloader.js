@@ -38,7 +38,7 @@ function getTimeAgo(postedAt) {
   return { text: `${diffDay} day${diffDay !== 1 ? "s" : ""} ago`, color: "text-danger" };
 }
 
-// 🔹 Render Each Job Card (Tags included, removed company/lastDate/qualification)
+// 🔹 Render Each Job Card (Unified style)
 function renderJobCard(job) {
   const tempDiv = document.createElement("div");
   tempDiv.innerHTML = job.content || "";
@@ -49,7 +49,7 @@ function renderJobCard(job) {
     <div class="col-md-6 col-lg-4">
       <div class="card h-100 border border-warning shadow-sm" style="border-radius: 12px; overflow: hidden;">
         <div class="bg-light px-3 py-2 border-bottom">
-          <h6 class="fw-bold text-primary mb-0" style="font-size: .9rem;">
+          <h6 class="fw-bold text-dark mb-0" style="font-size: 1rem;">
             ${job.title || 'Untitled Job'}
           </h6>
         </div>
@@ -57,8 +57,8 @@ function renderJobCard(job) {
           <p class="text-muted small mb-2">${shortContent}</p>
          
           <p class="mb-1 text-dark"><strong>📌 Job Type:</strong> 
-            <span class="${job.type?.toLowerCase() === "government" ? "text-success fw-bold" : "text-info fw-bold"}">
-              ${job.type} ||${job.tags }
+            <span class="fw-bold text-dark">
+              ${job.type || "N/A"} ${job.tags ? `|| ${job.tags}` : ""}
             </span>
           </p>
         </div>

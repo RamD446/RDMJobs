@@ -26,9 +26,7 @@
   <meta name="twitter:image" content="https://rdmjobs.com/assets/preview-image.jpg" />
 
   <!-- 🔹 Favicon & Icons -->
-   <!-- Favicon -->
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
-
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="icon" href="https://rdmjobs.com/assets/favicon.ico" type="image/x-icon" />
   <link rel="icon" type="image/png" sizes="32x32" href="https://rdmjobs.com/assets/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="https://rdmjobs.com/assets/favicon-16x16.png" />
@@ -48,7 +46,7 @@
 <body>
   <div class="site-wrapper">
     <div id="header-container"></div>
-<br>
+    <br>
     <div class="mt-4" id="hero-section"></div>
 
     <main class="main-content container py-4" id="jobList"></main>
@@ -62,17 +60,10 @@
   <script src="footer.js"></script>
   <script src="header.js"></script>
 
-  <!-- Import heroSection.js and run render + event bind -->
+  <!-- Import heroSection.js -->
   <script type="module">
     import { renderHeroSection } from './heroSection.js';
-
-    const heroContainer = document.getElementById('hero-section');
-    heroContainer.innerHTML = renderHeroSection();
-
-    const scrollButton = document.getElementById('scrollToJobs');
-    scrollButton.addEventListener('click', () => {
-      document.getElementById('jobList').scrollIntoView({ behavior: 'smooth' });
-    });
+    document.getElementById('hero-section').innerHTML = renderHeroSection();
   </script>
 
   <script type="module" src="jobloader.js"></script>
