@@ -4,29 +4,38 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Job Details - RDM Jobs</title>
+
+  <!-- ✅ Bootstrap & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <!-- ✅ Custom Styles -->
   <link rel="stylesheet" href="styles.css" />
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
   <div class="site-wrapper">
+    <!-- Header -->
     <div id="header-container"></div>
 
+    <!-- Main Content -->
     <div class="main-content p-3 mt-5">
+      <!-- Job Details -->
       <div id="jobDetails" class="p-4 bg-light border rounded shadow-sm mb-4"></div>
 
-      <h5 class="mb-3 btn btn-sm fw-semibold" style="color: #ffc107; cursor: default; border-color: #ffc107;">
+      <!-- Related Jobs -->
+      <h5 class="mb-3 btn btn-sm fw-semibold" 
+          style="color: #ffc107; cursor: default; border-color: #ffc107;">
         <i class="bi bi-list-task me-1"></i> More Jobs
       </h5>
-
       <div id="relatedJobs" class="mb-5"></div>
     </div>
 
+    <!-- Footer -->
     <div class="footer-container"></div>
   </div>
 
-  <!-- ✅ Firebase + Firestore Setup and Job Loading Logic -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
     import {
@@ -34,10 +43,12 @@
       doc,
       getDoc,
       collection,
-      getDocs
+      getDocs,
+      query,
+      orderBy
     } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
-    // ✅ Firebase Config
+    // 🔹 Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyAzXgI8kvqz9CEo9393W48yEZjUx6l_YNM",
       authDomain: "rdmjobs-78da3.firebaseapp.com",
@@ -54,22 +65,23 @@
     const jobDetailsEl = document.getElementById("jobDetails");
     const relatedJobsEl = document.getElementById("relatedJobs");
 
-    // ✅ Convert timestamp to "time ago" format
-    function timeAgo(dateStr) {
+    // 🔹 Time formatting (with color)
+    function getTimeAgo(postedAt) {
+      if (!postedAt) return { text: "", color: "text-muted" };
       const now = new Date();
-      const past = new Date(dateStr);
-      const diffMs = now - past;
-      const seconds = Math.floor(diffMs / 1000);
-      const minutes = Math.floor(seconds / 60);
-      const hours = Math.floor(minutes / 60);
-      const days = Math.floor(hours / 24);
+      const postDate = postedAt?.toDate ? postedAt.toDate() : new Date(postedAt);
+      const diffMs = now - postDate;
+      const diffMin = Math.floor(diffMs / 60000);
+      const diffHour = Math.floor(diffMin / 60);
+      const diffDay = Math.floor(diffHour / 24);
 
-      if (seconds < 60) return `${seconds}s ago`;
-      if (minutes < 60) return `${minutes}m ago`;
-      if (hours < 24) return `${hours}h ago`;
-      return `${days}d ago`;
+      if (diffMin < 1) return { text: "Just now", color: "text-success" };
+      if (diffMin < 60) return { text: `${diffMin} min ago`, color: "text-success" };
+      if (diffHour < 24) return { text: `${diffHour} hour${diffHour !== 1 ? "s" : ""} ago`, color: "text-warning" };
+      return { text: `${diffDay} day${diffDay !== 1 ? "s" : ""} ago`, color: "text-danger" };
     }
 
+    // 🔹 Load Job Details
     async function loadJobDetails() {
       jobDetailsEl.innerHTML = `
         <div class="text-center text-muted py-5">
@@ -93,20 +105,16 @@
 
         const job = docSnap.data();
         const currentUrl = window.location.href;
-        const postedAgo = job.createdDate ? timeAgo(job.createdDate) : "";
+        const time = getTimeAgo(job.postedAt);
 
         jobDetailsEl.innerHTML = `
-          <!-- ✅ Title -->
           <h4 class="fw-bold text-danger">${job.title}</h4>
-
-          <!-- ✅ Posted Info -->
           <div class="mb-3 small text-secondary d-flex flex-wrap gap-2">
             <span><strong class="text-dark">Posted by:</strong> Yalla Ramana</span>
             <span>|</span>
-            <span><strong class="text-dark">Posted:</strong> ${postedAgo}</span>
+            <span><strong class="text-dark">Posted:</strong> <span class="${time.color}">${time.text}</span></span>
           </div>
 
-          <!-- ✅ Share Buttons -->
           <div class="mb-3">
             <strong>Share this job:</strong>
             <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
@@ -119,10 +127,8 @@
             </div>
           </div>
 
-          <!-- ✅ Job Content -->
           <div class="mb-4">${job.content}</div>
 
-          <!-- ✅ Follow Channels -->
           <div class="mb-3">
             <strong>Follow our channels:</strong>
             <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
@@ -136,21 +142,13 @@
           </div>
         `;
 
-        // ✅ Share + Copy actions
+        // Share + Copy
         document.getElementById("shareBtn").addEventListener("click", async () => {
           if (navigator.share) {
             try {
-              await navigator.share({
-                title: job.title,
-                text: "Check out this job on RDM Jobs!",
-                url: currentUrl
-              });
-            } catch (err) {
-              console.warn("Share cancelled:", err);
-            }
-          } else {
-            alert("Sharing is not supported on this browser.");
-          }
+              await navigator.share({ title: job.title, text: "Check this job!", url: currentUrl });
+            } catch (err) { console.warn("Share cancelled:", err); }
+          } else alert("Sharing not supported");
         });
 
         document.getElementById("copyBtn").addEventListener("click", () => {
@@ -165,47 +163,36 @@
       }
     }
 
+    // 🔹 Load Related Jobs
     async function loadRelatedJobs() {
-      const snapshot = await getDocs(collection(db, "jobs"));
+      const q = query(collection(db, "jobs"), orderBy("postedAt", "desc"));
+      const snapshot = await getDocs(q);
+
       relatedJobsEl.innerHTML = `<ul class="list-group"></ul>`;
-
       const listGroup = relatedJobsEl.querySelector("ul");
-      let jobs = [];
 
-      snapshot.forEach((docItem) => {
-        if (docItem.id === jobId) return; // Skip current job
-        jobs.push({ id: docItem.id, ...docItem.data() });
-      });
+      snapshot.forEach(docItem => {
+        if (docItem.id === jobId) return;
+        const job = { id: docItem.id, ...docItem.data() };
+        const time = getTimeAgo(job.postedAt);
 
-      jobs.sort((a, b) => new Date(b.createdDate) - new Date(a.createdDate));
-
-      if (jobs.length === 0) {
-        relatedJobsEl.innerHTML = `<p class="text-muted">No other jobs available.</p>`;
-        return;
-      }
-
-      jobs.forEach((job) => {
-        const postedAgo = job.createdDate ? timeAgo(job.createdDate) : "";
         const li = document.createElement("li");
         li.className = "list-group-item list-group-item-action";
-
         li.innerHTML = `
           <a href="job-details.html?jobId=${job.id}" class="text-decoration-none fw-semibold text-primary">
             📌 ${job.title || "Untitled Job"}
           </a>
-          <small class="text-muted ms-2">Posted: ${postedAgo}</small>
+          <small class="${time.color} ms-2">Posted: ${time.text}</small>
         `;
-
         listGroup.appendChild(li);
       });
     }
 
+    // 🚀 Start
     loadJobDetails();
-
-    // ✅ Navigation function
- 
   </script>
 
+  <!-- Header & Footer -->
   <script src="header.js"></script>
   <script src="footer.js"></script>
 </body>
