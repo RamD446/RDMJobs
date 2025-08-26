@@ -133,8 +133,6 @@
               </div>
               <!-- Body -->
               <div class="card-body bg-white">
-                <p><strong>🏢 Company:</strong> ${job.company || "N/A"}</p>
-                <p><strong>📅 Last Date:</strong> <span class="text-danger">${job.lastDate || "N/A"}</span></p>
                 <p class="small text-muted">${job.content?.replace(/<[^>]+>/g, '').slice(0, 80) || "No description"}...</p>
               </div>
               <!-- Footer -->

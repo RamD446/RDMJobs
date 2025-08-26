@@ -38,11 +38,11 @@ function getTimeAgo(postedAt) {
   return { text: `${diffDay} day${diffDay !== 1 ? "s" : ""} ago`, color: "text-danger" };
 }
 
-// 🔹 Render Each Job Card (Job Type inside body)
+// 🔹 Render Each Job Card (Tags included, removed company/lastDate/qualification)
 function renderJobCard(job) {
   const tempDiv = document.createElement("div");
   tempDiv.innerHTML = job.content || "";
-  const shortContent = tempDiv.textContent.trim().slice(0, 200) + "...";
+  const shortContent = tempDiv.textContent.trim().slice(0, 90) + "...";
   const time = getTimeAgo(job.postedAt);
 
   return `
@@ -55,14 +55,10 @@ function renderJobCard(job) {
         </div>
         <div class="card-body bg-white" style="font-size: 0.95rem;">
           <p class="text-muted small mb-2">${shortContent}</p>
-          <p class="mb-1 text-dark"><strong>🏢 Company:</strong> <span class="text-secondary">${job.company || 'N/A'}</span></p>
-          <p class="mb-1 text-dark"><strong>📅 Last Date:</strong> <span class="text-danger">${job.lastDate || 'N/A'}</span></p>
-          <p class="mb-1 text-dark"><strong>🎓 Qualification:</strong> 
-            <span class="text-muted">${job.qualification || 'N/A'}</span>
-          </p>
+         
           <p class="mb-1 text-dark"><strong>📌 Job Type:</strong> 
             <span class="${job.type?.toLowerCase() === "government" ? "text-success fw-bold" : "text-info fw-bold"}">
-              ${job.type || "Other"}
+              ${job.type} ||${job.tags }
             </span>
           </p>
         </div>

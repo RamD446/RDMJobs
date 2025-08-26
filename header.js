@@ -79,13 +79,13 @@ document.addEventListener("DOMContentLoaded", function () {
         <!-- Desktop buttons -->
         <div class="d-none d-md-flex gap-2">
           <button class="btn btn-light" onclick="location.href='index.html'">
-            <i class="bi bi-house-door-fill me-1"></i> All
+            <i class="bi bi-house-door-fill me-1"></i> All Jobs
           </button>
           <button class="btn btn-light" onclick="location.href='government.html'">
-            <i class="bi bi-bank me-1"></i> Govt
+            <i class="bi bi-bank me-1"></i> Govt Jobs
           </button>
           <button class="btn btn-light" onclick="location.href='private.html'">
-            <i class="bi bi-briefcase-fill me-1"></i> Private
+            <i class="bi bi-briefcase-fill me-1"></i> Private Jobs
           </button>
           <button class="btn btn-light" onclick="location.href='admin.html'">
             <i class="bi bi-lock-fill me-1"></i> Login
