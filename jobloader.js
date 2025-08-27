@@ -38,64 +38,26 @@ function getTimeAgo(postedAt) {
   return { text: `${diffDay} day${diffDay !== 1 ? "s" : ""} ago`, color: "text-danger" };
 }
 
-// 🔹 Render Each Job Card (Title → Type → Content)
-function renderJobCard(job) {
-  // Extract plain text from HTML content for snippet
-  const tempDiv = document.createElement("div");
-  tempDiv.innerHTML = job.content || "";
-  const shortContent = tempDiv.textContent.trim().slice(0, 120) + "..."; // Slightly longer snippet
-
-  // Get "time ago" display
+// 🔹 Render Job List Item
+function renderJobListItem(job) {
   const time = getTimeAgo(job.postedAt);
-
-  // Return card HTML
   return `
-    <div class="col-md-6 col-lg-4 mb-1">
-      <div class="card h-100 border border-warning shadow-sm" style="border-radius: 12px; overflow: hidden;">
-        
-        <!-- Job Title -->
-        <div class="bg-light px-3 py-2 border-bottom">
-          <h6 class="fw-bold mb-1 job-title" style="font-size: 1rem; color: #0d6efd;">
-            ${job.title || 'Untitled Job'}
-          </h6>
-        </div>
-
-        <!-- Card Body -->
-        <div class="card-body bg-white" style="font-size: 0.95rem;">
-          <!-- Job Type -->
-          <p class="mb-2">
-            <span class="fw-bold ">
-              ${job.type || "N/A"} Job ${job.tags ? `|| ${job.tags}` : ""}
-            </span>
-          </p>
-          <!-- Content Snippet -->
-          <p class="text-muted small mb-0">${shortContent}</p>
-        </div>
-
-        <!-- Footer: Time & Details -->
-        <div class="bg-light px-3 py-2 d-flex justify-content-between align-items-center border-top">
-          <span class="${time.color} small">
-            <i class="bi bi-clock me-1"></i>${time.text}
-          </span>
-          <a href="job-details.html?jobId=${job.id}" class="btn btn-sm btn-outline-success">
-            <i class="bi bi-eye-fill me-1"></i> Full Details
-          </a>
-        </div>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <div>
+        🔹 
+        <a href="job-details.html?jobId=${job.id}" class="fw-semibold text-decoration-none text-primary">
+          ${job.title || "Untitled Job"}
+        </a> || <small class="${time.color}">
+        <i class="bi bi-clock me-1"></i>${time.text}
+      </small>
       </div>
-    </div>
+      
+    </li>
   `;
 }
 
-
-
-
-// 🔹 Global for pagination
-let allJobs = [];
-let currentPage = 1;
-const jobsPerPage = 12;
-
-// 🔹 Render Paginated Jobs
-function renderPaginatedJobs() {
+// 🔹 Render Split View (Govt & Private Jobs)
+function renderSplitJobLists() {
   const jobList = document.getElementById("jobList");
   jobList.innerHTML = "";
 
@@ -104,42 +66,48 @@ function renderPaginatedJobs() {
     return;
   }
 
-  const start = (currentPage - 1) * jobsPerPage;
-  const end = start + jobsPerPage;
-  const jobsToShow = allJobs.slice(start, end);
+  // Separate jobs into govt & private
+  const govtJobs = allJobs.filter(j => (j.type || "").toLowerCase().includes("gov")).slice(0, 20);
+  const privateJobs = allJobs.filter(j => (j.type || "").toLowerCase().includes("private")).slice(0, 20);
 
-  const jobCardsHTML = jobsToShow.map(renderJobCard).join("");
+  // Build HTML
   jobList.innerHTML = `
-    <h5 class="fw-semibold text-warning mb-3">
-      <i class="bi bi-broadcast-pin me-1"></i> Latest Job Updates
-    </h5>
-    <div class="row g-3">${jobCardsHTML}</div>
-    <div class="d-flex justify-content-center mt-4">
-      ${renderPaginationControls()}
+    <div class="row g-3">
+      <!-- Government Jobs -->
+      <div class="col-md-6">
+        <div class="card border-success shadow-sm h-100">
+          <div class="card-header bg-success text-white fw-bold d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-bank me-1"></i> Government Job Stories</span>
+            <button class="btn btn-sm btn-light" onclick="location.href='government.html'">
+              More <i class="bi bi-arrow-right-circle ms-1"></i>
+            </button>
+          </div>
+          <ul class="list-group list-group-flush">
+            ${govtJobs.map(renderJobListItem).join("") || "<li class='list-group-item text-muted'>No government jobs found.</li>"}
+          </ul>
+        </div>
+      </div>
+
+      <!-- Private Jobs -->
+      <div class="col-md-6">
+        <div class="card border-warning shadow-sm h-100">
+          <div class="card-header bg-warning text-dark fw-bold d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-briefcase-fill me-1"></i> Private Job Stories</span>
+            <button class="btn btn-sm btn-dark" onclick="location.href='private.html'">
+              More <i class="bi bi-arrow-right-circle ms-1"></i>
+            </button>
+          </div>
+          <ul class="list-group list-group-flush">
+            ${privateJobs.map(renderJobListItem).join("") || "<li class='list-group-item text-muted'>No private jobs found.</li>"}
+          </ul>
+        </div>
+      </div>
     </div>
   `;
 }
 
-// 🔹 Pagination Controls
-function renderPaginationControls() {
-  const totalPages = Math.ceil(allJobs.length / jobsPerPage);
-
-  let buttons = "";
-  for (let i = 1; i <= totalPages; i++) {
-    buttons += `
-      <button class="btn btn-sm ${i === currentPage ? "btn-success" : "btn-outline-success"} mx-1"
-              onclick="changePage(${i})">${i}</button>
-    `;
-  }
-
-  return buttons;
-}
-
-// 🔹 Change Page
-window.changePage = function (page) {
-  currentPage = page;
-  renderPaginatedJobs();
-};
+// 🔹 Global Jobs
+let allJobs = [];
 
 // 🔹 Load Jobs from Firebase
 export async function loadJobs() {
@@ -162,7 +130,7 @@ export async function loadJobs() {
       allJobs.push(fullJob);
     });
 
-    renderPaginatedJobs();
+    renderSplitJobLists();
 
   } catch (error) {
     console.error("Error loading jobs:", error);
