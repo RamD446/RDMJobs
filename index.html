@@ -67,5 +67,14 @@
   </script>
 
   <script type="module" src="jobloader.js"></script>
+  <script>
+  function scrollToSection(id) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+</script>
+
 </body>
 </html>

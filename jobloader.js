@@ -1,5 +1,3 @@
-// jobloader.js
-
 // 🔹 Firebase Setup
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
 import {
@@ -45,7 +43,7 @@ function renderJobListItem(job) {
     <li class="list-group-item d-flex justify-content-between align-items-center">
       <div>
         🔹 
-        <a href="job-details.html?jobId=${job.id}" class="fw-semibold text-decoration-none text-primary">
+        <a href="jobdetails.html?jobId=${job.id}" class="fw-semibold text-decoration-none text-primary">
           ${job.title || "Untitled Job"}
         </a> || <small class="${time.color}">
         <i class="bi bi-clock me-1"></i>${time.text}
@@ -98,7 +96,7 @@ function renderJobsByDate() {
   jobList.innerHTML = `
     <div class="row g-3 mb-4">
       <!-- Today's Jobs -->
-      <div class="col-md-6">
+      <div class="col-md-6" id="today-jobs">
         <div class="card border-success shadow-sm h-100">
           <div class="card-header bg-success text-white fw-bold">
             <i class="bi bi-calendar-event me-1"></i> Today’s Job Notifications
@@ -110,7 +108,7 @@ function renderJobsByDate() {
       </div>
 
       <!-- Yesterday / Previous Jobs -->
-      <div class="col-md-6">
+      <div class="col-md-6" id="previous-jobs">
         <div class="card border-warning shadow-sm h-100">
           <div class="card-header bg-warning text-dark fw-bold">
             <i class="bi bi-calendar-check me-1"></i> ${yesterdayTitle}
@@ -123,7 +121,7 @@ function renderJobsByDate() {
     </div>
 
     <!-- Latest 100 Jobs -->
-    <div class="card border-primary shadow-sm">
+    <div class="card border-primary shadow-sm" id="latest-jobs">
       <div class="card-header bg-primary text-white fw-bold">
         <i class="bi bi-list-ul me-1"></i> Latest Job Notifications (Top 100)
       </div>
@@ -168,3 +166,25 @@ export async function loadJobs() {
 
 // 🔹 Auto Load
 loadJobs();
+
+// 🔹 Smooth Scroll to Sections
+window.scrollToSection = function (id) {
+  const el = document.getElementById(id);
+  if (el) {
+    const headerOffset = 70; // fixed header height
+    const elementPosition = el.getBoundingClientRect().top + window.scrollY;
+    const offsetPosition = elementPosition - headerOffset;
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: "smooth"
+    });
+
+    // 🔹 Close the offcanvas if open
+    const offcanvasEl = document.querySelector("#mainMenu");
+    if (offcanvasEl) {
+      const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
+      if (bsOffcanvas) bsOffcanvas.hide();
+    }
+  }
+};

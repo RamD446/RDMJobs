@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", function () {
   const headerContainer = document.getElementById("header-container");
   if (!headerContainer) {
@@ -119,19 +118,19 @@ document.addEventListener("DOMContentLoaded", function () {
     <!-- Offcanvas Menu -->
     <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="mainMenu">
       <div class="offcanvas-header border-bottom border-secondary">
-        <h1 style="font-size: 1.25rem; color: #ffc107; margin: 0;">𝓡𝓭𝓶𝓳𝓸𝓫𝓼.𝓬𝓸𝓶</h1>
+        <h1 style="font-size: 1.25rem; color: #ffc107; margin: 0;">Rdmjobs</h1>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
       </div>
       <div class="offcanvas-body d-flex flex-column">
         <div class="d-grid gap-2 mb-3">
-          <button class="btn btn-red text-start w-100" onclick="location.href='index.html'">
-            <i class="bi bi-house-door-fill me-2"></i> All Jobs
+          <button class="btn btn-red text-start w-100" onclick="scrollToSection('today-jobs')">
+            <i class="bi bi-house-door-fill me-2"></i> Today’s Posted Jobs
           </button>
-          <button class="btn btn-red text-start w-100" onclick="location.href='government.html'">
-            <i class="bi bi-bank me-2"></i> Government Jobs
+          <button class="btn btn-red text-start w-100" onclick="scrollToSection('previous-jobs')">
+            <i class="bi bi-clock-history me-2"></i> Previous Jobs
           </button>
-          <button class="btn btn-red text-start w-100" onclick="location.href='private.html'">
-            <i class="bi bi-briefcase-fill me-2"></i> Private Jobs
+          <button class="btn btn-red text-start w-100" onclick="scrollToSection('latest-jobs')">
+            <i class="bi bi-bell-fill me-2"></i> Latest all Jobs
           </button>
           <button class="btn btn-red text-start w-100" onclick="location.href='admin.html'">
             <i class="bi bi-lock-fill me-2"></i> Login
@@ -146,5 +145,3 @@ document.addEventListener("DOMContentLoaded", function () {
     </div>
   `;
 });
-//test
-
