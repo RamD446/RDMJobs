@@ -51,13 +51,12 @@ function renderJobListItem(job) {
         <i class="bi bi-clock me-1"></i>${time.text}
       </small>
       </div>
-      
     </li>
   `;
 }
 
-// 🔹 Render Split View (Govt & Private Jobs)
-function renderSplitJobLists() {
+// 🔹 Render Today, Yesterday/Previous & Latest Jobs
+function renderJobsByDate() {
   const jobList = document.getElementById("jobList");
   jobList.innerHTML = "";
 
@@ -66,42 +65,71 @@ function renderSplitJobLists() {
     return;
   }
 
-  // Separate jobs into govt & private
-  const govtJobs = allJobs.filter(j => (j.type || "").toLowerCase().includes("gov")).slice(0, 20);
-  const privateJobs = allJobs.filter(j => (j.type || "").toLowerCase().includes("private")).slice(0, 20);
+  const now = new Date();
 
-  // Build HTML
+  // ✅ Today Jobs
+  const todayJobs = allJobs.filter(j => {
+    const d = j.postedAt?.toDate ? j.postedAt.toDate() : new Date(j.postedAt);
+    return d.toDateString() === now.toDateString();
+  }).slice(0, 5);
+
+  // ✅ Yesterday Jobs
+  let yesterdayJobs = [];
+  let yesterdayTitle = "Yesterday’s Job Notifications";
+
+  const yest = new Date(now);
+  yest.setDate(yest.getDate() - 1);
+
+  yesterdayJobs = allJobs.filter(j => {
+    const d = j.postedAt?.toDate ? j.postedAt.toDate() : new Date(j.postedAt);
+    return d.toDateString() === yest.toDateString();
+  }).slice(0, 5);
+
+  // ✅ If no actual yesterday jobs, fallback to previous 5 (after today’s jobs)
+  if (yesterdayJobs.length === 0) {
+    const todayIds = todayJobs.map(j => j.id);
+    yesterdayJobs = allJobs.filter(j => !todayIds.includes(j.id)).slice(0, 5);
+    yesterdayTitle = "Previous Job Notifications";
+  }
+
+  // ✅ Latest 100
+  const latestJobs = allJobs.slice(0, 100);
+
   jobList.innerHTML = `
-    <div class="row g-3">
-      <!-- Government Jobs -->
+    <div class="row g-3 mb-4">
+      <!-- Today's Jobs -->
       <div class="col-md-6">
         <div class="card border-success shadow-sm h-100">
-          <div class="card-header bg-success text-white fw-bold d-flex justify-content-between align-items-center">
-            <span><i class="bi bi-bank me-1"></i> Government Job Stories</span>
-            <button class="btn btn-sm btn-light" onclick="location.href='government.html'">
-              More <i class="bi bi-arrow-right-circle ms-1"></i>
-            </button>
+          <div class="card-header bg-success text-white fw-bold">
+            <i class="bi bi-calendar-event me-1"></i> Today’s Job Notifications
           </div>
           <ul class="list-group list-group-flush">
-            ${govtJobs.map(renderJobListItem).join("") || "<li class='list-group-item text-muted'>No government jobs found.</li>"}
+            ${todayJobs.map(renderJobListItem).join("") || "<li class='list-group-item text-muted'>No jobs posted today.</li>"}
           </ul>
         </div>
       </div>
 
-      <!-- Private Jobs -->
+      <!-- Yesterday / Previous Jobs -->
       <div class="col-md-6">
         <div class="card border-warning shadow-sm h-100">
-          <div class="card-header bg-warning text-dark fw-bold d-flex justify-content-between align-items-center">
-            <span><i class="bi bi-briefcase-fill me-1"></i> Private Job Stories</span>
-            <button class="btn btn-sm btn-dark" onclick="location.href='private.html'">
-              More <i class="bi bi-arrow-right-circle ms-1"></i>
-            </button>
+          <div class="card-header bg-warning text-dark fw-bold">
+            <i class="bi bi-calendar-check me-1"></i> ${yesterdayTitle}
           </div>
           <ul class="list-group list-group-flush">
-            ${privateJobs.map(renderJobListItem).join("") || "<li class='list-group-item text-muted'>No private jobs found.</li>"}
+            ${yesterdayJobs.map(renderJobListItem).join("") || "<li class='list-group-item text-muted'>No jobs found.</li>"}
           </ul>
         </div>
       </div>
+    </div>
+
+    <!-- Latest 100 Jobs -->
+    <div class="card border-primary shadow-sm">
+      <div class="card-header bg-primary text-white fw-bold">
+        <i class="bi bi-list-ul me-1"></i> Latest Job Notifications (Top 100)
+      </div>
+      <ul class="list-group list-group-flush">
+        ${latestJobs.map(renderJobListItem).join("")}
+      </ul>
     </div>
   `;
 }
@@ -130,7 +158,7 @@ export async function loadJobs() {
       allJobs.push(fullJob);
     });
 
-    renderSplitJobLists();
+    renderJobsByDate();
 
   } catch (error) {
     console.error("Error loading jobs:", error);
