@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
         
         <!-- Brand -->
         <div class="brand-title fw-bold">
-          <button type="button" class="btn custom-rdm-btn" onclick="location.href='index.html'">
+          <button type="button" class="btn custom-rdm-btn" onclick="window.location.href='https://www.rdmjobs.com'">
             𝓡𝓭𝓶jobs.𝓬𝓸𝓶
           </button>
         </div>
