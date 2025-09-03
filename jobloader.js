@@ -39,21 +39,35 @@ function getTimeAgo(postedAt) {
 // 🔹 Render Job List Item
 function renderJobListItem(job) {
   const time = getTimeAgo(job.postedAt);
+
+  // Last Date to Apply (only if available)
+  let lastDateHtml = "";
+  if (job.lastDate) {
+    const d = job.lastDate?.toDate ? job.lastDate.toDate() : new Date(job.lastDate);
+    lastDateHtml = ` | <small class="text-danger">
+      <i class="bi bi-calendar-x me-1"></i> Last Date: ${d.toLocaleDateString()}
+    </small>`;
+  }
+
   return `
     <li class="list-group-item d-flex justify-content-between align-items-center">
       <div>
         🔹 
         <a href="jobdetails.html?jobId=${job.id}" class="fw-semibold text-decoration-none text-primary">
           ${job.title || "Untitled Job"}
-        </a> || <small class="${time.color}">
-        <i class="bi bi-clock me-1"></i>${time.text}
-      </small>
+        </a> 
+        || <small class="${time.color}">
+          <i class="bi bi-clock me-1"></i>${time.text}
+        </small>
+        ${lastDateHtml}
       </div>
     </li>
   `;
 }
 
 // 🔹 Render Today, Yesterday/Previous & Latest Jobs
+let latestVisibleCount = 15; // how many jobs visible initially
+
 function renderJobsByDate() {
   const jobList = document.getElementById("jobList");
   jobList.innerHTML = "";
@@ -90,8 +104,8 @@ function renderJobsByDate() {
     yesterdayTitle = "Previous Job Notifications";
   }
 
-  // ✅ Latest 100
-  const latestJobs = allJobs.slice(0, 100);
+  // ✅ Latest Jobs (all, but controlled display)
+  const latestJobs = allJobs; 
 
   jobList.innerHTML = `
     <div class="row g-3 mb-4">
@@ -120,16 +134,32 @@ function renderJobsByDate() {
       </div>
     </div>
 
-    <!-- Latest 100 Jobs -->
+    <!-- Latest Jobs -->
     <div class="card border-primary shadow-sm" id="latest-jobs">
       <div class="card-header bg-primary text-white fw-bold">
-        <i class="bi bi-list-ul me-1"></i> Latest Job Notifications (Top 100)
+        <i class="bi bi-list-ul me-1"></i> Latest Job Notifications
       </div>
-      <ul class="list-group list-group-flush">
-        ${latestJobs.map(renderJobListItem).join("")}
+      <ul class="list-group list-group-flush" id="latest-jobs-list">
+        ${latestJobs.slice(0, latestVisibleCount).map(renderJobListItem).join("")}
       </ul>
+      <div class="card-footer text-center" id="load-more-container">
+        ${latestVisibleCount < latestJobs.length ? 
+          `<button class="btn btn-outline-primary btn-sm" id="loadMoreBtn">
+            Load More Jobs
+          </button>` 
+        : ""}
+      </div>
     </div>
   `;
+
+  // Attach Load More event
+  const loadMoreBtn = document.getElementById("loadMoreBtn");
+  if (loadMoreBtn) {
+    loadMoreBtn.addEventListener("click", () => {
+      latestVisibleCount += 15;
+      renderJobsByDate(); // re-render with more jobs
+    });
+  }
 }
 
 // 🔹 Global Jobs
