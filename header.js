@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
     <!-- Offcanvas Menu -->
     <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="mainMenu">
       <div class="offcanvas-header border-bottom border-secondary">
-        <h1 style="font-size: 1.25rem; color: #ffc107; margin: 0;">Rdmjobs</h1>
+        <h1 style="font-size: 1.25rem; color: #ffc107; margin: 0;">𝓡𝓭𝓶jobs.𝓬𝓸𝓶</h1>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
       </div>
       <div class="offcanvas-body d-flex flex-column">
