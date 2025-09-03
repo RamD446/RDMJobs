@@ -20,7 +20,7 @@
     <div id="header-container"></div>
 
     <!-- Main Content -->
-    <div class="main-content p-3 mt-5"style="min-height: 80vh;">
+    <div class="main-content p-3 mt-5" style="min-height: 80vh;">
       <!-- Job Details -->
       <div id="jobDetails" class="p-4 bg-light border rounded shadow-sm mb-4"></div>
 
@@ -34,6 +34,16 @@
 
     <!-- Footer -->
     <div class="footer-container"></div>
+  </div>
+
+  <!-- ✅ Bootstrap Toast Container -->
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1080">
+    <div id="toastBox" class="toast align-items-center text-bg-success border-0" role="alert">
+      <div class="d-flex">
+        <div class="toast-body" id="toastMsg">Copied!</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    </div>
   </div>
 
   <script type="module">
@@ -64,6 +74,18 @@
     const jobId = new URLSearchParams(window.location.search).get("jobId");
     const jobDetailsEl = document.getElementById("jobDetails");
     const relatedJobsEl = document.getElementById("relatedJobs");
+
+    // 🔹 Toast function
+    function showToast(message, type = "success") {
+      const toastEl = document.getElementById("toastBox");
+      const toastMsg = document.getElementById("toastMsg");
+
+      toastMsg.innerText = message;
+      toastEl.className = `toast align-items-center text-bg-${type} border-0`;
+
+      const bsToast = new bootstrap.Toast(toastEl);
+      bsToast.show();
+    }
 
     // 🔹 Time formatting (with color)
     function getTimeAgo(postedAt) {
@@ -107,12 +129,20 @@
         const currentUrl = window.location.href;
         const time = getTimeAgo(job.postedAt);
 
+        // 🔹 Last Date Format
+        let lastDateText = "";
+        if (job.lastDate) {
+          const lastDate = job.lastDate?.toDate ? job.lastDate.toDate() : new Date(job.lastDate);
+          lastDateText = lastDate.toLocaleDateString();
+        }
+
         jobDetailsEl.innerHTML = `
           <h4 class="fw-bold text-danger">${job.title}</h4>
           <div class="mb-3 small text-secondary d-flex flex-wrap gap-2">
             <span><strong class="text-dark">Posted by:</strong> Yalla Ramana</span>
             <span>|</span>
             <span><strong class="text-dark">Posted:</strong> <span class="${time.color}">${time.text}</span></span>
+            ${lastDateText ? `<span>|</span><span><strong class="text-dark">Last Date:</strong> <span class="text-danger">${lastDateText}</span></span>` : ""}
           </div>
 
           <div class="mb-3">
@@ -148,12 +178,14 @@
             try {
               await navigator.share({ title: job.title, text: "Check this job!", url: currentUrl });
             } catch (err) { console.warn("Share cancelled:", err); }
-          } else alert("Sharing not supported");
+          } else {
+            showToast("Sharing not supported!", "danger");
+          }
         });
 
         document.getElementById("copyBtn").addEventListener("click", () => {
           navigator.clipboard.writeText(currentUrl);
-          alert("Link copied to clipboard!");
+          showToast("Link copied successfully!", "success");
         });
 
         await loadRelatedJobs();
@@ -163,29 +195,60 @@
       }
     }
 
-    // 🔹 Load Related Jobs
+    // 🔹 Related Jobs with Load More
+    let allRelatedJobs = [];
+    let relatedVisibleCount = 15;
+
     async function loadRelatedJobs() {
+      relatedJobsEl.innerHTML = `
+        <div class="text-center text-muted py-3">
+          <div class="spinner-border text-warning mb-2" role="status"></div><br />
+          Loading more jobs...
+        </div>`;
+
       const q = query(collection(db, "jobs"), orderBy("postedAt", "desc"));
       const snapshot = await getDocs(q);
 
-      relatedJobsEl.innerHTML = `<ul class="list-group"></ul>`;
-      const listGroup = relatedJobsEl.querySelector("ul");
-
+      allRelatedJobs = [];
       snapshot.forEach(docItem => {
-        if (docItem.id === jobId) return;
-        const job = { id: docItem.id, ...docItem.data() };
-        const time = getTimeAgo(job.postedAt);
-
-        const li = document.createElement("li");
-        li.className = "list-group-item list-group-item-action";
-        li.innerHTML = `
-          <a href="job-details.html?jobId=${job.id}" class="text-decoration-none fw-semibold text-primary">
-            📌 ${job.title || "Untitled Job"}
-          </a>
-          <small class="${time.color} ms-2">Posted: ${time.text}</small>
-        `;
-        listGroup.appendChild(li);
+        if (docItem.id === jobId) return; // skip current job
+        allRelatedJobs.push({ id: docItem.id, ...docItem.data() });
       });
+
+      renderRelatedJobs();
+    }
+
+    function renderRelatedJobs() {
+      relatedJobsEl.innerHTML = `
+        <ul class="list-group" id="related-list">
+          ${allRelatedJobs.slice(0, relatedVisibleCount).map(job => {
+            const time = getTimeAgo(job.postedAt);
+            return `
+              <li class="list-group-item list-group-item-action">
+                <a href="jobdetails.html?jobId=${job.id}" class="text-decoration-none fw-semibold text-primary">
+                  📌 ${job.title || "Untitled Job"}
+                </a>
+                <small class="${time.color} ms-2">Posted: ${time.text}</small>
+              </li>
+            `;
+          }).join("")}
+        </ul>
+        <div class="text-center mt-3" id="related-loadmore">
+          ${relatedVisibleCount < allRelatedJobs.length ? 
+            `<button class="btn btn-outline-warning btn-sm" id="loadMoreRelated">
+              Load More Jobs
+            </button>` 
+          : ""}
+        </div>
+      `;
+
+      const loadMoreBtn = document.getElementById("loadMoreRelated");
+      if (loadMoreBtn) {
+        loadMoreBtn.addEventListener("click", () => {
+          relatedVisibleCount += 15;
+          renderRelatedJobs();
+        });
+      }
     }
 
     // 🚀 Start
