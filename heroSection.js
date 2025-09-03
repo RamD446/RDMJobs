@@ -27,7 +27,7 @@ export function renderHeroSection() {
       }
 
       .card-sm {
-        padding: 0.7rem;
+        padding: 0.9rem;
         font-size: 0.85rem;
         border-radius: 0.6rem;
         color: #fff;
@@ -39,6 +39,12 @@ export function renderHeroSection() {
         transform: translateY(20px);
       }
 
+      .card-sm img {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 0.4rem;
+      }
+
       .card-sm:hover {
         transform: translateY(-5px) scale(1.03);
         box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
@@ -48,17 +54,6 @@ export function renderHeroSection() {
       .bg-intern { background-color: #fde047; color: #111; }
       .bg-software { background-color: #1e3a8a; }
       .bg-medical { background-color: #991b1b; }
-
-      .hero-social {
-        margin-top: 2rem;
-        font-size: 0.9rem;
-      }
-
-      .hero-social .btn {
-        pointer-events: none;
-        user-select: none;
-        border: none;
-      }
 
       .scroll-down-icon {
         font-size: 2.4rem;
@@ -93,27 +88,24 @@ export function renderHeroSection() {
       @media (max-width: 576px) {
         .hero-subtitle { font-size: 1rem; }
         .card-sm { font-size: 0.75rem; padding: 0.6rem; }
+        .card-sm img { width: 30px; height: 30px; }
         .scroll-down-icon { font-size: 2rem; }
       }
     </style>
 
     <section class="hero-wrapper">
       <div class="hero-glass">
-        <div class="hero-subtitle">
-          <strong>Get the updates on Govt & Private Jobs</strong><br>
-          <span class="text-success">Stay ahead in your career journey</span>.
-        </div>
-
         <div class="container px-2">
           <div class="row g-3 justify-content-center">
             ${[
-              { title: "🏛️ Govt & Private", class: "bg-govt", description: "Daily News" },
-              { title: "🎓 Interns", class: "bg-intern", description: "For Students" },
-              { title: "💻 IT Software Jobs", class: "bg-software", description: "Developer & Tech Roles" },
-              { title: "🩺 Medical Jobs", class: "bg-medical", description: "Healthcare & Hospitals" }
+              { title: "Govt & Private", class: "bg-govt", description: "Daily News", gif: "https://media.giphy.com/media/26AHONQ79FdWZhAI0/giphy.gif" },
+              { title: "Interns", class: "bg-intern", description: "For Students", gif: "https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" },
+              { title: "IT Software Jobs", class: "bg-software", description: "Developer & Tech Roles", gif: "https://media.giphy.com/media/26AHONQ79FdWZhAI0/giphy.gif" },
+              { title: "Medical Jobs", class: "bg-medical", description: "Healthcare & Hospitals", gif: "https://media.giphy.com/media/3o7abB06u9bNzA8lu8/giphy.gif" }
             ].map(cat => `
               <div class="col-6 col-sm-3">
                 <div class="card-sm ${cat.class}">
+                  <img src="${cat.gif}" alt="${cat.title}">
                   <div class="fw-bold">${cat.title}</div>
                   <small>${cat.description}</small>
                 </div>
@@ -121,8 +113,7 @@ export function renderHeroSection() {
             `).join('')}
           </div>
         </div>
-
-        
+      </div>
     </section>
   `;
 }
