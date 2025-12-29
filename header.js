@@ -132,9 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <button class="btn btn-red text-start w-100" onclick="scrollToSection('latest-jobs')">
             <i class="bi bi-bell-fill me-2"></i> Latest all Jobs
           </button>
-          <button class="btn btn-red text-start w-100" onclick="location.href='admin.html'">
-            <i class="bi bi-lock-fill me-2"></i> Login
-          </button>
+
         </div>
       </div>
 
