@@ -64,10 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
           𝓡𝓭𝓶jobs.𝓬𝓸𝓶
         </button>
 
-        <!-- Right: Home button with icon -->
-        <button type="button" class="custom-home-btn" onclick="window.location.href='https://www.rdmjobs.com'">
-          <i class="bi bi-house-door-fill"></i> Home
-        </button>
+      
 
       </div>
     </header>
