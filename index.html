@@ -4,37 +4,45 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <title>RDM Jobs - Latest Government & Private Job Updates</title>
 
-  <!-- SEO Meta -->
+  <!-- SEO -->
   <meta name="description" content="RDM Jobs - Latest Government & Private Job Updates" />
   <meta name="keywords" content="RDM Jobs, Government Jobs, Private Jobs, Latest Jobs, Sarkari Naukri" />
-<meta name="author" content="RDM Jobs" />
+  <meta name="author" content="RDM Jobs" />
 
-  <!-- Open Graph / Twitter -->
-  <meta property="og:title" content="RDM Jobs - Latest Government & Private Job Updates" />
-  <meta property="og:description" content="Find daily updates on Government Jobs, Private Jobs, Admit Cards, Results, and Upcoming Notifications at RDM Jobs." />
-  <meta property="og:image" content="https://rdmjobs.com/assets/preview-image.jpg" />
+  <!-- ✅ Open Graph (WhatsApp / Facebook) -->
+  <meta property="og:title" content="RDM Jobs - Latest Job Updates" />
+  <meta property="og:description" content="Daily Government & Private Job Notifications. Apply Now." />
   <meta property="og:url" content="https://rdmjobs.com/" />
   <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="RDM Jobs" />
+
+  <!-- ✅ WhatsApp Preview Image (LOGO) -->
+  <meta property="og:image" content="https://rdmjobs.com/assets/preview-image.jpg" />
+  <meta property="og:image:secure_url" content="https://rdmjobs.com/assets/preview-image.jpg" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="RDM Jobs - Latest Government & Private Job Updates" />
-  <meta name="twitter:description" content="Stay updated with the latest Government & Private job notifications at RDM Jobs." />
+  <meta name="twitter:title" content="RDM Jobs - Latest Job Updates" />
+  <meta name="twitter:description" content="Government & Private Job Updates Daily" />
   <meta name="twitter:image" content="https://rdmjobs.com/assets/preview-image.jpg" />
 
-  <!-- Favicon & Icons -->
-  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <!-- Favicon -->
   <link rel="icon" href="https://rdmjobs.com/assets/favicon.ico" type="image/x-icon" />
   <link rel="icon" type="image/png" sizes="32x32" href="https://rdmjobs.com/assets/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="https://rdmjobs.com/assets/favicon-16x16.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="https://rdmjobs.com/assets/apple-touch-icon.png" />
-  <link rel="image_src" href="https://rdmjobs.com/assets/preview-image.jpg" />
-  <!-- Bootstrap & Icons -->
+
+  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
 
   <style>
-    /* Fixed header */
     header {
       position: fixed;
       top: 0;
@@ -61,13 +69,9 @@
       border: none;
       padding: 0.25rem 0.6rem;
       border-radius: 5px;
-      transition: 0.2s;
-    }
-    header .contact-btn:hover {
-      transform: scale(1.05);
     }
     body {
-      padding-top: 50px; /* Space for fixed header */
+      padding-top: 55px;
     }
   </style>
 </head>
@@ -82,32 +86,26 @@
     </button>
   </header>
 
-  <!-- Main Content -->
+  <!-- Main -->
   <main class="container mt-4" id="jobList" style="min-height:80vh;"></main>
 
-  <div class="footer-container"></div>
-
   <!-- Contact Modal -->
-  <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+  <div class="modal fade" id="contactModal" tabindex="-1">
     <div class="modal-dialog modal-sm modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="contactModalLabel">Contact Support</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h5 class="modal-title">Contact Support</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body text-center">
-          <p> Email: ramana9000r@gmail.com</p>
+          <p>Email: ramana9000r@gmail.com</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- JS Dependencies -->
+  <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script src="footer.js"></script>
-
-  <!-- Job Loader -->
   <script type="module" src="jobloader.js"></script>
 
 </body>
