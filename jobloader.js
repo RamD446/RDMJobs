@@ -94,14 +94,31 @@ function renderJobsByDate() {
   const snippet = snippetText.length > 200 ? snippetText.slice(0, 200) + "..." : snippetText;
 
   popularHtml = `
-    <div class="card shadow-sm mb-3 clickable-card border-primary h-100 hover-card" onclick="window.location='jobdetails.html?jobId=${popularJob.id}'">
-      <div class="card-body">
-        <span class="badge bg-primary mb-2">${popularJob.type || "Popular Job"}</span>
-        <h5 class="card-title text-primary fw-bold">${popularJob.title}</h5>
-        ${imgHtml}
-        <p class="card-text mt-2">${snippet}</p>
-      </div>
+   <div class="card shadow-sm mb-3 clickable-card border-primary h-100 hover-card"
+     onclick="window.location='jobdetails.html?jobId=${popularJob.id}'">
+  <div class="card-body">
+    <span class="badge bg-primary mb-2">${popularJob.type || "Popular Job"}</span>
+
+    <h5 class="card-title text-primary fw-bold">
+      ${popularJob.title}
+    </h5>
+
+    ${imgHtml}
+
+    <p class="card-text mt-2">
+      ${snippet}
+    </p>
+
+    <!-- ✅ More Details Button -->
+    <div class="text-end mt-2">
+      <button class="btn btn-sm btn-outline-primary"
+        onclick="event.stopPropagation(); window.location='jobdetails.html?jobId=${popularJob.id}'">
+        More Details »
+      </button>
     </div>
+  </div>
+</div>
+
   `;
 }
 
