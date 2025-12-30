@@ -36,11 +36,10 @@ function getTimeAgo(postedAt) {
   return { text: `${diffDay} day${diffDay !== 1 ? "s" : ""} ago`, color: "text-danger" };
 }
 
-// 🔹 Render Job List Item
+// 🔹 Render Job List Item (for Today/Yesterday/Latest)
 function renderJobListItem(job) {
   const time = getTimeAgo(job.postedAt);
 
-  // Last Date to Apply (only if available)
   let lastDateHtml = "";
   if (job.lastDate) {
     const d = job.lastDate?.toDate ? job.lastDate.toDate() : new Date(job.lastDate);
@@ -50,12 +49,11 @@ function renderJobListItem(job) {
   }
 
   return `
-    <li class="list-group-item d-flex justify-content-between align-items-center">
+    <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-action clickable-card" 
+        onclick="window.location='jobdetails.html?jobId=${job.id}'">
       <div>
         🔹 
-        <a href="jobdetails.html?jobId=${job.id}" class="fw-semibold text-decoration-none text-primary">
-          ${job.title || "Untitled Job"}
-        </a> 
+        <span class="fw-semibold text-primary">${job.title || "Untitled Job"}</span>
         || <small class="${time.color}">
           <i class="bi bi-clock me-1"></i>${time.text}
         </small>
@@ -65,8 +63,9 @@ function renderJobListItem(job) {
   `;
 }
 
-// 🔹 Render Today, Yesterday/Previous & Latest Jobs
-let latestVisibleCount = 15; // how many jobs visible initially
+// 🔹 Render Jobs By Date with Popular Job Card
+let latestVisibleCount = 15;
+let allJobs = [];
 
 function renderJobsByDate() {
   const jobList = document.getElementById("jobList");
@@ -79,16 +78,43 @@ function renderJobsByDate() {
 
   const now = new Date();
 
+  // ✅ Popular Job (first of type "Popular Job")
+  const popularJob = allJobs.find(j => j.type === "Popular Job") || allJobs[0] || null;
+  let popularHtml = "";
+
+ if (popularJob) {
+  // Extract first image from Quill content
+  const tempDiv = document.createElement("div");
+  tempDiv.innerHTML = popularJob.content || "";
+  const imgEl = tempDiv.querySelector("img");
+  const imgHtml = imgEl ? `<img src="${imgEl.src}" class="img-fluid rounded-top mt-2 mb-2" alt="${popularJob.title}">` : "";
+
+  // Extract first 200 chars of text
+  const snippetText = tempDiv.textContent || "";
+  const snippet = snippetText.length > 200 ? snippetText.slice(0, 200) + "..." : snippetText;
+
+  popularHtml = `
+    <div class="card shadow-sm mb-3 clickable-card border-primary h-100 hover-card" onclick="window.location='jobdetails.html?jobId=${popularJob.id}'">
+      <div class="card-body">
+        <span class="badge bg-primary mb-2">${popularJob.type || "Popular Job"}</span>
+        <h5 class="card-title text-primary fw-bold">${popularJob.title}</h5>
+        ${imgHtml}
+        <p class="card-text mt-2">${snippet}</p>
+      </div>
+    </div>
+  `;
+}
+
+
   // ✅ Today Jobs
   const todayJobs = allJobs.filter(j => {
     const d = j.postedAt?.toDate ? j.postedAt.toDate() : new Date(j.postedAt);
     return d.toDateString() === now.toDateString();
   }).slice(0, 5);
 
-  // ✅ Yesterday Jobs
+  // ✅ Yesterday/Previous Jobs
   let yesterdayJobs = [];
   let yesterdayTitle = "Yesterday’s Job Notifications";
-
   const yest = new Date(now);
   yest.setDate(yest.getDate() - 1);
 
@@ -97,73 +123,69 @@ function renderJobsByDate() {
     return d.toDateString() === yest.toDateString();
   }).slice(0, 5);
 
-  // ✅ If no actual yesterday jobs, fallback to previous 5 (after today’s jobs)
   if (yesterdayJobs.length === 0) {
     const todayIds = todayJobs.map(j => j.id);
     yesterdayJobs = allJobs.filter(j => !todayIds.includes(j.id)).slice(0, 5);
     yesterdayTitle = "Previous Job Notifications";
   }
 
-  // ✅ Latest Jobs (all, but controlled display)
-  const latestJobs = allJobs; 
-
+  // ✅ Row with 3 equal columns
   jobList.innerHTML = `
-    <div class="row g-3 mb-4">
-      <!-- Today's Jobs -->
-      <div class="col-md-6" id="today-jobs">
-        <div class="card border-success shadow-sm h-100">
+    <div class="row g-3">
+      <!-- Popular Job -->
+      <div class="col-md-4">
+        ${popularHtml}
+      </div>
+
+      <!-- Today Jobs -->
+      <div class="col-md-4">
+        <div class="card shadow-sm border-success h-100 hover-card">
           <div class="card-header bg-success text-white fw-bold">
-            <i class="bi bi-calendar-event me-1"></i> Today’s Job Notifications
+            <i class="bi bi-calendar-event me-1"></i> Today’s Jobs
           </div>
           <ul class="list-group list-group-flush">
-            ${todayJobs.map(renderJobListItem).join("") || "<li class='list-group-item text-muted'>No jobs posted today.</li>"}
+            ${todayJobs.map(renderJobListItem).join("") || "<li class='list-group-item text-muted'>No jobs today.</li>"}
           </ul>
         </div>
       </div>
 
-      <!-- Yesterday / Previous Jobs -->
-      <div class="col-md-6" id="previous-jobs">
-        <div class="card border-warning shadow-sm h-100">
+      <!-- Yesterday/Previous Jobs -->
+      <div class="col-md-4">
+        <div class="card shadow-sm border-warning h-100 hover-card">
           <div class="card-header bg-warning text-dark fw-bold">
             <i class="bi bi-calendar-check me-1"></i> ${yesterdayTitle}
           </div>
           <ul class="list-group list-group-flush">
-            ${yesterdayJobs.map(renderJobListItem).join("") || "<li class='list-group-item text-muted'>No jobs found.</li>"}
+            ${yesterdayJobs.map(renderJobListItem).join("") || "<li class='list-group-item text-muted'>No previous jobs.</li>"}
           </ul>
         </div>
       </div>
     </div>
 
     <!-- Latest Jobs -->
-    <div class="card border-primary shadow-sm" id="latest-jobs">
+    <div class="card border-primary shadow-sm mt-4">
       <div class="card-header bg-primary text-white fw-bold">
-        <i class="bi bi-list-ul me-1"></i> Latest Job Notifications
+        <i class="bi bi-list-ul me-1"></i> Latest Jobs
       </div>
       <ul class="list-group list-group-flush" id="latest-jobs-list">
-        ${latestJobs.slice(0, latestVisibleCount).map(renderJobListItem).join("")}
+        ${allJobs.slice(0, latestVisibleCount).map(renderJobListItem).join("")}
       </ul>
-      <div class="card-footer text-center" id="load-more-container">
-        ${latestVisibleCount < latestJobs.length ? 
-          `<button class="btn btn-outline-primary btn-sm" id="loadMoreBtn">
-            Load More Jobs
-          </button>` 
-        : ""}
+      <div class="card-footer text-center">
+        ${latestVisibleCount < allJobs.length ? 
+          `<button class="btn btn-outline-primary btn-sm" id="loadMoreBtn">Load More Jobs</button>` : ""}
       </div>
     </div>
   `;
 
-  // Attach Load More event
+  // Load More Button
   const loadMoreBtn = document.getElementById("loadMoreBtn");
   if (loadMoreBtn) {
     loadMoreBtn.addEventListener("click", () => {
       latestVisibleCount += 15;
-      renderJobsByDate(); // re-render with more jobs
+      renderJobsByDate();
     });
   }
 }
-
-// 🔹 Global Jobs
-let allJobs = [];
 
 // 🔹 Load Jobs from Firebase
 export async function loadJobs() {
@@ -180,41 +202,25 @@ export async function loadJobs() {
     const snapshot = await getDocs(q);
 
     allJobs = [];
-    snapshot.forEach((docSnap) => {
-      const job = docSnap.data();
-      const fullJob = { ...job, id: docSnap.id };
-      allJobs.push(fullJob);
+    snapshot.forEach(docSnap => {
+      allJobs.push({ id: docSnap.id, ...docSnap.data() });
     });
 
     renderJobsByDate();
-
-  } catch (error) {
-    console.error("Error loading jobs:", error);
-    jobList.innerHTML = "<p class='text-center text-danger'>Failed to load jobs. Please try again later.</p>";
+  } catch (err) {
+    console.error("Error loading jobs:", err);
+    jobList.innerHTML = "<p class='text-center text-danger'>Failed to load jobs.</p>";
   }
 }
 
 // 🔹 Auto Load
 loadJobs();
 
-// 🔹 Smooth Scroll to Sections
-window.scrollToSection = function (id) {
+// 🔹 Smooth Scroll
+window.scrollToSection = function(id) {
   const el = document.getElementById(id);
   if (el) {
-    const headerOffset = 70; // fixed header height
-    const elementPosition = el.getBoundingClientRect().top + window.scrollY;
-    const offsetPosition = elementPosition - headerOffset;
-
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: "smooth"
-    });
-
-    // 🔹 Close the offcanvas if open
-    const offcanvasEl = document.querySelector("#mainMenu");
-    if (offcanvasEl) {
-      const bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
-      if (bsOffcanvas) bsOffcanvas.hide();
-    }
+    const offset = 70;
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: "smooth" });
   }
 };

@@ -17,8 +17,6 @@ body{
   background:#f1f5f9;
   padding-top:72px;
 }
-
-/* ===== HEADER ===== */
 .admin-header{
   height:64px;
   background:linear-gradient(90deg,#2563eb,#1e3a8a);
@@ -29,8 +27,6 @@ body{
   letter-spacing:1px;
   text-decoration:none;
 }
-
-/* ===== LOGIN ===== */
 #loginSection .card{
   width:340px;
   border-radius:16px;
@@ -39,26 +35,10 @@ body{
 .form-control{border-radius:10px;font-size:.9rem}
 .input-group-text{background:#fff}
 .btn{border-radius:10px}
-
-/* ===== QUILL ===== */
 #quillEditor{
   background:#fff;
   border-radius:12px;
 }
-
-/* 🔥 IMAGE AUTO RESIZE FIX */
-#quillEditor img{
-  max-width:100% !important;
-  width:300px;
-  height:auto !important;
-  display:block;
-  margin:10px auto;
-  border-radius:8px;
-}
-@media(max-width:576px){
-  #quillEditor img{width:100%;}
-}
-
 .table td,.table th{vertical-align:middle}
 </style>
 </head>
@@ -89,7 +69,8 @@ body{
     <form onsubmit="event.preventDefault(); login();">
       <div class="input-group mb-3">
         <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-        <input type="email" id="email" class="form-control" placeholder="hr@rdmjobs.com" required />
+        <input type="email" id="email" class="form-control"
+          placeholder="hr@rdmjobs.com" required />
       </div>
 
       <div class="input-group mb-3">
@@ -154,11 +135,10 @@ body{
               <input id="jobTitle" class="form-control" required />
             </div>
 
-            <!-- ✅ JOB TYPE AS TEXT INPUT -->
+            <!-- ✅ JOB TYPE TEXT INPUT -->
             <div class="col-md-6">
               <label class="form-label">Job Type</label>
-              <input id="jobType" class="form-control"
-                placeholder="Government / Private / Freshers / Results" required />
+              <input id="jobType" class="form-control" placeholder="Eg: Government / Private / IT" required />
             </div>
 
             <div class="col-md-6">
@@ -197,23 +177,11 @@ firebase.initializeApp(firebaseConfig);
 const auth=firebase.auth();
 const db=firebase.firestore();
 
-const quill=new Quill("#quillEditor",{
-  theme:"snow",
-  modules:{toolbar:[
-    ["bold","italic","underline"],
-    [{list:"ordered"},{list:"bullet"}],
-    ["link","image"],
-    ["clean"]
-  ]}
-});
-
-/* ensure images stay small */
-quill.on("text-change",()=>{
-  quill.root.querySelectorAll("img").forEach(img=>{
-    img.style.maxWidth="300px";
-    img.style.height="auto";
-  });
-});
+const quill=new Quill("#quillEditor",{theme:"snow",modules:{toolbar:[
+  ["bold","italic","underline"],
+  [{list:"ordered"},{list:"bullet"}],
+  ["link","image"],["clean"]
+]}});
 
 function togglePassword(){
   password.type=password.type==="password"?"text":"password";
@@ -275,9 +243,10 @@ async function loadJobs(){
 }
 
 async function deleteJob(id){
-  if(!confirm("Delete this job?"))return;
-  await db.collection("jobs").doc(id).delete();
-  loadJobs();
+  if(confirm("Delete this job?")){
+    await db.collection("jobs").doc(id).delete();
+    loadJobs();
+  }
 }
 
 auth.onAuthStateChanged(u=>{

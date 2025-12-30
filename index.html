@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,74 +6,90 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>RDM Jobs - Latest Government & Private Job Updates</title>
 
-  <!-- 🔹 SEO Meta Tags -->
-  <meta name="description" content="RDM Jobs - Get the latest Government Jobs, Private Jobs, Admit Cards, Results, and Notifications. Updated daily with new job opportunities." />
-  <meta name="keywords" content="RDM Jobs, Government Jobs, Private Jobs, Latest Jobs, Sarkari Naukri, Admit Card, Results, Job Notifications" />
-  <meta name="author" content="RDM Jobs" />
+  <!-- SEO Meta -->
+  <meta name="description" content="RDM Jobs - Latest Government & Private Job Updates" />
+  <meta name="keywords" content="RDM Jobs, Government Jobs, Private Jobs, Latest Jobs, Sarkari Naukri" />
 
-  <!-- 🔹 Open Graph for Social Media -->
-  <meta property="og:title" content="RDM Jobs - Latest Government & Private Job Updates" />
-  <meta property="og:description" content="Find daily updates on Government Jobs, Private Jobs, Admit Cards, Results, and Upcoming Notifications at RDM Jobs." />
-  <meta property="og:image" content="https://rdmjobs.com/assets/preview-image.jpg" />
-  <meta property="og:url" content="https://rdmjobs.com/" />
-  <meta property="og:type" content="website" />
-
-  <!-- 🔹 Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="RDM Jobs - Latest Government & Private Job Updates" />
-  <meta name="twitter:description" content="Stay updated with the latest Government & Private job notifications at RDM Jobs." />
-  <meta name="twitter:image" content="https://rdmjobs.com/assets/preview-image.jpg" />
-
-  <!-- 🔹 Favicon & Icons -->
-  <link rel="icon" href="favicon.ico" type="image/x-icon" />
-  <link rel="icon" href="https://rdmjobs.com/assets/favicon.ico" type="image/x-icon" />
-  <link rel="icon" type="image/png" sizes="32x32" href="https://rdmjobs.com/assets/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="https://rdmjobs.com/assets/favicon-16x16.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="https://rdmjobs.com/assets/apple-touch-icon.png" />
-
-  <!-- ✅ Preview Image for Google/SEO -->
-  <link rel="image_src" href="https://rdmjobs.com/assets/preview-image.jpg" />
-
-  <!-- CSS -->
+  <!-- Bootstrap & Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    /* Fixed header */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1030;
+      background-color: #212529;
+      padding: 0.5rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    header .brand {
+      color: #ffc107;
+      font-weight: bold;
+      font-size: 1.25rem;
+    }
+    header .contact-btn {
+      background-color: #ffc107;
+      color: #212529;
+      font-weight: bold;
+      font-size: 0.8rem;
+      border: none;
+      padding: 0.25rem 0.6rem;
+      border-radius: 5px;
+      transition: 0.2s;
+    }
+    header .contact-btn:hover {
+      transform: scale(1.05);
+    }
+    body {
+      padding-top: 50px; /* Space for fixed header */
+    }
+  </style>
 </head>
 
 <body>
-  <div class="site-wrapper">
-    <div id="header-container"></div>
-    <br>
-    <div class="mt-4" id="hero-section"></div>
 
-    <main class="main-content container py-4" id="jobList" style="min-height: 80vh;"></main>
+  <!-- Header -->
+  <header>
+    <div class="brand">RDM Jobs</div>
+    <button class="contact-btn" data-bs-toggle="modal" data-bs-target="#contactModal">
+      Contact
+    </button>
+  </header>
 
-    <div class="footer-container"></div>
+  <!-- Main Content -->
+  <main class="container mt-4" id="jobList" style="min-height:80vh;"></main>
+
+  <div class="footer-container"></div>
+
+  <!-- Contact Modal -->
+  <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="contactModalLabel">Contact Support</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <p>📧 Email: <a href="mailto:ramana9000r@gmail.com">ramana9000r@gmail.com</a></p>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- JS dependencies -->
+  <!-- JS Dependencies -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="footer.js"></script>
-  <script src="header.js"></script>
 
-  <!-- Import heroSection.js -->
-  <script type="module">
-    import { renderHeroSection } from './heroSection.js';
-    document.getElementById('hero-section').innerHTML = renderHeroSection();
-  </script>
-
+  <!-- Job Loader -->
   <script type="module" src="jobloader.js"></script>
-  <script>
-  function scrollToSection(id) {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }
-</script>
 
 </body>
 </html>
