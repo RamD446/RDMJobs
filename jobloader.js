@@ -36,34 +36,23 @@ function getTimeAgo(postedAt) {
   return { text: `${diffDay} day${diffDay !== 1 ? "s" : ""} ago`, color: "text-danger" };
 }
 
-// 🔹 Render Job List Item (for Today/Yesterday/Latest)
+// 🔹 Render Job List Item (❌ lastDate REMOVED)
 function renderJobListItem(job) {
   const time = getTimeAgo(job.postedAt);
 
-  let lastDateHtml = "";
-  if (job.lastDate) {
-    const d = job.lastDate?.toDate ? job.lastDate.toDate() : new Date(job.lastDate);
-    lastDateHtml = ` | <small class="text-danger">
-      <i class="bi bi-calendar-x me-1"></i> Last Date: ${d.toLocaleDateString()}
-    </small>`;
-  }
-
   return `
-    <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-action clickable-card" 
+    <li class="list-group-item list-group-item-action clickable-card"
         onclick="window.location='jobdetails.html?jobId=${job.id}'">
-      <div>
-        🔹 
-        <span class="fw-semibold text-primary">${job.title || "Untitled Job"}</span>
-        || <small class="${time.color}">
-          <i class="bi bi-clock me-1"></i>${time.text}
-        </small>
-        ${lastDateHtml}
-      </div>
+      🔹 
+      <span class="fw-semibold text-primary">${job.title || "Untitled Job"}</span>
+      <small class="${time.color} ms-2">
+        <i class="bi bi-clock me-1"></i>${time.text}
+      </small>
     </li>
   `;
 }
 
-// 🔹 Render Jobs By Date with Popular Job Card
+// 🔹 Render Jobs
 let latestVisibleCount = 15;
 let allJobs = [];
 
@@ -76,103 +65,55 @@ function renderJobsByDate() {
     return;
   }
 
-  const now = new Date();
-
-  // ✅ Popular Job (first of type "Popular Job")
-  const popularJob = allJobs.find(j => j.type === "Popular Job") || allJobs[0] || null;
+  // ✅ Popular Job (same logic)
+  const popularJob = allJobs.find(j => j.type === "Popular Job") || allJobs[0];
   let popularHtml = "";
 
- if (popularJob) {
-  // Extract first image from Quill content
-  const tempDiv = document.createElement("div");
-  tempDiv.innerHTML = popularJob.content || "";
-  const imgEl = tempDiv.querySelector("img");
-  const imgHtml = imgEl ? `<img src="${imgEl.src}" class="img-fluid rounded-top mt-2 mb-2" alt="${popularJob.title}">` : "";
+  if (popularJob) {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = popularJob.content || "";
+    const imgEl = tempDiv.querySelector("img");
+    const imgHtml = imgEl
+      ? `<img src="${imgEl.src}" class="img-fluid rounded mt-2 mb-2">`
+      : "";
 
-  // Extract first 200 chars of text
-  const snippetText = tempDiv.textContent || "";
-  const snippet = snippetText.length > 200 ? snippetText.slice(0, 200) + "..." : snippetText;
+    const text = tempDiv.textContent || "";
+    const snippet = text.length > 200 ? text.slice(0, 200) + "..." : text;
 
-  popularHtml = `
-   <div class="card shadow-sm mb-3 clickable-card border-primary h-100 hover-card"
-     onclick="window.location='jobdetails.html?jobId=${popularJob.id}'">
-  <div class="card-body">
-   
-    <h5 class="card-title text-primary fw-bold">
-      ${popularJob.title}
-    </h5>
-
-    ${imgHtml}
-
-    <p class="card-text mt-2">
-      ${snippet}
-    </p>
-
-    <!-- ✅ More Details Button -->
-    <div class="text-end mt-2">
-      <button class="btn btn-sm btn-outline-primary"
-        onclick="event.stopPropagation(); window.location='jobdetails.html?jobId=${popularJob.id}'">
-        More Details »
-      </button>
-    </div>
-  </div>
-</div>
-
-  `;
-}
-
-
-  // ✅ Today Jobs
-  const todayJobs = allJobs.filter(j => {
-    const d = j.postedAt?.toDate ? j.postedAt.toDate() : new Date(j.postedAt);
-    return d.toDateString() === now.toDateString();
-  }).slice(0, 5);
-
-  // ✅ Yesterday/Previous Jobs
-  let yesterdayJobs = [];
-  let yesterdayTitle = "Yesterday’s Job Notifications";
-  const yest = new Date(now);
-  yest.setDate(yest.getDate() - 1);
-
-  yesterdayJobs = allJobs.filter(j => {
-    const d = j.postedAt?.toDate ? j.postedAt.toDate() : new Date(j.postedAt);
-    return d.toDateString() === yest.toDateString();
-  }).slice(0, 5);
-
-  if (yesterdayJobs.length === 0) {
-    const todayIds = todayJobs.map(j => j.id);
-    yesterdayJobs = allJobs.filter(j => !todayIds.includes(j.id)).slice(0, 5);
-    yesterdayTitle = "Previous Job Notifications";
+    popularHtml = `
+      <div class="card shadow-sm border-primary h-100 clickable-card"
+           onclick="window.location='jobdetails.html?jobId=${popularJob.id}'">
+        <div class="card-body">
+          <h5 class="fw-bold text-primary">${popularJob.title}</h5>
+          ${imgHtml}
+          <p class="mt-2">${snippet}</p>
+          <div class="text-end">
+            <button class="btn btn-sm btn-outline-primary"
+              onclick="event.stopPropagation();window.location='jobdetails.html?jobId=${popularJob.id}'">
+              More Details »
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
   }
 
-  // ✅ Row with 3 equal columns
+  // ✅ TOP 5 LATEST JOBS (NO DATE FILTER)
+  const todayJobs = allJobs.slice(0, 5);
+
   jobList.innerHTML = `
     <div class="row g-3">
-      <!-- Popular Job -->
       <div class="col-md-4">
         ${popularHtml}
       </div>
 
-      <!-- Today Jobs -->
-      <div class="col-md-4">
-        <div class="card shadow-sm border-success h-100 hover-card">
+      <div class="col-md-8">
+        <div class="card shadow-sm border-success">
           <div class="card-header bg-success text-white fw-bold">
-            <i class="bi bi-calendar-event me-1"></i> Today’s Jobs
+            <i class="bi bi-lightning me-1"></i> Top 5 Latest Jobs
           </div>
           <ul class="list-group list-group-flush">
-            ${todayJobs.map(renderJobListItem).join("") || "<li class='list-group-item text-muted'>No jobs today.</li>"}
-          </ul>
-        </div>
-      </div>
-
-      <!-- Yesterday/Previous Jobs -->
-      <div class="col-md-4">
-        <div class="card shadow-sm border-warning h-100 hover-card">
-          <div class="card-header bg-warning text-dark fw-bold">
-            <i class="bi bi-calendar-check me-1"></i> ${yesterdayTitle}
-          </div>
-          <ul class="list-group list-group-flush">
-            ${yesterdayJobs.map(renderJobListItem).join("") || "<li class='list-group-item text-muted'>No previous jobs.</li>"}
+            ${todayJobs.map(renderJobListItem).join("")}
           </ul>
         </div>
       </div>
@@ -181,35 +122,37 @@ function renderJobsByDate() {
     <!-- Latest Jobs -->
     <div class="card border-primary shadow-sm mt-4">
       <div class="card-header bg-primary text-white fw-bold">
-        <i class="bi bi-list-ul me-1"></i> Latest Jobs
+        <i class="bi bi-list-ul me-1"></i> Latest all Jobs
       </div>
-      <ul class="list-group list-group-flush" id="latest-jobs-list">
+      <ul class="list-group list-group-flush">
         ${allJobs.slice(0, latestVisibleCount).map(renderJobListItem).join("")}
       </ul>
       <div class="card-footer text-center">
-        ${latestVisibleCount < allJobs.length ? 
-          `<button class="btn btn-outline-primary btn-sm" id="loadMoreBtn">Load More Jobs</button>` : ""}
+        ${
+          latestVisibleCount < allJobs.length
+            ? `<button class="btn btn-outline-primary btn-sm" id="loadMoreBtn">Load More Jobs</button>`
+            : ""
+        }
       </div>
     </div>
   `;
 
-  // Load More Button
   const loadMoreBtn = document.getElementById("loadMoreBtn");
   if (loadMoreBtn) {
-    loadMoreBtn.addEventListener("click", () => {
+    loadMoreBtn.onclick = () => {
       latestVisibleCount += 15;
       renderJobsByDate();
-    });
+    };
   }
 }
 
-// 🔹 Load Jobs from Firebase
+// 🔹 Load Jobs
 export async function loadJobs() {
   const jobList = document.getElementById("jobList");
   jobList.innerHTML = `
-    <div class="text-center text-muted py-5">
-      <div class="spinner-border text-success mb-3" role="status"></div><br>
-      Loading jobs...
+    <div class="text-center py-5">
+      <div class="spinner-border text-success"></div>
+      <p class="mt-2">Loading jobs...</p>
     </div>
   `;
 
@@ -218,25 +161,16 @@ export async function loadJobs() {
     const snapshot = await getDocs(q);
 
     allJobs = [];
-    snapshot.forEach(docSnap => {
-      allJobs.push({ id: docSnap.id, ...docSnap.data() });
+    snapshot.forEach(doc => {
+      allJobs.push({ id: doc.id, ...doc.data() });
     });
 
     renderJobsByDate();
-  } catch (err) {
-    console.error("Error loading jobs:", err);
-    jobList.innerHTML = "<p class='text-center text-danger'>Failed to load jobs.</p>";
+  } catch (e) {
+    console.error(e);
+    jobList.innerHTML = "<p class='text-danger text-center'>Failed to load jobs.</p>";
   }
 }
 
 // 🔹 Auto Load
 loadJobs();
-
-// 🔹 Smooth Scroll
-window.scrollToSection = function(id) {
-  const el = document.getElementById(id);
-  if (el) {
-    const offset = 70;
-    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: "smooth" });
-  }
-};
