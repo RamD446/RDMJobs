@@ -177,11 +177,19 @@ firebase.initializeApp(firebaseConfig);
 const auth=firebase.auth();
 const db=firebase.firestore();
 
-const quill=new Quill("#quillEditor",{theme:"snow",modules:{toolbar:[
-  ["bold","italic","underline"],
-  [{list:"ordered"},{list:"bullet"}],
-  ["link","image"],["clean"]
-]}});
+const quill = new Quill("#quillEditor", {
+  theme: "snow",
+  modules: {
+    toolbar: [
+      ["bold", "italic", "underline"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ color: [] }, { background: [] }],   // ✅ Text & Background color
+      ["link", "image"],
+      ["clean"]
+    ]
+  }
+});
+
 
 function togglePassword(){
   password.type=password.type==="password"?"text":"password";
