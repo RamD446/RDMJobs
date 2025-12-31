@@ -40,13 +40,7 @@ function getTimeAgo(postedAt) {
 function renderJobListItem(job) {
   const time = getTimeAgo(job.postedAt);
 
-  let lastDateHtml = "";
-  if (job.lastDate) {
-    const d = job.lastDate?.toDate ? job.lastDate.toDate() : new Date(job.lastDate);
-    lastDateHtml = ` | <small class="text-danger">
-      <i class="bi bi-calendar-x me-1"></i> Last Date: ${d.toLocaleDateString()}
-    </small>`;
-  }
+ 
 
   return `
     <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-action clickable-card" 
@@ -57,7 +51,6 @@ function renderJobListItem(job) {
         || <small class="${time.color}">
           <i class="bi bi-clock me-1"></i>${time.text}
         </small>
-        ${lastDateHtml}
       </div>
     </li>
   `;
@@ -96,7 +89,6 @@ function renderJobsByDate() {
   popularHtml = `
     <div class="card shadow-sm mb-3 clickable-card border-primary h-100 hover-card" onclick="window.location='jobdetails.html?jobId=${popularJob.id}'">
       <div class="card-body">
-        <span class="badge bg-primary mb-2">${popularJob.type || "Popular Job"}</span>
         <h5 class="card-title text-primary fw-bold">${popularJob.title}</h5>
         ${imgHtml}
         <p class="card-text mt-2">${snippet}</p>
