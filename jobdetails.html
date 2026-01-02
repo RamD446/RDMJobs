@@ -49,11 +49,11 @@
     header.short-header .brand { color: #ffc107; font-weight: bold; font-size: 1.25rem; }
 
     /* Breadcrumb strip under header */
-    :root { --mini-header-height: 36px; --short-header-offset: 56px; /* reduce vertical gap by subtracting 36px */
-      --header-offset: calc(var(--mini-header-height) + var(--short-header-offset) - 36px);
+:root { --mini-header-height: 36px; --short-header-offset: 56px; /* small increase: subtract 42px instead of 54px */
+      --header-offset: calc(var(--mini-header-height) + var(--short-header-offset) - 42px);
     }
 
-    .breadcrumb-mini { padding: .35rem 1rem; border-bottom: 1px solid rgba(0,0,0,0.05); color: #6c757d; font-size: .95rem; margin-top: var(--header-offset); }
+    .breadcrumb-mini { padding: .2rem 1rem; border-bottom: 1px solid rgba(0,0,0,0.05); color: #6c757d; font-size: .8rem; line-height:1.1; margin-top: var(--header-offset); }
     .breadcrumb-mini a { color: #0d6efd; text-decoration: none; }
 
     body { padding-top: var(--header-offset); }
@@ -187,12 +187,12 @@
         const snippet = (job.content || '').replace(/<[^>]+>/g, '').slice(0, 150).trim();
         document.title = `${job.title} - RDM Jobs`;
 
-        // Breadcrumb: show Home > Details Review > short title
+        // Breadcrumb: show Home > short title (no 'Details Review' label)
         function escapeHtml(s){ return s ? s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : ''; }
         const rawTitle = job.title || 'Untitled Job';
         const shortTitle = rawTitle.length > 50 ? rawTitle.slice(0,50).trim() + '...' : rawTitle;
         const bcEl = document.getElementById('detailBreadcrumb');
-        if (bcEl){ bcEl.innerHTML = `<div><a href="index.html">Home</a> &nbsp;›&nbsp; <span class="text-muted">Details Review</span> &nbsp;›&nbsp; <strong class="text-dark">${escapeHtml(shortTitle)}</strong></div>`; } 
+        if (bcEl){ bcEl.innerHTML = `<div><a href="index.html">Home</a> &nbsp;›&nbsp; <strong class="text-dark">${escapeHtml(shortTitle)}</strong></div>`; } 
 
         // description meta
         let metaDesc = document.querySelector('meta[name="description"]');

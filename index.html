@@ -44,7 +44,7 @@
 
   <style>
     /* Mini header (fixed, blue background) */
-    :root { --mini-header-height: 36px; --short-header-offset: 56px; /* reduce vertical gap */ --header-offset: calc(var(--mini-header-height) + var(--short-header-offset) - 36px); }
+    :root { --mini-header-height: 36px; --short-header-offset: 56px; /* small increase: subtract 42px instead of 54px */ --header-offset: calc(var(--mini-header-height) + var(--short-header-offset) - 42px); }
     .mini-header { position: fixed; top:0; left:0; right:0; height:36px; background: linear-gradient(90deg,#0d6efd,#0056b3); z-index:1040; display:flex; align-items:center; padding:0 .75rem; font-size:0.85rem; }
     .mini-header .bi { font-size: 1rem; color: #fff; }
     .mini-header .text-white-50 { color: rgba(255,255,255,0.85) !important; }

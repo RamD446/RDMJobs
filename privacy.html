@@ -38,7 +38,7 @@
       .mini-header .text-white-50 { color: rgba(255,255,255,0.85) !important; }
 
       /* Short header (below mini) */
-      :root { --mini-header-height: 36px; --short-header-offset: 56px; /* reduce vertical gap */ --header-offset: calc(var(--mini-header-height) + var(--short-header-offset) - 36px); }
+      :root { --mini-header-height: 36px; --short-header-offset: 56px; /* small increase: subtract 42px instead of 54px */ --header-offset: calc(var(--mini-header-height) + var(--short-header-offset) - 42px); }
       header.short-header { position: fixed; top:36px; left:0; right:0; z-index:1030; background-color:#212529; padding:0.5rem 1rem; display:flex; justify-content:space-between; align-items:center; box-shadow:0 2px 5px rgba(0,0,0,0.2); cursor:pointer; }
       header.short-header .brand { color: #ffc107; font-weight: bold; font-size: 1.25rem; }
 

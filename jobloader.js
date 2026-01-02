@@ -219,9 +219,14 @@ function renderJobsByDate() {
 export async function loadJobs() {
   const jobList = document.getElementById("jobList");
   jobList.innerHTML = `
-    <div class="text-center text-muted py-5">
-      <div class="spinner-border text-success mb-3" role="status"></div><br>
-      Loading jobs...
+    <div class="panel-card p-3 text-center text-muted">
+      <div class="skeleton">
+        <div class="skeleton-line large" style="width:60%; margin: 0.6rem auto;"></div>
+        <div class="skeleton-line" style="width:40%; margin: 0.6rem auto;"></div>
+        <div class="skeleton-line" style="width:90%; margin: 0.6rem auto; height:14px;"></div>
+        <div class="skeleton-line" style="width:80%; margin: 0.6rem auto; height:14px;"></div>
+      </div>
+      <div class="mt-3">Loading jobs...</div>
     </div>
   `;
 
