@@ -53,7 +53,7 @@ function renderJobListItem(job) {
             <span class="fw-semibold text-primary">${job.title || "Untitled Job"}</span>
           </div>
           <div class="job-snippet text-muted mt-2">${snippet}</div>
-          <small class="${timeClass} d-block mt-2"><i class="bi bi-clock me-1"></i>${time.text}</small>
+          <small class="${timeClass} text-danger d-block mt-2"><i class="bi bi-clock me-1"></i>${time.text}</small>
         </div>
         <div class="mt-2 mt-md-0 ms-md-3 text-md-end">
           <button class="btn btn-sm btn-outline-primary continue-btn" onclick="event.stopPropagation(); window.location='jobdetails.html?jobId=${job.id}'">Continue reading</button>
@@ -103,7 +103,7 @@ function renderJobsByDate() {
           <h5 class="card-title popular-title  text-danger">${popularJob.title}</h5>
           ${imgHtml}
           <p class="card-text mt-2 mb-2 popular-snippet">${snippet}</p>
-          <small class="${popularTimeClass} mt-auto"><i class="bi bi-clock me-1"></i>${popularTime.text}</small>
+          <small class="${popularTimeClass} text-danger mt-auto"><i class="bi bi-clock me-1"></i>${popularTime.text}</small>
           <div class="text-end mt-2">
             <button class="btn btn-sm btn-outline-primary"
               onclick="event.stopPropagation(); window.location='jobdetails.html?jobId=${popularJob.id}'">Continue reading »</button>
