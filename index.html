@@ -43,9 +43,14 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
 
   <style>
+    /* Mini header (fixed, blue background) */
+    .mini-header { position: fixed; top:0; left:0; right:0; height:36px; background: linear-gradient(90deg,#0d6efd,#0056b3); z-index:1040; display:flex; align-items:center; padding:0 .75rem; font-size:0.85rem; }
+    .mini-header .bi { font-size: 1rem; color: #fff; }
+    .mini-header .text-white-50 { color: rgba(255,255,255,0.85) !important; }
+
     header {
       position: fixed;
-      top: 0;
+      top: 36px;
       left: 0;
       right: 0;
       z-index: 1030;
@@ -71,12 +76,22 @@
       border-radius: 5px;
     }
     body {
-      padding-top: 55px;
+      padding-top: 92px;
     }
   </style>
 </head>
 
 <body>
+
+  <!-- Mini Header -->
+  <div class="mini-header">
+    <div id="miniDateTime" class="text-white-50 small"></div>
+    <div class="ms-auto d-flex gap-2 align-items-center">
+      <a href="#" class="text-white small text-decoration-none" target="_blank" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+      <a href="#" class="text-white small text-decoration-none" target="_blank" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+      <a href="#" class="text-white small text-decoration-none" target="_blank" aria-label="Telegram"><i class="bi bi-telegram"></i></a>
+    </div>
+  </div>
 
   <!-- Header -->
   <header>
@@ -98,5 +113,17 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script type="module" src="jobloader.js"></script>
  <script src="footer.js"></script>
+
+  <script>
+    function updateMiniDateTime() {
+      const el = document.getElementById('miniDateTime');
+      if (!el) return;
+      const now = new Date();
+      const opts = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric' };
+      el.textContent = now.toLocaleString(undefined, opts);
+    }
+    updateMiniDateTime();
+    setInterval(updateMiniDateTime, 60 * 1000);
+  </script>
 </body>
 </html>

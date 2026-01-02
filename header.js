@@ -84,10 +84,20 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     </style>
 
+    <!-- Mini header (fixed, blue background) -->
+    <div class="mini-header position-fixed top-0 start-0 end-0 d-flex align-items-center px-3 bg-primary text-white">
+      <div id="miniDateTime" class="small text-white-50"></div>
+      <div class="ms-auto d-flex gap-2 align-items-center">
+        <a href="#" class="text-white small text-decoration-none" target="_blank" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+        <a href="#" class="text-white small text-decoration-none" target="_blank" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+        <a href="#" class="text-white small text-decoration-none" target="_blank" aria-label="Telegram"><i class="bi bi-telegram"></i></a>
+      </div>
+    </div>
+
     <!-- Header -->
-    <header class="top-header position-fixed top-0 start-0 end-0 shadow-sm"
-      style="background: linear-gradient(to right, #343a40, #212529); color: #fff; z-index: 1030;">
+    <header class="top-header position-fixed" style="top:36px; left:0; right:0; z-index: 1030;">
       <div class="container-fluid d-flex justify-content-between align-items-center px-3">
+
         
         <!-- Brand -->
         <div class="brand-title fw-bold">
@@ -141,5 +151,23 @@ document.addEventListener("DOMContentLoaded", function () {
         🛠️ Developed by<br> <strong class="text-warning">Yalla Ramana</strong>
       </div>
     </div>
+
+    <script>
+      // Mini header styles
+      const style = document.createElement('style');
+     
+      document.head.appendChild(style);
+
+      // Update mini date/time every minute
+      function updateMiniDateTime() {
+        const el = document.getElementById('miniDateTime');
+        if (!el) return;
+        const now = new Date();
+        const opts = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric' };
+        el.textContent = now.toLocaleString(undefined, opts);
+      }
+      updateMiniDateTime();
+      setInterval(updateMiniDateTime, 60 * 1000);
+    </script>
   `;
 });
