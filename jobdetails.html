@@ -29,12 +29,12 @@
   <div class="row">
     
     <!-- Job Details (Left) -->
-    <div class="col-md-6 mb-4">
+    <div class="col-md-9 mb-4">
       <div id="jobDetails" class="panel-card p-3"></div>
     </div>
 
     <!-- Related Jobs (Right) -->
-    <div class="col-md-6 mb-4">
+    <div class="col-md-3 mb-4">
       <div id="relatedJobs" class="panel-card p-3"></div>
     </div>
 
@@ -144,6 +144,59 @@
         const currentUrl = window.location.href;
         const time = getTimeAgo(job.postedAt);
 
+        // 🔹 SEO/meta updates (dynamic)
+        const snippet = (job.content || '').replace(/<[^>]+>/g, '').slice(0, 150).trim();
+        document.title = `${job.title} - RDM Jobs`;
+
+        // description meta
+        let metaDesc = document.querySelector('meta[name="description"]');
+        if (!metaDesc) {
+          metaDesc = document.createElement('meta');
+          metaDesc.name = 'description';
+          document.head.appendChild(metaDesc);
+        }
+        metaDesc.content = snippet || 'Latest job updates on RDM Jobs.';
+
+        // OG tags
+        const ogTitle = document.querySelector('meta[property="og:title"]');
+        if (ogTitle) ogTitle.content = document.title;
+        const ogDesc = document.querySelector('meta[property="og:description"]');
+        if (ogDesc) ogDesc.content = snippet || ogDesc.content;
+        const ogUrl = document.querySelector('meta[property="og:url"]');
+        if (ogUrl) ogUrl.content = currentUrl;
+
+        // canonical
+        let linkCanonical = document.querySelector('link[rel="canonical"]');
+        if (!linkCanonical) {
+          linkCanonical = document.createElement('link');
+          linkCanonical.rel = 'canonical';
+          document.head.appendChild(linkCanonical);
+        }
+        linkCanonical.href = currentUrl;
+
+        // JSON-LD JobPosting
+        const existingLd = document.getElementById('job-jsonld');
+        if (existingLd) existingLd.remove();
+        const jsonLd = {
+          "@context": "https://schema.org",
+          "@type": "JobPosting",
+          "title": job.title,
+          "description": snippet,
+          "datePosted": job.postedAt ? (job.postedAt.toDate ? job.postedAt.toDate().toISOString() : new Date(job.postedAt).toISOString()) : undefined,
+          "validThrough": job.lastDate ? (job.lastDate.toDate ? job.lastDate.toDate().toISOString() : new Date(job.lastDate).toISOString()) : undefined,
+          "url": currentUrl,
+          "hiringOrganization": {
+            "@type": "Organization",
+            "name": "RDM Jobs",
+            "sameAs": "https://rdmjobs.com"
+          }
+        };
+        const ldScript = document.createElement('script');
+        ldScript.type = 'application/ld+json';
+        ldScript.id = 'job-jsonld';
+        ldScript.text = JSON.stringify(jsonLd);
+        document.head.appendChild(ldScript);
+
         // 🔹 Last Date Format
         let lastDateText = "";
         if (job.lastDate) {
@@ -216,7 +269,7 @@
 
     // 🔹 Related Jobs with Load More
     let allRelatedJobs = [];
-    let relatedVisibleCount = 15;
+    let relatedVisibleCount = 5;
 
     async function loadRelatedJobs() {
       relatedJobsEl.innerHTML = `
@@ -256,9 +309,9 @@
               return `
                 <li class="list-group-item list-group-item-action">
                   <a href="jobdetails.html?jobId=${job.id}" 
-                     class="text-decoration-none fw-semibold text-primary">
+                     class="text-decoration-none fw-semibold text-primary" title="${job.title || "Job details"}">
                     📌 ${job.title || "Untitled Job"}
-                  </a>
+                  </a> 
                   <small class="${time.color} ms-2">Posted: ${time.text}</small>
                 </li>
               `;
@@ -279,7 +332,7 @@
       const loadMoreBtn = document.getElementById("loadMoreRelated");
       if (loadMoreBtn) {
         loadMoreBtn.addEventListener("click", () => {
-          relatedVisibleCount += 15;
+          relatedVisibleCount += 5;
           renderRelatedJobs();
         });
       }
