@@ -105,7 +105,7 @@ function renderJobsByDate() {
           <small class="${popularTimeClass} mt-auto"><i class="bi bi-clock me-1"></i>${popularTime.text}</small>
           <div class="text-end mt-2">
             <button class="btn btn-sm btn-outline-primary"
-              onclick="event.stopPropagation(); window.location='jobdetails.html?jobId=${popularJob.id}'">More Details »</button>
+              onclick="event.stopPropagation(); window.location='jobdetails.html?jobId=${popularJob.id}'">Continue reading »</button>
           </div>
         </div>
       </div>`;
@@ -152,7 +152,6 @@ function renderJobsByDate() {
             <select id="jobFilter" class="form-select form-select-sm" style="width:220px;">
               ${filterOptions}
             </select>
-            <div class="flex-grow-1"><i class="bi bi-list-ul me-1"></i> Latest Jobs</div>
             <small class="text-white-50">${currentFilter === 'All' ? '' : currentFilter}</small>
           </div>
 
