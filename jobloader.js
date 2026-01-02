@@ -118,6 +118,39 @@ function renderJobsByDate() {
     return d.toDateString() === now.toDateString();
   }).slice(0, 5);
 
+  // Yesterday top 5 (previous day)
+  const yest = new Date(now);
+  yest.setDate(yest.getDate() - 1);
+  const yesterdayJobs = allJobs.filter(j => {
+    const d = j.postedAt?.toDate ? j.postedAt.toDate() : new Date(j.postedAt);
+    return d.toDateString() === yest.toDateString();
+  }).slice(0, 5);
+
+  // Build today's and yesterday sections only if they have jobs
+  // Titles-only Today list
+  const todaySectionHtml = todayJobs.length ? `
+    <div class="card shadow-sm border-success mt-3">
+      <div class="card-header bg-success text-white fw-bold">
+        <i class="bi bi-calendar-event me-1"></i> Today's Top 5
+      </div>
+      <ul class="list-group list-group-flush today-list">
+        ${todayJobs.map(j => `<li class="list-group-item p-2"><a href="jobdetails.html?jobId=${j.id}" class="text-decoration-none text-primary fw-semibold">🔹 ${j.title || 'Untitled Job'}</a></li>`).join("")}
+      </ul>
+    </div>
+  ` : '';
+
+  // Titles-only Yesterday list
+  const yesterdaySectionHtml = yesterdayJobs.length ? `
+    <div class="card shadow-sm border-warning mt-3">
+      <div class="card-header bg-warning text-dark fw-bold">
+        <i class="bi bi-calendar-check me-1"></i> Yesterday's Top 5
+      </div>
+      <ul class="list-group list-group-flush today-list">
+        ${yesterdayJobs.map(j => `<li class="list-group-item p-2"><a href="jobdetails.html?jobId=${j.id}" class="text-decoration-none text-primary fw-semibold">🔹 ${j.title || 'Untitled Job'}</a></li>`).join("")}
+      </ul>
+    </div>
+  ` : '';
+
   // Filter select HTML (moved into header)
   const filterOptions = `
     <option value="All">All Jobs</option>
@@ -135,14 +168,7 @@ function renderJobsByDate() {
       <div class="col-lg-4">
         ${popularHtml}
 
-        <div class="card shadow-sm border-success mt-3">
-          <div class="card-header bg-success text-white fw-bold">
-            <i class="bi bi-calendar-event me-1"></i> Today's Top 5
-          </div>
-          <ul class="list-group list-group-flush">
-            ${todayJobs.map(renderJobListItem).join("") || "<li class='list-group-item text-muted'>No jobs today.</li>"}
-          </ul>
-        </div>
+        ${todaySectionHtml || yesterdaySectionHtml}
       </div>
 
       <!-- Left/center column: filter in header + latest jobs -->

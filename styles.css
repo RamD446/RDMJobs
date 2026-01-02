@@ -40,14 +40,19 @@ body { background-color: #f7f9fb; }
 
 /* Popular card styling */
 .popular-card { overflow: hidden; }
-.popular-image { width: 100%; height: 180px; object-fit: cover; display:block; }
-.popular-card .card-body { min-height: 160px; }
-.popular-snippet { max-height: 5.4rem; overflow: hidden; }
+.popular-image { width: 100%; height: 120px; object-fit: cover; display:block; }
+.popular-card .card-body { min-height: 120px; }
+.popular-snippet { max-height: 4.2rem; overflow: hidden; }
 
 @media (min-width: 992px) {
-  .popular-card { height: 340px; }
-  .popular-image { height: 180px; }
+  .popular-card { height: 260px; }
+  .popular-image { height: 120px; }
 }
+
+/* Titles-only list styling */
+.today-list .list-group-item { padding-top: .5rem; padding-bottom: .5rem; }
+.today-list .list-group-item a { display:block; }
+
 
 /* Posted time styling */
 .job-time { color: #dc3545; font-weight: 600; }
