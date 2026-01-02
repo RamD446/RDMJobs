@@ -88,7 +88,7 @@ function renderJobsByDate() {
     const tempDiv = document.createElement("div");
     tempDiv.innerHTML = popularJob.content || "";
     const imgEl = tempDiv.querySelector("img");
-    const imgHtml = imgEl ? `<img src="${imgEl.src}" class="popular-image" alt="${popularJob.title}">` : "";
+    const imgHtml = imgEl ? `<div class="popular-image-wrap text-center"><img src="${imgEl.src}" class="popular-image-small" alt="${popularJob.title}"></div>` : "";
     const snippetText = tempDiv.textContent || "";
     const snippet = snippetText.length > 200 ? snippetText.slice(0, 200) + "..." : snippetText;
     const popularTime = getTimeAgo(popularJob.postedAt);
