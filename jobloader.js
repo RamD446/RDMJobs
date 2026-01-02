@@ -89,6 +89,7 @@ function renderJobsByDate() {
     tempDiv.innerHTML = popularJob.content || "";
     const imgEl = tempDiv.querySelector("img");
     const imgHtml = imgEl ? `<div class="popular-image-wrap text-center"><img src="${imgEl.src}" class="popular-image-small" alt="${popularJob.title}"></div>` : "";
+    const bodyClass = imgEl ? 'card-body d-flex flex-column text-center' : 'card-body d-flex flex-column';
     const snippetText = tempDiv.textContent || "";
     const snippet = snippetText.length > 200 ? snippetText.slice(0, 200) + "..." : snippetText;
     const popularTime = getTimeAgo(popularJob.postedAt);
@@ -99,7 +100,7 @@ function renderJobsByDate() {
       <div class="card shadow-sm mb-3 popular-card clickable-card border-primary hover-card"
            onclick="window.location='jobdetails.html?jobId=${popularJob.id}'">
         ${imgHtml}
-        <div class="card-body d-flex flex-column">
+        <div class="${bodyClass}">
           <h5 class="card-title text-primary fw-bold">${popularJob.title}</h5>
           <p class="card-text mt-2 mb-2 popular-snippet">${snippet}</p>
           <small class="${popularTimeClass} mt-auto"><i class="bi bi-clock me-1"></i>${popularTime.text}</small>
