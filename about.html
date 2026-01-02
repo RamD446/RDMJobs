@@ -29,7 +29,6 @@
     <!-- Header (short) -->
     <header class="short-header" onclick="window.location.href='index.html'" role="button" aria-label="Go to Home">
       <div class="brand">RDM Jobs</div>
-      <button class="contact-btn" onclick="window.scrollToSection('siteFooter')">Contact</button>
     </header>
 
     <style>
@@ -39,11 +38,11 @@
       .mini-header .text-white-50 { color: rgba(255,255,255,0.85) !important; }
 
       /* Short header (below mini) */
+      :root { --mini-header-height: 36px; --short-header-offset: 56px; /* reduce vertical gap */ --header-offset: calc(var(--mini-header-height) + var(--short-header-offset) - 36px); }
       header.short-header { position: fixed; top:36px; left:0; right:0; z-index:1030; background-color:#212529; padding:0.5rem 1rem; display:flex; justify-content:space-between; align-items:center; box-shadow:0 2px 5px rgba(0,0,0,0.2); cursor:pointer; }
       header.short-header .brand { color: #ffc107; font-weight: bold; font-size: 1.25rem; }
-      header.short-header .contact-btn { background-color: #ffc107; color: #212529; font-weight: bold; font-size: 0.8rem; border: none; padding: 0.25rem 0.6rem; border-radius: 5px; }
 
-      body { padding-top: 92px; }
+      body { padding-top: var(--header-offset); }
     </style>
 
     <!-- About Content -->

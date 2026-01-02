@@ -31,9 +31,11 @@
   </div>
 
   <!-- Header (short) -->
-  <header class="short-header" onclick="window.location.href='index.html'" role="button" aria-label="Go to Home">
-    <div class="brand">RDM Jobs</div>
-    <button class="contact-btn" onclick="window.scrollToSection('siteFooter')">Contact</button>
+  <header class="short-header" role="banner" aria-label="Site header">
+    <div>
+      <a href="index.html" class="small text-white-50 text-decoration-none"><i class="bi bi-house"></i> Home</a>
+    </div>
+    <div class="brand ms-auto" role="button" aria-label="Go to Home" onclick="window.location.href='index.html'">RDM Jobs</div>
   </header>
 
   <style>
@@ -43,12 +45,22 @@
     .mini-header .text-white-50 { color: rgba(255,255,255,0.85) !important; }
 
     /* Short header (below mini) */
-    header.short-header { position: fixed; top:36px; left:0; right:0; z-index:1030; background-color:#212529; padding:0.5rem 1rem; display:flex; justify-content:space-between; align-items:center; box-shadow:0 2px 5px rgba(0,0,0,0.2); cursor:pointer; }
+    header.short-header { position: fixed; top:36px; left:0; right:0; z-index:1030; background-color:#212529; padding:0.5rem 1rem; display:flex; justify-content:space-between; align-items:center; box-shadow:0 2px 5px rgba(0,0,0,0.2); }
     header.short-header .brand { color: #ffc107; font-weight: bold; font-size: 1.25rem; }
-    header.short-header .contact-btn { background-color: #ffc107; color: #212529; font-weight: bold; font-size: 0.8rem; border: none; padding: 0.25rem 0.6rem; border-radius: 5px; }
 
-    body { padding-top: 92px; }
+    /* Breadcrumb strip under header */
+    :root { --mini-header-height: 36px; --short-header-offset: 56px; /* reduce vertical gap by subtracting 36px */
+      --header-offset: calc(var(--mini-header-height) + var(--short-header-offset) - 36px);
+    }
+
+    .breadcrumb-mini { padding: .35rem 1rem; border-bottom: 1px solid rgba(0,0,0,0.05); color: #6c757d; font-size: .95rem; margin-top: var(--header-offset); }
+    .breadcrumb-mini a { color: #0d6efd; text-decoration: none; }
+
+    body { padding-top: var(--header-offset); }
   </style>
+
+  <!-- Breadcrumb (filled dynamically) -->
+  <div id="detailBreadcrumb" class="container-fluid breadcrumb-mini" aria-label="Breadcrumb">&nbsp;</div>
 
   <!-- Main Content -->
   <div class="container-fluid" style="min-height:80vh;">
@@ -175,6 +187,13 @@
         const snippet = (job.content || '').replace(/<[^>]+>/g, '').slice(0, 150).trim();
         document.title = `${job.title} - RDM Jobs`;
 
+        // Breadcrumb: show Home > Details Review > short title
+        function escapeHtml(s){ return s ? s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : ''; }
+        const rawTitle = job.title || 'Untitled Job';
+        const shortTitle = rawTitle.length > 50 ? rawTitle.slice(0,50).trim() + '...' : rawTitle;
+        const bcEl = document.getElementById('detailBreadcrumb');
+        if (bcEl){ bcEl.innerHTML = `<div><a href="index.html">Home</a> &nbsp;›&nbsp; <span class="text-muted">Details Review</span> &nbsp;›&nbsp; <strong class="text-dark">${escapeHtml(shortTitle)}</strong></div>`; } 
+
         // description meta
         let metaDesc = document.querySelector('meta[name="description"]');
         if (!metaDesc) {
@@ -287,82 +306,51 @@
           showToast("Link copied successfully!", "success");
         });
 
-        await loadRelatedJobs();
+        await loadLatestSideJobs();
       } catch (err) {
         console.error("Error loading job:", err);
         jobDetailsEl.innerHTML = "<p class='text-danger'>Failed to load job details.</p>";
       }
     }
 
-    // 🔹 Related Jobs with Load More
-    let allRelatedJobs = [];
-    let relatedVisibleCount = 5;
+    // 🔹 Right column: Top Latest Jobs (title-only, top 5)
+    let latestSideJobs = [];
+    const latestSideLimit = 5;
 
-    async function loadRelatedJobs() {
+    async function loadLatestSideJobs() {
       relatedJobsEl.innerHTML = `
         <div class="card shadow-sm">
           <div class="card-header bg-primary text-white fw-bold">
-            <i class="bi bi-list-ul me-1"></i> More Latest Jobs
+            <i class="bi bi-list-ul me-1"></i> Top Latest Jobs
           </div>
           <ul class="list-group list-group-flush">
-            ${new Array(6).fill(0).map(()=>`<li class="list-group-item"><div class="skeleton-line" style="width:90%; height:12px;"></div></li>`).join('')}
+            ${new Array(5).fill(0).map(()=>`<li class="list-group-item"><div class="skeleton-line" style="width:90%; height:12px;"></div></li>`).join('')}
           </ul>
         </div>`;
 
       const q = query(collection(db, "jobs"), orderBy("postedAt", "desc"));
       const snapshot = await getDocs(q);
 
-      allRelatedJobs = [];
+      latestSideJobs = [];
       snapshot.forEach(docItem => {
         if (docItem.id === jobId) return; // skip current job
-        allRelatedJobs.push({ id: docItem.id, ...docItem.data() });
+        latestSideJobs.push({ id: docItem.id, ...docItem.data() });
       });
 
-      renderRelatedJobs();
+      renderLatestSideJobs();
     }
 
-    function renderRelatedJobs() {
+    function renderLatestSideJobs() {
       relatedJobsEl.innerHTML = `
         <div class="card shadow-sm">
-          <!-- ✅ Section Header -->
           <div class="card-header bg-primary text-white fw-bold">
-            <i class="bi bi-list-ul me-1"></i> More Latest Jobs
+            <i class="bi bi-list-ul me-1"></i> Top Latest Jobs
           </div>
-
-          <!-- ✅ Related Jobs List -->
-          <ul class="list-group list-group-flush" id="related-list">
-            ${allRelatedJobs.slice(0, relatedVisibleCount).map(job => {
-              const time = getTimeAgo(job.postedAt);
-              return `
-                <li class="list-group-item list-group-item-action">
-                  <a href="jobdetails.html?jobId=${job.id}" 
-                     class="text-decoration-none fw-semibold text-primary" title="${job.title || "Job details"}">
-                    📌 ${job.title || "Untitled Job"}
-                  </a> 
-                  <small class="job-time ms-2">Posted: ${time.text}</small>
-                </li>
-              `;
-            }).join("")}
+          <ul class="list-group list-group-flush">
+            ${latestSideJobs.slice(0, latestSideLimit).map(j => `<li class="list-group-item p-2"><a href="jobdetails.html?jobId=${j.id}" class="text-decoration-none text-primary fw-semibold">🔹 ${j.title || 'Untitled Job'}</a></li>`).join('')}
           </ul>
-
-          <!-- ✅ Load More Button -->
-          <div class="card-footer text-center" id="related-loadmore">
-            ${relatedVisibleCount < allRelatedJobs.length ? 
-              `<button class="btn btn-outline-light text-primary border-primary btn-sm" id="loadMoreRelated">
-                Load More Jobs
-              </button>` 
-            : ""}
-          </div>
         </div>
       `;
-
-      const loadMoreBtn = document.getElementById("loadMoreRelated");
-      if (loadMoreBtn) {
-        loadMoreBtn.addEventListener("click", () => {
-          relatedVisibleCount += 5;
-          renderRelatedJobs();
-        });
-      }
     }
 
     // 🚀 Start
