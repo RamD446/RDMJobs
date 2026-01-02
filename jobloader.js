@@ -103,7 +103,6 @@ function renderJobsByDate() {
           <h5 class="card-title popular-title  text-danger">${popularJob.title}</h5>
           ${imgHtml}
           <p class="card-text mt-2 mb-2 popular-snippet">${snippet}</p>
-          <small class="${popularTimeClass} text-danger mt-auto"><i class="bi bi-clock me-1"></i>${popularTime.text}</small>
           <div class="text-end mt-2">
             <button class="btn btn-sm btn-outline-primary"
               onclick="event.stopPropagation(); window.location='jobdetails.html?jobId=${popularJob.id}'">Continue reading »</button>
