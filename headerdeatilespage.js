@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
         justify-content: space-between;
         align-items: center;
         box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        cursor: pointer;
       }
       header.short-header .brand { color: #ffc107; font-weight: bold; font-size: 1.25rem; }
       header.short-header .contact-btn { background-color: #ffc107; color: #212529; font-weight: bold; font-size: 0.8rem; border: none; padding: 0.25rem 0.6rem; border-radius: 5px; }
@@ -29,9 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     </style>
 
-    <header class="short-header">
+    <header class="short-header" onclick="window.location.href='index.html'" role="button" aria-label="Go to Home">
       <div class="brand">RDM Jobs</div>
-      
     </header>
   `;
 });
