@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <!-- Column 3: Contact -->
           <div class="col-lg-4 mb-3">
             <h6 class="fw-semibold text-warning">Support</h6>
-            <p class="small mb-1">Ramana9000r@gmail.com</p>
+            <p class="small mb-1">rdm409446@gmail.com</p>
             <p class="small mb-0"><strong>Note:</strong> All job information is shared for public benefit. Please verify before applying.</p>
           </div>
 
