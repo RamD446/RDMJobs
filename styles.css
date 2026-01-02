@@ -22,5 +22,44 @@ body { background-color: #f7f9fb; }
 /* Related list small spacing */
 #related-list .list-group-item { padding-top: 0.6rem; padding-bottom: 0.6rem; }
 
+/* Job list item snippet + button */
+.job-snippet { max-height: 3.6rem; overflow: hidden; font-size: 0.95rem; }
+.continue-btn { min-width: 130px; }
+
+/* Clickable card hover */
+.clickable-card { transition: transform 0.12s ease, box-shadow 0.12s ease; }
+.clickable-card:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(18,35,63,0.08); }
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+  /* On mobile, stack popular + today's above latest */
+  .col-lg-4 { order: -1; }
+  .col-lg-8 { order: 1; }
+  .continue-btn { width: 100%; }
+}
+
+/* Popular card styling */
+.popular-card { overflow: hidden; }
+.popular-image { width: 100%; height: 180px; object-fit: cover; display:block; }
+.popular-card .card-body { min-height: 160px; }
+.popular-snippet { max-height: 5.4rem; overflow: hidden; }
+
+@media (min-width: 992px) {
+  .popular-card { height: 340px; }
+  .popular-image { height: 180px; }
+}
+
+/* Posted time styling */
+.job-time { color: #dc3545; font-weight: 600; }
+
+/* Latest Jobs responsive grid on small screens */
+#latest-jobs-list { display: block; }
+@media (max-width: 767px) {
+  #latest-jobs-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+  #latest-jobs-list .list-group-item { border-radius: .5rem; margin: 0; }
+  #latest-jobs-list .list-group-item .job-snippet { max-height: 4.2rem; }
+}
+
+
 /* Utility tweaks */
 .main-content { padding-top: 0; }
