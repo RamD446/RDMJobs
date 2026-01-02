@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       header.short-header .brand { color: #ffc107; font-weight: bold; font-size: 1.25rem; }
       header.short-header .contact-btn { background-color: #ffc107; color: #212529; font-weight: bold; font-size: 0.8rem; border: none; padding: 0.25rem 0.6rem; border-radius: 5px; }
-      body { padding-top: 55px; }
+      body { padding-top: 48px; }
 
       @media (max-width: 576px) {
         header.short-header .brand { font-size: 1.05rem; }
