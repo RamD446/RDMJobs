@@ -39,18 +39,25 @@ function getTimeAgo(postedAt) {
 // 🔹 Render Job List Item (for Today/Yesterday/Latest)
 function renderJobListItem(job) {
   const time = getTimeAgo(job.postedAt);
-
- 
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = job.content || '';
+  const text = (tempDiv.textContent || '').trim();
+  const snippet = text.length > 200 ? text.slice(0, 200) + '...' : text;
+  const timeClass = 'job-time';
 
   return `
-    <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-action clickable-card" 
-        onclick="window.location='jobdetails.html?jobId=${job.id}'">
-      <div>
-        🔹 
-        <span class="fw-semibold text-primary">${job.title || "Untitled Job"}</span>
-        || <small class="${time.color}">
-          <i class="bi bi-clock me-1"></i>${time.text}
-        </small>
+    <li class="list-group-item list-group-item-action clickable-card">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center" onclick="window.location='jobdetails.html?jobId=${job.id}'" style="cursor:pointer;">
+        <div style="flex:1; min-width:0;">
+          <div class="d-flex align-items-baseline gap-2">
+            <span class="fw-semibold text-primary">${job.title || "Untitled Job"}</span>
+          </div>
+          <div class="job-snippet text-muted mt-2">${snippet}</div>
+          <small class="${timeClass} d-block mt-2"><i class="bi bi-clock me-1"></i>${time.text}</small>
+        </div>
+        <div class="mt-2 mt-md-0 ms-md-3 text-md-end">
+          <button class="btn btn-sm btn-outline-primary continue-btn" onclick="event.stopPropagation(); window.location='jobdetails.html?jobId=${job.id}'">Continue reading</button>
+        </div>
       </div>
     </li>
   `;
@@ -81,18 +88,22 @@ function renderJobsByDate() {
     const tempDiv = document.createElement("div");
     tempDiv.innerHTML = popularJob.content || "";
     const imgEl = tempDiv.querySelector("img");
-    const imgHtml = imgEl ? `<img src="${imgEl.src}" class="img-fluid rounded-top mt-2 mb-2" alt="${popularJob.title}">` : "";
+    const imgHtml = imgEl ? `<img src="${imgEl.src}" class="popular-image" alt="${popularJob.title}">` : "";
     const snippetText = tempDiv.textContent || "";
     const snippet = snippetText.length > 200 ? snippetText.slice(0, 200) + "..." : snippetText;
+    const popularTime = getTimeAgo(popularJob.postedAt);
+
+    const popularTimeClass = 'job-time';
 
     popularHtml = `
-      <div class="card shadow-sm mb-3 clickable-card border-primary h-100 hover-card"
+      <div class="card shadow-sm mb-3 popular-card clickable-card border-primary hover-card"
            onclick="window.location='jobdetails.html?jobId=${popularJob.id}'">
-        <div class="card-body">
+        ${imgHtml}
+        <div class="card-body d-flex flex-column">
           <h5 class="card-title text-primary fw-bold">${popularJob.title}</h5>
-          ${imgHtml}
-          <p class="card-text mt-2">${snippet}</p>
-          <div class="text-end mt-3">
+          <p class="card-text mt-2 mb-2 popular-snippet">${snippet}</p>
+          <small class="${popularTimeClass} mt-auto"><i class="bi bi-clock me-1"></i>${popularTime.text}</small>
+          <div class="text-end mt-2">
             <button class="btn btn-sm btn-outline-primary"
               onclick="event.stopPropagation(); window.location='jobdetails.html?jobId=${popularJob.id}'">More Details »</button>
           </div>
@@ -113,8 +124,6 @@ function renderJobsByDate() {
     <option value="Popular Job">Popular Job</option>
     <option value="Government Job">Government Job</option>
     <option value="Private Job">Private Job</option>
-    <option value="Fresher Job">Fresher Job</option>
-    <option value="Experienced Job">Experienced Job</option>
     <option value="Work From Home">Work From Home</option>
   `;
 

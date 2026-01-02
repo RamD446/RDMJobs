@@ -209,7 +209,7 @@
           <div class="mb-3 small text-secondary d-flex flex-wrap gap-2">
             <span><strong class="text-dark">Posted by:</strong> Yalla Ramana</span>
             <span>|</span>
-            <span><strong class="text-dark">Posted:</strong> <span class="${time.color}">${time.text}</span></span>
+            <span><strong class="text-dark">Posted:</strong> <span class="job-time">${time.text}</span></span>
           </div>
 
           <div class="mb-3">
@@ -312,7 +312,7 @@
                      class="text-decoration-none fw-semibold text-primary" title="${job.title || "Job details"}">
                     📌 ${job.title || "Untitled Job"}
                   </a> 
-                  <small class="${time.color} ms-2">Posted: ${time.text}</small>
+                  <small class="job-time ms-2">Posted: ${time.text}</small>
                 </li>
               `;
             }).join("")}
