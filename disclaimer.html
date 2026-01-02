@@ -47,13 +47,28 @@
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         document.getElementById("disclaimerContent").innerHTML = `
-          <h3 class="mb-3"> <button class="btn btn-outline-success btn-sm fw-bold" disabled>Disclaimer</button></h3>
-          <p>RDM Jobs is not affiliated with any government or private organization. All content on this site is published in good faith and for general information purposes only.</p>
-          <p>We make every effort to ensure the information is accurate and up-to-date, but we do not make any warranties about the completeness or reliability of the data.</p>
-          <p>Any action you take based on the information found on RDM Jobs is strictly at your own risk.</p>
-          <p>Always verify details from the official website of the respective organization or recruiter before applying.</p>
+          <div class="d-flex flex-column gap-3 text-start">
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+              <div>
+                <h2 class="fw-bold mb-1"><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>Disclaimer</h2>
+                <p class="lead text-muted mb-0">Information on this site is provided for general purposes; always verify on official sources.</p>
+              </div>
+              <div class="d-flex gap-2">
+                <a href="index.html" class="btn btn-outline-primary btn-sm">Back to Jobs</a>
+              </div>
+            </div>
+
+            <div class="mt-3 text-muted" style="max-width:880px;">
+              <p>RDM Jobs is not affiliated with any government or private organization. We publish information in good faith but make no warranties about completeness.</p>
+              <ul class="list-unstyled">
+                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Verify all details on official websites before applying.</li>
+                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Use the information responsibly; applications are at your own risk.</li>
+              </ul>
+              <p class="mb-0">Contact: <a href="mailto:rdm409446@gmail.com">rdm409446@gmail.com</a></p>
+            </div>
+          </div>
         `;
-      }, 1000);
+      }, 600);
     });
   </script>
 </body>

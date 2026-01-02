@@ -43,31 +43,33 @@
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         document.getElementById("privacyContent").innerHTML = `
-          <h3 class="mb-4">
-            <button class="btn btn-outline-success btn-sm fw-bold" disabled>Privacy Policy</button>
-          </h3>
-          <p>At <strong>RDM Jobs</strong>, we take your privacy seriously. Here's how we handle your data:</p>
+          <div class="d-flex flex-column gap-3 text-start">
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+              <div>
+                <h2 class="fw-bold mb-1"><i class="bi bi-shield-lock-fill text-primary me-2"></i>Privacy Policy</h2>
+                <p class="lead text-muted mb-0">We respect your privacy — here's what you need to know about data on RDM Jobs.</p>
+              </div>
+              <div class="d-flex gap-2">
+                <a href="index.html" class="btn btn-outline-primary btn-sm">Back to Jobs</a>
+              </div>
+            </div>
 
-          <h5>Information We Collect</h5>
-          <ul>
-            <li>We do <strong>not collect or store personal data</strong> from users.</li>
-            <li>This website only publishes publicly available job notifications.</li>
-            <li>There is no login, registration, or user tracking.</li>
-          </ul>
+            <div class="mt-3 text-muted" style="max-width:880px;">
+              <h5>Information We Collect</h5>
+              <ul class="mb-3">
+                <li><i class="bi bi-check-lg text-success me-2"></i>We do <strong>not collect or store personal data</strong> from users.</li>
+                <li><i class="bi bi-check-lg text-success me-2"></i>There is no login, registration, or tracking.</li>
+              </ul>
 
-          <h5>Use of Information</h5>
-          <p>All job information shared here is for public benefit. We do not sell or share any user data. The site is purely informational and updated daily with job-related content.</p>
+              <h5>Use of Information</h5>
+              <p class="mb-3">Job information is published for public benefit. We do not sell user data and link to external sites without responsibility for their practices.</p>
 
-          <h5>External Links</h5>
-          <p>RDM Jobs may contain links to external websites. We are not responsible for the privacy practices of those sites.</p>
-
-          <h5>Policy Updates</h5>
-          <p>This privacy policy may be revised without notice. Users are encouraged to review it periodically.</p>
-
-          <h5>Contact Us</h5>
-          <p>For questions, contact: <strong>rdm409446@gmail.com</strong></p>
+              <h5>Contact Us</h5>
+              <p class="mb-0">For questions, contact: <a href="mailto:rdm409446@gmail.com">rdm409446@gmail.com</a></p>
+            </div>
+          </div>
         `;
-      }, 1000); // ⏳ 1 second delay
+      }, 600); // ⏳ 0.6 second delay
     });
   </script>
 </body>
