@@ -100,7 +100,9 @@ function renderJobsByDate() {
       <div class="card shadow-sm mb-3 popular-card clickable-card border-primary hover-card"
            onclick="window.location='jobdetails.html?jobId=${popularJob.id}'">
         <div class="${bodyClass}">
-          <h5 class="card-title popular-title  text-danger">${popularJob.title}</h5>
+         <h5 class="card-title popular-title text-danger fw-bold fs-6">
+  ${popularJob.title}
+</h5>
           ${imgHtml}
           <p class="card-text mt-2 mb-2 popular-snippet">${snippet}</p>
           <div class="text-end mt-2">
