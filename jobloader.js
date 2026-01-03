@@ -156,10 +156,10 @@ function renderJobsByDate() {
   // Filter select HTML (moved into header)
   const filterOptions = `
     <option value="All">All Jobs</option>
-    <option value="Popular Job">Popular Job</option>
+ 
     <option value="Government Job">Government Job</option>
     <option value="Private Job">Private Job</option>
-    <option value="Work From Home">Work From Home</option>
+ 
   `;
 
   // Latest jobs list (from filtered set)
